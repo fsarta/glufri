@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:glufri/features/purchase/data/models/purchase_item_model.dart';
+import 'package:intl/intl.dart';
 
 part 'purchase_model.g.dart';
 
@@ -29,14 +30,17 @@ class PurchaseModel extends HiveObject {
 
     // Fallback: se la lista di item è vuota, restituisce un titolo generico
     if (items.isEmpty) {
-      return store ?? 'Acquisto Sconosciuto';
+      final formattedDate = DateFormat('dd/MM/yyyy HH:mm').format(date);
+      return store ?? 'Acquisto del $formattedDate';
     }
 
     // Trova il prodotto più costoso per subtotal
     items.sort((a, b) => b.subtotal.compareTo(a.subtotal));
     final topProduct = items.first;
 
-    final String baseTitle = store ?? 'Spesa';
+    // Fallback se il negozio è null ma ci sono items
+    final String baseTitle =
+        store ?? 'Spesa del ${DateFormat('dd MMM').format(date)}';
 
     // Regola 2.1: 1 solo prodotto
     if (items.length == 1) {

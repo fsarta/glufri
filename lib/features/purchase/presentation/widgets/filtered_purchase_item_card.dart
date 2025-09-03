@@ -62,8 +62,8 @@ class FilteredPurchaseItemCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        DateFormat.yMMMd().format(purchase.date),
-                        style: theme.textTheme.bodySmall,
+                        DateFormat('dd/MM/yyyy HH:mm:ss').format(purchase.date),
+                        style: TextStyle(color: Colors.grey.shade600),
                       ),
                     ],
                   ),

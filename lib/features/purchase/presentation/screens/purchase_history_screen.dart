@@ -108,9 +108,10 @@ class PurchaseHistoryScreen extends ConsumerWidget {
                       return ListTile(
                         title: Text(purchase.smartTitle),
                         subtitle: Text(
-                          DateFormat.yMMMd(
-                            l10n.localeName,
+                          DateFormat(
+                            'dd/MM/yyyy HH:mm:ss',
                           ).format(purchase.date),
+                          style: TextStyle(color: Colors.grey.shade600),
                         ),
                         trailing: Text(
                           '${purchase.total.toStringAsFixed(2)} ${purchase.currency}',

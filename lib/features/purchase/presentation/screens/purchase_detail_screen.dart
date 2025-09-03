@@ -101,7 +101,10 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  DateFormat.yMMMMEEEEd('it_IT').format(widget.purchase.date),
+                  // Usiamo un formato completo per il dettaglio
+                  DateFormat(
+                    'EEEE d MMMM yyyy, HH:mm:ss',
+                  ).format(widget.purchase.date),
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const SizedBox(height: 16),
