@@ -9,6 +9,7 @@ import 'package:glufri/features/purchase/presentation/providers/purchase_provide
 import 'package:glufri/features/purchase/presentation/screens/purchase_detail_screen.dart';
 import 'package:glufri/features/purchase/presentation/screens/purchase_session_screen.dart';
 import 'package:glufri/features/purchase/presentation/widgets/filtered_purchase_item_card.dart';
+import 'package:glufri/features/purchase/presentation/widgets/purchase_card.dart';
 import 'package:glufri/features/settings/presentation/screens/settings_screen.dart';
 import 'package:intl/intl.dart';
 
@@ -104,18 +105,8 @@ class PurchaseHistoryScreen extends ConsumerWidget {
                     itemCount: purchases.length,
                     itemBuilder: (context, index) {
                       final purchase = purchases[index];
-                      // Questa è la vecchia visualizzazione (ListTile semplice)
-                      return ListTile(
-                        title: Text(purchase.smartTitle),
-                        subtitle: Text(
-                          DateFormat(
-                            'dd/MM/yyyy HH:mm:ss',
-                          ).format(purchase.date),
-                          style: TextStyle(color: Colors.grey.shade600),
-                        ),
-                        trailing: Text(
-                          '${purchase.total.toStringAsFixed(2)} ${purchase.currency}',
-                        ),
+                      // Usiamo InkWell per un effetto visivo migliore. Avvolgiamo DIRETTAMENTE la card.
+                      return InkWell(
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -124,6 +115,7 @@ class PurchaseHistoryScreen extends ConsumerWidget {
                             ),
                           );
                         },
+                        child: PurchaseCard(purchase: purchase),
                       );
                     },
                   );
@@ -134,27 +126,9 @@ class PurchaseHistoryScreen extends ConsumerWidget {
                   itemCount: purchases.length,
                   itemBuilder: (context, index) {
                     final purchase = purchases[index];
-                    /* return ListTile(
-                      title: Text(purchase.store ?? 'Acquisto Sconosciuto'),
-                      subtitle: Text(
-                        DateFormat.yMMMd(l10n.localeName).format(purchase.date),
-                      ),
-                      trailing: Text(
-                        '${purchase.total.toStringAsFixed(2)} ${purchase.currency}',
-                      ),
+                    // Se la ricerca È attiva, usiamo la `FilteredPurchaseItemCard`.
+                    return InkWell(
                       onTap: () {
-                        // Naviga alla schermata di dettaglio passando l'oggetto `purchase`.
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (ctx) =>
-                                PurchaseDetailScreen(purchase: purchase),
-                          ),
-                        );
-                      },
-                    ); */
-                    return GestureDetector(
-                      onTap: () {
-                        // Permette di cliccare sulla card per vedere i dettagli
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (ctx) =>
