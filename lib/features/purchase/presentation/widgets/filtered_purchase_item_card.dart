@@ -41,17 +41,49 @@ class FilteredPurchaseItemCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Intestazione con Negozio e Data
-            Text(
-              purchase.store ?? 'Acquisto Sconosciuto',
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+            // Intestazione con Negozio/Titolo Smart E IL NUOVO TOTALE
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Colonna per Titolo e Data a sinistra
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        // Usiamo lo smart title anche qui per coerenza
+                        purchase.smartTitle,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines:
+                            2, // Permette al titolo di andare a capo se lungo
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        DateFormat.yMMMd().format(purchase.date),
+                        style: theme.textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+                // Spazio per separare
+                const SizedBox(width: 16),
+                // Totale dell'acquisto originale, allineato a destra
+                Text(
+                  '${purchase.total.toStringAsFixed(2)} €',
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+              ],
             ),
-            Text(
+            /* Text(
               DateFormat.yMMMd().format(purchase.date),
               style: theme.textTheme.bodySmall,
-            ),
+            ), */
             const Divider(height: 20),
 
             // Lista dei soli prodotti che hanno matchato la ricerca

@@ -106,7 +106,7 @@ class PurchaseHistoryScreen extends ConsumerWidget {
                       final purchase = purchases[index];
                       // Questa è la vecchia visualizzazione (ListTile semplice)
                       return ListTile(
-                        title: Text(purchase.store ?? 'Acquisto Sconosciuto'),
+                        title: Text(purchase.smartTitle),
                         subtitle: Text(
                           DateFormat.yMMMd(
                             l10n.localeName,
