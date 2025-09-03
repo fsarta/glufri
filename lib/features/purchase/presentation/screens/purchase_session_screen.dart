@@ -9,7 +9,6 @@ import 'package:glufri/features/purchase/presentation/providers/cart_provider.da
 import 'package:glufri/features/purchase/data/models/purchase_item_model.dart';
 import 'package:glufri/features/purchase/presentation/providers/product_api_provider.dart';
 import 'package:glufri/features/scanner/presentation/screens/barcode_scanner_screen.dart';
-import 'package:glufri/generated/l10n.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -229,6 +228,8 @@ void _showAddItemDialog(
   final l10n = AppLocalizations.of(context)!;
   final formKey = GlobalKey<FormState>();
   final theme = Theme.of(context);
+  // Determina se il barcode proviene da una scansione e quindi non deve essere modificato
+  final bool isFromScan = barcode != null && offProduct != null;
 
   // Controller per i campi di testo. Pre-popolati se si modifica o si scansiona.
   final nameController = TextEditingController(
@@ -239,6 +240,10 @@ void _showAddItemDialog(
   );
   final quantityController = TextEditingController(
     text: item?.quantity.toString().replaceAll('.', ',') ?? '1',
+  );
+
+  final barcodeController = TextEditingController(
+    text: item?.barcode ?? barcode ?? '',
   );
 
   File? _imageFile;
@@ -350,6 +355,20 @@ void _showAddItemDialog(
                           ),
                         ),
                       ],
+                    ),
+                    const SizedBox(height: 16),
+                    // Campo Barcode (nella sua Row separata)
+                    TextFormField(
+                      controller: barcodeController,
+                      readOnly: isFromScan,
+                      decoration: InputDecoration(
+                        labelText: 'Codice a Barre (Opzionale)',
+                        prefixIcon: const Icon(Icons.qr_code_2),
+                        filled: isFromScan,
+                        fillColor: isFromScan
+                            ? theme.disabledColor.withOpacity(0.1)
+                            : null,
+                      ),
                     ),
                     const SizedBox(height: 32),
                     FilledButton(
