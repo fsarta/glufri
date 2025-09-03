@@ -8,6 +8,7 @@ import 'package:glufri/features/purchase/presentation/providers/purchase_filter_
 import 'package:glufri/features/purchase/presentation/providers/purchase_providers.dart';
 import 'package:glufri/features/purchase/presentation/screens/purchase_detail_screen.dart';
 import 'package:glufri/features/purchase/presentation/screens/purchase_session_screen.dart';
+import 'package:glufri/features/purchase/presentation/widgets/filtered_purchase_item_card.dart';
 import 'package:glufri/features/settings/presentation/screens/settings_screen.dart';
 import 'package:intl/intl.dart';
 
@@ -28,6 +29,10 @@ class PurchaseHistoryScreen extends ConsumerWidget {
     final purchasesAsyncValue = ref.watch(purchaseListProvider);
     // `isProUserProvider` determina se mostrare le funzionalità premium (es. nascondere ads).
     final isPro = ref.watch(isProUserProvider);
+    final filters = ref.watch(purchaseFilterProvider);
+    final searchQuery = filters.searchQuery;
+    final bool isSearchActive = searchQuery.isNotEmpty;
+
     // `l10n` per le stringhe tradotte.
     final l10n = AppLocalizations.of(context);
 
@@ -82,20 +87,53 @@ class PurchaseHistoryScreen extends ConsumerWidget {
               data: (purchases) {
                 // Se la lista è vuota, mostra un messaggio di benvenuto.
                 if (purchases.isEmpty) {
-                  return const Center(
+                  return Center(
                     child: Text(
-                      'Nessun acquisto registrato.\nPremi "+" per iniziare!',
+                      isSearchActive
+                          ? 'Nessun prodotto trovato per "$searchQuery"'
+                          : 'Nessun acquisto registrato.\nPremi "+" per iniziare!',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                      style: const TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                   );
                 }
+
+                // Se la ricerca NON è attiva, mostra la lista normale
+                if (!isSearchActive) {
+                  return ListView.builder(
+                    itemCount: purchases.length,
+                    itemBuilder: (context, index) {
+                      final purchase = purchases[index];
+                      // Questa è la vecchia visualizzazione (ListTile semplice)
+                      return ListTile(
+                        title: Text(purchase.store ?? 'Acquisto Sconosciuto'),
+                        subtitle: Text(
+                          DateFormat.yMMMd(
+                            l10n.localeName,
+                          ).format(purchase.date),
+                        ),
+                        trailing: Text(
+                          '${purchase.total.toStringAsFixed(2)} ${purchase.currency}',
+                        ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (ctx) =>
+                                  PurchaseDetailScreen(purchase: purchase),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                }
+
                 // Altrimenti, costruisci la lista con `ListView.builder`.
                 return ListView.builder(
                   itemCount: purchases.length,
                   itemBuilder: (context, index) {
                     final purchase = purchases[index];
-                    return ListTile(
+                    /* return ListTile(
                       title: Text(purchase.store ?? 'Acquisto Sconosciuto'),
                       subtitle: Text(
                         DateFormat.yMMMd(l10n.localeName).format(purchase.date),
@@ -112,6 +150,21 @@ class PurchaseHistoryScreen extends ConsumerWidget {
                           ),
                         );
                       },
+                    ); */
+                    return GestureDetector(
+                      onTap: () {
+                        // Permette di cliccare sulla card per vedere i dettagli
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) =>
+                                PurchaseDetailScreen(purchase: purchase),
+                          ),
+                        );
+                      },
+                      child: FilteredPurchaseItemCard(
+                        purchase: purchase,
+                        searchQuery: searchQuery,
+                      ),
                     );
                   },
                 );
