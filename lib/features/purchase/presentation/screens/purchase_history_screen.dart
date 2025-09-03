@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
+import 'package:glufri/features/backup/presentation/providers/user_provider.dart';
+import 'package:glufri/features/backup/presentation/screens/login_screen.dart';
 import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
 import 'package:glufri/features/monetization/presentation/widgets/ad_banner_widget.dart';
 import 'package:glufri/features/purchase/presentation/providers/cart_provider.dart';
@@ -31,6 +33,7 @@ class PurchaseHistoryScreen extends ConsumerWidget {
     // `isProUserProvider` determina se mostrare le funzionalità premium (es. nascondere ads).
     final isPro = ref.watch(isProUserProvider);
     final filters = ref.watch(purchaseFilterProvider);
+    final user = ref.watch(userProvider);
     final searchQuery = filters.searchQuery;
     final bool isSearchActive = searchQuery.isNotEmpty;
 
@@ -41,6 +44,26 @@ class PurchaseHistoryScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(l10n!.purchaseHistory),
         actions: [
+          IconButton(
+            tooltip: user != null ? 'Account' : 'Accedi',
+            icon: user != null
+                ? const Icon(Icons.person_outline_rounded, color: Colors.white)
+                : const Icon(Icons.login_rounded, color: Colors.white),
+            onPressed: () {
+              if (user != null) {
+                // Naviga alla pagina dell'account, dove l'utente può fare logout, ecc.
+                // Navigator.of(context).push(MaterialPageRoute(builder: (_) => AccountScreen()));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Loggato come ${user.email}')),
+                );
+              } else {
+                // Naviga alla pagina di login/registrazione
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (_) => const LoginScreen()));
+              }
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.settings),
             tooltip: 'Impostazioni',

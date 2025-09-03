@@ -1,95 +1,193 @@
+// lib/features/backup/domain/auth_repository.dart
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter/foundation.dart'
-    show kIsWeb; // Utile per la configurazione web
 
+/// Repository per autenticazione Firebase + Google (gestione web & mobile).
 class AuthRepository {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
 
   AuthRepository(this._firebaseAuth, this._googleSignIn);
 
-  /// Stream per ascoltare i cambiamenti dello stato di autenticazione in tempo reale.
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
-
-  /// Restituisce l'utente corrente di Firebase, se presente.
   User? get currentUser => _firebaseAuth.currentUser;
 
-  /// Funzione per eseguire il login con Google, aggiornata alle API più recenti.
+  /// Login con Google — restituisce [User] se successo, `null` se l'utente annulla.
   Future<User?> signInWithGoogle() async {
     try {
-      // 1. Avvia il flusso di login di Google. L'utente vedrà un popup per
-      //    selezionare l'account. Se è già loggato, potrebbe essere immediato.
-      final GoogleSignInAccount? googleUser = await GoogleSignIn.instance
-          .authenticate();
+      // WEB: usa il popup Firebase (se usi web)
+      if (kIsWeb) {
+        final GoogleAuthProvider webProvider = GoogleAuthProvider();
+        final UserCredential userCredential = await _firebaseAuth
+            .signInWithPopup(webProvider);
+        return userCredential.user;
+      }
 
-      // Se l'utente chiude il popup, googleUser sarà null.
+      // MOBILE (Android / iOS)
+      debugPrint('[GoogleSignIn] start authenticate()');
+      GoogleSignInAccount? googleUser;
+
+      try {
+        // Chiamata principale: interactive authenticate()
+        googleUser = await _googleSignIn.authenticate();
+        debugPrint('[GoogleSignIn] authenticate() completed: $googleUser');
+      } on GoogleSignInException catch (gse) {
+        debugPrint('[GoogleSignIn] GoogleSignInException: ${gse.code}');
+        // Gestiamo il caso di cancellazione (utente o sistema ha annullato)
+        if (gse.code == 'canceled') {
+          debugPrint(
+            '[GoogleSignIn] authenticate() was cancelled by user/system.',
+          );
+          // Proviamo un fallback leggero (non sempre apre UI completa).
+          try {
+            debugPrint(
+              '[GoogleSignIn] attempting attemptLightweightAuthentication() fallback...',
+            );
+            final fallbackAccount = await _googleSignIn
+                .attemptLightweightAuthentication();
+            debugPrint(
+              '[GoogleSignIn] attemptLightweightAuthentication() returned: $fallbackAccount',
+            );
+            googleUser = fallbackAccount;
+            // se fallbackAccount è null, verrà gestito più sotto come annullamento
+          } on Exception catch (fallbackErr, fallbackSt) {
+            debugPrint(
+              '[GoogleSignIn] fallback attemptLightweightAuthentication error: $fallbackErr\n$fallbackSt',
+            );
+            // Non rilanciamo: consideriamo il login annullato
+            return null;
+          }
+        } else {
+          // altri codici di errore: rilanciamo per gestione superiore
+          rethrow;
+        }
+      }
+
+      // Se ancora null, consideriamo l'utente ha annullato / nessun account selezionato
       if (googleUser == null) {
+        debugPrint(
+          '[GoogleSignIn] No account returned (user cancelled or no account).',
+        );
         return null;
       }
 
-      // 2. Ottieni i dettagli di autenticazione dalla richiesta. Questo
-      //    contiene i token necessari per l'autenticazione con Firebase.
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
-      // 3. Crea una credenziale OAuth per Firebase.
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken, // <- Ora è un accesso diretto
+      debugPrint(
+        '[GoogleSignIn] got account: ${googleUser.email} (${googleUser.id})',
       );
 
-      // 4. Esegui il login in Firebase con la credenziale ottenuta
-      //    e restituisci l'utente di Firebase.
-      final userCredential = await _firebaseAuth.signInWithCredential(
-        credential,
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      debugPrint(
+        '[GoogleSignIn] got authentication, idToken: ${googleAuth.idToken != null}',
+      );
+
+      if (googleAuth.idToken == null) {
+        debugPrint('[GoogleSignIn] idToken is null -> abort sign in');
+        return null;
+      }
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+        // accessToken non sempre disponibile nelle API v7
+      );
+
+      final UserCredential userCredential = await _firebaseAuth
+          .signInWithCredential(credential);
+
+      debugPrint(
+        '[GoogleSignIn] firebase signInWithCredential success: ${userCredential.user?.uid}',
       );
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
-      debugPrint('Firebase Auth Error in Google Sign-In: ${e.message}');
+      debugPrint(
+        'FirebaseAuthException during Google Sign-In: ${e.code} - ${e.message}',
+      );
       rethrow;
-    } catch (e) {
-      debugPrint('Generic Error in Google Sign-In: $e');
+    } catch (e, st) {
+      debugPrint('Generic Error in Google Sign-In: $e\n$st');
       rethrow;
     }
   }
 
-  /// Esegue il logout sia da Firebase che da Google Sign-In.
+  Future<User?> signUpWithEmailAndPassword(
+    String email,
+    String password,
+  ) async {
+    try {
+      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      debugPrint("Errore registrazione: ${e.code} - ${e.message}");
+      rethrow;
+    }
+  }
+
+  Future<User?> signInWithEmailAndPassword(
+    String email,
+    String password,
+  ) async {
+    try {
+      final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      debugPrint("Errore login: ${e.code} - ${e.message}");
+      rethrow;
+    }
+  }
+
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      debugPrint("Errore reset password: ${e.code} - ${e.message}");
+      rethrow;
+    }
+  }
+
   Future<void> signOut() async {
-    await _googleSignIn.signOut();
-    await _firebaseAuth.signOut();
+    try {
+      try {
+        await _googleSignIn.signOut();
+      } catch (e) {
+        // Non blocchiamo l'operazione principale se fallisce il signOut di GoogleSignIn
+        debugPrint("Warning: signOut() su GoogleSignIn ha fallito: $e");
+      }
+      await _firebaseAuth.signOut();
+    } catch (e) {
+      debugPrint("Errore durante signOut: $e");
+      rethrow;
+    }
   }
 }
 
-// ---- Provider di Riverpod (Aggiornati) ----
+// -------------------- Riverpod Providers (se li vuoi qui) --------------------
 
 final firebaseAuthProvider = Provider<FirebaseAuth>(
   (ref) => FirebaseAuth.instance,
 );
 
-/// Provider per GoogleSignIn, ora configurato correttamente.
 final googleSignInProvider = Provider<GoogleSignIn>((ref) {
-  // Se stai costruendo per il web, devi fornire il tuo client ID.
-  // Per mobile (Android/iOS), questa configurazione è sufficiente.
-  if (kIsWeb) {
-    // Sostituisci 'TUO_WEB_CLIENT_ID.apps.googleusercontent.com' con il tuo client ID
-    // ottenuto dalla Google Cloud Console per la tua app web Firebase.
-    return GoogleSignIn.instance;
-  }
-  // Configurazione standard per mobile
+  // L'istanza dovrebbe essere inizializzata in main() con clientId/serverClientId.
   return GoogleSignIn.instance;
 });
 
-// Il repository ora dipende dai provider aggiornati
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  return AuthRepository(
-    ref.watch(firebaseAuthProvider),
-    ref.watch(googleSignInProvider),
-  );
+  final firebaseAuth = ref.watch(firebaseAuthProvider);
+  final googleSignIn = ref.watch(googleSignInProvider);
+  return AuthRepository(firebaseAuth, googleSignIn);
 });
 
-// Questo stream provider non necessita di modifiche e continuerà a funzionare
 final authStateChangesProvider = StreamProvider<User?>((ref) {
-  return ref.watch(authRepositoryProvider).authStateChanges;
+  final repo = ref.watch(authRepositoryProvider);
+  return repo.authStateChanges;
 });

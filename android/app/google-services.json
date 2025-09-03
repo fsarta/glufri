@@ -12,7 +12,20 @@
           "package_name": "com.example.glufri"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "640788715599-fdb4p6hl460ukur1cmgj9pobm5qopntv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.glufri",
+            "certificate_hash": "040bfe18fc808d2f299a3cf96d314dd8f453a092"
+          }
+        },
+        {
+          "client_id": "640788715599-9g24gd98o2jis2i2r2f9op2og1mag58e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyChK7V8KJrIvCYX88Nuv2kkNFbvhcn6Frc"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "640788715599-9g24gd98o2jis2i2r2f9op2og1mag58e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "640788715599-scm6sjftt5arifjfk3gmjsoc0u3vnoo6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.glufri"
+              }
+            }
+          ]
         }
       }
     }
