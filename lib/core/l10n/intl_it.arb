@@ -1,0 +1,20 @@
+{
+  "@@locale": "it",
+  "appName": "Glufri",
+  "newPurchase": "Nuovo Acquisto",
+  "purchaseHistory": "Cronologia Acquisti",
+  "settings": "Impostazioni",
+  "addItem": "Aggiungi Prodotto",
+  "scanBarcode": "Scansiona Codice",
+  "savePurchase": "Salva Acquisto",
+  "store": "Negozio",
+  "productName": "Nome Prodotto",
+  "price": "Prezzo",
+  "quantity": "Quantità",
+  "total": "Totale",
+  "theme": "Tema",
+  "language": "Lingua",
+  "light": "Chiaro",
+  "dark": "Scuro",
+  "system": "Sistema"
+}

@@ -1,0 +1,11 @@
+# l10n.yaml (POSIZIONATO NELLA ROOT DEL PROGETTO)
+
+# La cartella dove si trovano i tuoi file .arb
+arb-dir: lib/core/l10n 
+
+# Il file .arb principale che serve da modello. 
+# Deve esistere in arb-dir!
+template-arb-file: intl_it.arb 
+
+# Il nome del file Dart che verrà generato.
+output-localization-file: app_localizations.dart 

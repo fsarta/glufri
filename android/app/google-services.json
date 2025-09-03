@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "640788715599",
+    "project_id": "glufri-app-project",
+    "storage_bucket": "glufri-app-project.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640788715599:android:6b17e3f5d1da4b6e32b23a",
+        "android_client_info": {
+          "package_name": "com.example.glufri"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChK7V8KJrIvCYX88Nuv2kkNFbvhcn6Frc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,421 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:glufri/core/l10n/app_localizations.dart';
+import 'package:glufri/features/purchase/data/models/purchase_model.dart';
+import 'package:glufri/features/purchase/domain/entities/off_product.dart';
+import 'package:glufri/features/purchase/presentation/providers/cart_provider.dart';
+import 'package:glufri/features/purchase/data/models/purchase_item_model.dart';
+import 'package:glufri/features/purchase/presentation/providers/product_api_provider.dart';
+import 'package:glufri/features/scanner/presentation/screens/barcode_scanner_screen.dart';
+import 'package:glufri/generated/l10n.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
+import 'package:uuid/uuid.dart';
+
+class PurchaseSessionScreen extends ConsumerStatefulWidget {
+  final PurchaseModel? purchaseToEdit;
+  final bool isDuplicate;
+
+  const PurchaseSessionScreen({
+    super.key,
+    this.purchaseToEdit,
+    this.isDuplicate = false,
+  });
+
+  @override
+  ConsumerState<PurchaseSessionScreen> createState() =>
+      _PurchaseSessionScreenState();
+}
+
+class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
+  @override
+  Widget build(BuildContext context) {
+    final ref = this.ref;
+    final cartState = ref.watch(cartProvider);
+    final l10n = AppLocalizations.of(context);
+    final textTheme = Theme.of(context).textTheme;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(l10n!.newPurchase),
+        actions: [
+          // Bottone Salva abilitato solo se ci sono items
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: FilledButton.icon(
+              icon: const Icon(Icons.save),
+              label: Text(l10n.savePurchase),
+              onPressed: cartState.items.isNotEmpty
+                  ? () async {
+                      await ref.read(cartProvider.notifier).savePurchase(ref);
+                      if (context.mounted) {
+                        Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Acquisto salvato con successo!'),
+                          ),
+                        );
+                      }
+                    }
+                  : null,
+            ),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          // Metadata dell'acquisto
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextFormField(
+              initialValue: cartState.storeName,
+              decoration: InputDecoration(
+                labelText: l10n.store,
+                hintText: 'Es. Supermercato Rossi',
+                border: const OutlineInputBorder(),
+              ),
+              onChanged: (value) {
+                ref.read(cartProvider.notifier).setStoreName(value);
+              },
+            ),
+          ),
+
+          // Lista dei prodotti
+          Expanded(
+            child: cartState.items.isEmpty
+                ? Center(child: Text('Aggiungi un prodotto per iniziare.'))
+                : ListView.builder(
+                    itemCount: cartState.items.length,
+                    itemBuilder: (context, index) {
+                      final item = cartState.items[index];
+                      return ListTile(
+                        title: Text(item.name),
+                        subtitle: Text(
+                          '${item.quantity} x ${item.unitPrice.toStringAsFixed(2)} €',
+                        ),
+                        trailing: Text(
+                          '${item.subtotal.toStringAsFixed(2)} €',
+                          style: textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        onTap: () =>
+                            _showAddItemDialog(context, ref, item: item),
+                      );
+                    },
+                  ),
+          ),
+
+          // Riepilogo e Totale
+          _buildTotalSummary(context, cartState.total),
+
+          // Pulsanti Azione
+          _buildActionButtons(context, ref, l10n),
+        ],
+      ),
+    );
+  }
+}
+
+// UI per i bottoni
+Widget _buildActionButtons(
+  BuildContext context,
+  WidgetRef ref,
+  AppLocalizations l10n,
+) {
+  return Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Expanded(
+          child: ElevatedButton.icon(
+            icon: const Icon(Icons.add),
+            label: Text(l10n.addItem),
+            onPressed: () => _showAddItemDialog(context, ref),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: ElevatedButton.icon(
+            icon: const Icon(Icons.qr_code_scanner),
+            label: Text(l10n.scanBarcode),
+            onPressed: () async {
+              final barcode = await Navigator.of(context).push<String>(
+                MaterialPageRoute(
+                  builder: (ctx) => const BarcodeScannerScreen(),
+                ),
+              );
+
+              if (barcode != null && context.mounted) {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (ctx) =>
+                      const Center(child: CircularProgressIndicator()),
+                );
+
+                try {
+                  final productInfo = await ref.read(
+                    offProductProvider(barcode).future,
+                  );
+                  Navigator.pop(context); // Chiude il loading dialog
+
+                  // Ora apri il dialog di aggiunta prodotto, pre-popolato
+                  _showAddItemDialog(
+                    context,
+                    ref,
+                    barcode: barcode,
+                    offProduct: productInfo,
+                  );
+                } catch (e) {
+                  Navigator.pop(
+                    context,
+                  ); // Chiude il loading dialog in caso di errore
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Prodotto non trovato o errore di rete.'),
+                    ),
+                  );
+                  // Apri comunque il dialog per l'inserimento manuale
+                  _showAddItemDialog(context, ref, barcode: barcode);
+                }
+              }
+            },
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+// UI per il totale
+Widget _buildTotalSummary(BuildContext context, double total) {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+    decoration: BoxDecoration(
+      border: Border(top: BorderSide(color: Theme.of(context).dividerColor)),
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          AppLocalizations.of(context)!.total,
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+        Text(
+          '${total.toStringAsFixed(2)} €',
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+        ),
+      ],
+    ),
+  );
+}
+
+// Funzione helper per mostrare il dialog di aggiunta/modifica
+void _showAddItemDialog(
+  BuildContext context,
+  WidgetRef ref, {
+  PurchaseItemModel? item,
+  String? barcode,
+  OffProduct? offProduct,
+}) {
+  final isEditing = item != null;
+  final l10n = AppLocalizations.of(context)!;
+  final formKey = GlobalKey<FormState>();
+  final theme = Theme.of(context);
+
+  // Controller per i campi di testo. Pre-popolati se si modifica o si scansiona.
+  final nameController = TextEditingController(
+    text: item?.name ?? offProduct?.name ?? '',
+  );
+  final priceController = TextEditingController(
+    text: item?.unitPrice.toString().replaceAll('.', ',') ?? '',
+  );
+  final quantityController = TextEditingController(
+    text: item?.quantity.toString().replaceAll('.', ',') ?? '1',
+  );
+
+  File? _imageFile;
+  if (item?.imagePath != null && item!.imagePath!.isNotEmpty) {
+    _imageFile = File(item.imagePath!);
+  }
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true, // Fondamentale per far spazio alla tastiera
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+    ),
+    builder: (ctx) {
+      return StatefulBuilder(
+        builder: (modalContext, setStateDialog) {
+          // Usiamo Padding per gestire lo spazio occupato dalla tastiera (viewInsets)
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(ctx).viewInsets.bottom,
+              left: 16,
+              right: 16,
+              top: 16,
+            ),
+            // SingleChildScrollView rende il contenuto scorrevole.
+            child: SingleChildScrollView(
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize:
+                      MainAxisSize.min, // Occupa solo lo spazio necessario
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      isEditing ? 'Modifica Prodotto' : l10n.addItem,
+                      style: theme.textTheme.headlineMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 24),
+                    // ... (logica immagine, se presente, può andare qui)
+                    TextFormField(
+                      controller: nameController,
+                      decoration: InputDecoration(labelText: l10n.productName),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Il nome non può essere vuoto';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: priceController,
+                            decoration: InputDecoration(
+                              labelText: l10n.price,
+                              suffixText: '€',
+                            ),
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              if (value == null || value.isEmpty)
+                                return 'Obbligatorio';
+                              // Gestisce sia il punto che la virgola
+                              final normalizedValue = value.replaceAll(
+                                ',',
+                                '.',
+                              );
+                              if (double.tryParse(normalizedValue) == null) {
+                                return 'Valore non valido';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: TextFormField(
+                            controller: quantityController,
+                            decoration: InputDecoration(
+                              labelText: l10n.quantity,
+                            ),
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              if (value == null || value.isEmpty)
+                                return 'Obbligatorio';
+                              final normalizedValue = value.replaceAll(
+                                ',',
+                                '.',
+                              );
+                              if (double.tryParse(normalizedValue) == null) {
+                                return 'Valore non valido';
+                              }
+                              if (double.parse(normalizedValue) <= 0) {
+                                return 'Deve essere > 0';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 32),
+                    FilledButton(
+                      child: Text(isEditing ? 'Aggiorna' : l10n.addItem),
+                      onPressed: () async {
+                        // La funzione diventa async
+                        // 1. Controlla la validità del form
+                        if (!(formKey.currentState?.validate() ?? false)) {
+                          return;
+                        }
+
+                        // 2. Converte i valori in modo sicuro (gestendo virgola/punto)
+                        final priceText = priceController.text.replaceAll(
+                          ',',
+                          '.',
+                        );
+                        final quantityText = quantityController.text.replaceAll(
+                          ',',
+                          '.',
+                        );
+
+                        final price = double.parse(priceText);
+                        final quantity = double.parse(quantityText);
+
+                        // 3. Gestisce il salvataggio dell'immagine (se presente)
+                        String? finalImagePath;
+                        if (_imageFile != null) {
+                          final appDir =
+                              await getApplicationDocumentsDirectory();
+                          final fileName = p.basename(_imageFile!.path);
+                          final savedImage = await _imageFile!.copy(
+                            p.join(appDir.path, fileName),
+                          );
+                          finalImagePath = savedImage.path;
+                        }
+
+                        // 4. Crea o aggiorna l'oggetto
+                        final newItem = PurchaseItemModel(
+                          id: item?.id ?? const Uuid().v4(),
+                          name: nameController.text.trim(),
+                          unitPrice: price,
+                          quantity: quantity,
+                          barcode: barcode ?? item?.barcode,
+                          imagePath: finalImagePath,
+                        );
+
+                        // 5. Aggiorna lo stato del carrello
+                        final notifier = ref.read(cartProvider.notifier);
+                        if (isEditing) {
+                          notifier.updateItem(newItem);
+                        } else {
+                          notifier.addItem(newItem);
+                        }
+
+                        // 6. Chiudi il dialog
+                        if (ctx.mounted) Navigator.of(ctx).pop();
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    },
+  );
+}
