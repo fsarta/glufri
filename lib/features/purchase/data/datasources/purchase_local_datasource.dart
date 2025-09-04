@@ -1,6 +1,8 @@
 import 'package:hive/hive.dart';
 import '../models/purchase_model.dart';
 
+const String localUserId = 'local';
+
 abstract class PurchaseLocalDataSource {
   Future<void> addPurchase(PurchaseModel purchase);
   Future<List<PurchaseModel>> getPurchases();
@@ -9,32 +11,34 @@ abstract class PurchaseLocalDataSource {
 }
 
 class PurchaseLocalDataSourceImpl implements PurchaseLocalDataSource {
-  final Box<PurchaseModel> _purchaseBox;
+  final Future<Box<PurchaseModel>> _purchaseBox;
 
-  PurchaseLocalDataSourceImpl()
-    : _purchaseBox = Hive.box<PurchaseModel>('purchases');
+  PurchaseLocalDataSourceImpl({required String userId})
+    : _purchaseBox = Hive.openBox<PurchaseModel>('purchases_$userId');
 
   @override
   Future<void> addPurchase(PurchaseModel purchase) async {
-    await _purchaseBox.put(purchase.id, purchase);
+    final box = await _purchaseBox;
+    await box.put(purchase.id, purchase);
   }
 
   @override
   Future<void> deletePurchase(String purchaseId) async {
-    await _purchaseBox.delete(purchaseId);
+    final box = await _purchaseBox;
+    await box.delete(purchaseId);
   }
 
   @override
   Future<void> updatePurchase(PurchaseModel purchase) async {
-    await _purchaseBox.put(purchase.id, purchase);
+    final box = await _purchaseBox;
+    await box.put(purchase.id, purchase);
   }
 
   @override
   Future<List<PurchaseModel>> getPurchases() async {
-    final purchases = _purchaseBox.values.toList();
-    purchases.sort(
-      (a, b) => b.date.compareTo(a.date),
-    ); // Ordina dal più recente
+    final box = await _purchaseBox;
+    final purchases = box.values.toList();
+    purchases.sort((a, b) => b.date.compareTo(a.date));
     return purchases;
   }
 }

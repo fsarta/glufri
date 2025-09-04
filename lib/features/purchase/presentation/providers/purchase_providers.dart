@@ -1,15 +1,22 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:glufri/features/backup/presentation/providers/user_provider.dart';
 import 'package:glufri/features/purchase/data/datasources/purchase_local_datasource.dart';
 import 'package:glufri/features/purchase/data/models/purchase_model.dart';
 import 'package:glufri/features/purchase/data/repositories/purchase_repository_impl.dart';
 import 'package:glufri/features/purchase/domain/repositories/purchase_repository.dart';
 import 'package:glufri/features/purchase/presentation/providers/purchase_filter_provider.dart';
 
-// 1. Provider per il DataSource locale (singleton)
+// 1. Provider per il DataSource locale (ORA È DINAMICO)
 final purchaseLocalDataSourceProvider = Provider<PurchaseLocalDataSource>((
   ref,
 ) {
-  return PurchaseLocalDataSourceImpl();
+  // Ascolta il provider dell'utente
+  final user = ref.watch(userProvider);
+
+  // Se l'utente è loggato, usa il suo UID. Altrimenti, usa la costante 'local'.
+  final userId = user?.uid ?? localUserId;
+
+  return PurchaseLocalDataSourceImpl(userId: userId);
 });
 
 // 2. Provider per il Repository (dipende dal datasource)
@@ -18,7 +25,7 @@ final purchaseRepositoryProvider = Provider<PurchaseRepository>((ref) {
   return PurchaseRepositoryImpl(localDataSource);
 });
 
-// 3. Provider della lista di acquisti ORA FILTRATA
+// 3. Provider della lista di acquisti  FILTRATA
 final purchaseListProvider = FutureProvider<List<PurchaseModel>>((ref) async {
   // Ascolta sia i filtri che il repository
   final filters = ref.watch(purchaseFilterProvider);
