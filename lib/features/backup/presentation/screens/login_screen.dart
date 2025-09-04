@@ -29,8 +29,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               _emailController.text,
               _passwordController.text,
             );
-        if (mounted)
-          Navigator.of(context).pop(); // Torna indietro dopo il login
+        //if (mounted) Navigator.of(context).pop(); // Torna indietro dopo il login
       } catch (e) {
         // Mostra errore
       } finally {
@@ -43,7 +42,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     setState(() => _isLoading = true);
     try {
       await ref.read(authRepositoryProvider).signInWithGoogle();
-      if (mounted) Navigator.of(context).pop();
+      // if (mounted) Navigator.of(context).pop();
     } catch (e) {
       // Mostra errore
     } finally {

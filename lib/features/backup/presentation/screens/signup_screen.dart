@@ -41,7 +41,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               _passwordController.text,
             );
         // Se la registrazione ha successo, torna indietro alla schermata precedente (login o home)
-        if (mounted) Navigator.of(context).pop();
+        // if (mounted) Navigator.of(context).pop();
       } catch (e) {
         // Gestisci e mostra un errore leggibile per l'utente
         setState(() {
