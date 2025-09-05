@@ -22,6 +22,9 @@ class PurchaseItemModel extends HiveObject {
   @HiveField(5)
   String? imagePath; // Percorso nel filesystem locale
 
+  @HiveField(6)
+  late bool isGlutenFree;
+
   PurchaseItemModel({
     required this.id,
     required this.name,
@@ -29,6 +32,7 @@ class PurchaseItemModel extends HiveObject {
     required this.quantity,
     this.barcode,
     this.imagePath,
+    this.isGlutenFree = false,
   });
 
   double get subtotal => unitPrice * quantity;

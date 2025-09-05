@@ -23,13 +23,14 @@ class PurchaseItemModelAdapter extends TypeAdapter<PurchaseItemModel> {
       quantity: fields[3] as double,
       barcode: fields[4] as String?,
       imagePath: fields[5] as String?,
+      isGlutenFree: fields[6] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, PurchaseItemModel obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class PurchaseItemModelAdapter extends TypeAdapter<PurchaseItemModel> {
       ..writeByte(4)
       ..write(obj.barcode)
       ..writeByte(5)
-      ..write(obj.imagePath);
+      ..write(obj.imagePath)
+      ..writeByte(6)
+      ..write(obj.isGlutenFree);
   }
 
   @override

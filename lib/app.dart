@@ -84,6 +84,7 @@ class GlufriApp extends ConsumerWidget {
                       quantity: item.quantity,
                       barcode: item.barcode,
                       imagePath: item.imagePath,
+                      isGlutenFree: item.isGlutenFree,
                     ),
                   )
                   .toList();

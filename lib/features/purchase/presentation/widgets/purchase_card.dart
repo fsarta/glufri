@@ -90,9 +90,61 @@ class PurchaseCard extends StatelessWidget {
                 ),
               ],
             ),
+            if (purchase.totalGlutenFree > 0) ...[
+              const Divider(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _SummaryChip(
+                    label: 'Senza Glutine',
+                    total: purchase.totalGlutenFree,
+                    icon: Icons.verified,
+                    color: Colors.green,
+                  ),
+                  _SummaryChip(
+                    label: 'Altro',
+                    total: purchase.totalRegular,
+                    icon: Icons.label_outline,
+                    color: Colors.grey.shade700,
+                  ),
+                ],
+              ),
+            ],
           ],
         ),
       ),
+    );
+  }
+}
+
+class _SummaryChip extends StatelessWidget {
+  const _SummaryChip({
+    required this.label,
+    required this.total,
+    required this.icon,
+    required this.color,
+  });
+
+  final String label;
+  final double total;
+  final IconData icon;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, size: 16, color: color),
+        const SizedBox(width: 4),
+        Text(
+          '$label: ',
+          style: TextStyle(color: Colors.grey.shade700, fontSize: 14),
+        ),
+        Text(
+          '${total.toStringAsFixed(2)} €',
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+        ),
+      ],
     );
   }
 }

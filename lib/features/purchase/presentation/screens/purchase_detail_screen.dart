@@ -109,25 +109,47 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Manteniamo le informazioni sul negozio e sulla data
                 Text(
                   purchase.store ?? 'Nessun negozio specificato',
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  // Usiamo un formato completo per il dettaglio
-                  DateFormat(
-                    'EEEE d MMMM yyyy, HH:mm:ss',
-                  ).format(purchase.date),
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  '${purchase.total.toStringAsFixed(2)} ${purchase.currency}',
-                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                    fontWeight: FontWeight.bold,
+                  DateFormat('EEEE d MMMM yyyy, HH:mm').format(purchase.date),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).textTheme.bodySmall?.color,
                   ),
                 ),
+                const SizedBox(height: 24), // Un po' più di spazio
+                // --- Inizia la nuova sezione dei totali dettagliati ---
+                // Questa Column interna è quella che ti avevo dato prima
+                Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.stretch, // Allarga gli elementi
+                  children: [
+                    _TotalDetailRow(
+                      'Totale Senza Glutine (SG)',
+                      purchase.totalGlutenFree,
+                      context,
+                      color: Colors.green,
+                    ),
+                    const SizedBox(height: 8),
+                    _TotalDetailRow(
+                      'Totale Altro',
+                      purchase.totalRegular,
+                      context,
+                    ),
+                    const Divider(height: 24, thickness: 1.0),
+                    _TotalDetailRow(
+                      'Totale Complessivo',
+                      purchase.total,
+                      context,
+                      isTotal: true,
+                    ),
+                  ],
+                ),
+                // --- Fine della nuova sezione dei totali ---
               ],
             ),
           ),
@@ -163,7 +185,15 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
                         ),
                 ),
               ),
-              title: Text(item.name),
+              title: Row(
+                children: [
+                  Text(item.name),
+                  if (item.isGlutenFree) ...[
+                    const SizedBox(width: 8),
+                    const Icon(Icons.verified, size: 16, color: Colors.green),
+                  ],
+                ],
+              ),
               subtitle: Text(
                 '${item.quantity} x ${item.unitPrice.toStringAsFixed(2)} €',
               ),
@@ -314,6 +344,47 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _TotalDetailRow extends StatelessWidget {
+  final String label;
+  final double amount;
+  final BuildContext context;
+  final bool isTotal;
+  final Color? color;
+
+  const _TotalDetailRow(
+    this.label,
+    this.amount,
+    this.context, {
+    this.isTotal = false,
+    this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final style = isTotal
+        ? Theme.of(
+            context,
+          ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold)
+        : Theme.of(context).textTheme.titleLarge;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: style?.copyWith(color: color)),
+        Text(
+          '${amount.toStringAsFixed(2)} €',
+          style: style?.copyWith(
+            fontWeight: FontWeight.bold,
+            color:
+                color ??
+                (isTotal ? Theme.of(context).colorScheme.primary : null),
+          ),
+        ),
+      ],
     );
   }
 }

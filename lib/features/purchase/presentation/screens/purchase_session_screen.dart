@@ -138,6 +138,9 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
                     itemBuilder: (context, index) {
                       final item = cartState.items[index];
                       return ListTile(
+                        leading: item.isGlutenFree
+                            ? const Icon(Icons.verified, color: Colors.green)
+                            : const Icon(Icons.shopping_cart_outlined),
                         title: Text(item.name),
                         subtitle: Text(
                           '${item.quantity} x ${item.unitPrice.toStringAsFixed(2)} €',
@@ -156,7 +159,7 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
           ),
 
           // Riepilogo e Totale
-          _buildTotalSummary(context, cartState.total),
+          _buildTotalSummary(context, cartState),
 
           // Pulsanti Azione
           _buildActionButtons(context, ref, l10n),
@@ -239,24 +242,36 @@ Widget _buildActionButtons(
 }
 
 // UI per il totale
-Widget _buildTotalSummary(BuildContext context, double total) {
+Widget _buildTotalSummary(BuildContext context, CartState cartState) {
+  // Ora calcoliamo i totali direttamente dallo stato del carrello
+  final double totalSg = cartState.items
+      .where((i) => i.isGlutenFree)
+      .fold(0.0, (sum, i) => sum + i.subtotal);
+
+  final double totalRegular = cartState.items
+      .where((i) => !i.isGlutenFree)
+      .fold(0.0, (sum, i) => sum + i.subtotal);
+
   return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+    padding: const EdgeInsets.all(16.0),
     decoration: BoxDecoration(
       border: Border(top: BorderSide(color: Theme.of(context).dividerColor)),
     ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    child: Column(
       children: [
-        Text(
+        if (totalSg > 0) ...[
+          _TotalRow('Totale Senza Glutine (SG)', totalSg),
+          const SizedBox(height: 8),
+        ],
+        if (totalRegular > 0) ...[
+          _TotalRow('Totale Altro', totalRegular),
+          const SizedBox(height: 8),
+        ],
+        const Divider(),
+        _TotalRow(
           AppLocalizations.of(context)!.total,
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
-        Text(
-          '${total.toStringAsFixed(2)} €',
-          style: Theme.of(
-            context,
-          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+          cartState.total,
+          isTotal: true,
         ),
       ],
     ),
@@ -298,6 +313,8 @@ void _showAddItemDialog(
     _imageFile = File(item.imagePath!);
   }
 
+  bool isGlutenFree = item?.isGlutenFree ?? false;
+
   showModalBottomSheet(
     context: context,
     isScrollControlled: true, // Fondamentale per far spazio alla tastiera
@@ -329,6 +346,7 @@ void _showAddItemDialog(
                       style: theme.textTheme.headlineMedium,
                       textAlign: TextAlign.center,
                     ),
+
                     const SizedBox(height: 24),
                     // ... (logica immagine, se presente, può andare qui)
                     TextFormField(
@@ -342,6 +360,7 @@ void _showAddItemDialog(
                         return null;
                       },
                     ),
+
                     const SizedBox(height: 16),
                     Row(
                       children: [
@@ -372,6 +391,7 @@ void _showAddItemDialog(
                             },
                           ),
                         ),
+
                         const SizedBox(width: 16),
                         Expanded(
                           child: TextFormField(
@@ -403,6 +423,7 @@ void _showAddItemDialog(
                         ),
                       ],
                     ),
+
                     const SizedBox(height: 16),
                     // Campo Barcode (nella sua Row separata)
                     TextFormField(
@@ -417,7 +438,25 @@ void _showAddItemDialog(
                             : null,
                       ),
                     ),
-                    const SizedBox(height: 32),
+
+                    const SizedBox(height: 16), // Spazio prima del checkbox
+                    CheckboxListTile(
+                      title: const Text('Prodotto Senza Glutine (SG)'),
+                      value: isGlutenFree,
+                      onChanged: (bool? value) {
+                        setStateDialog(() {
+                          // Usa setStateDialog per aggiornare la UI del modal
+                          isGlutenFree = value ?? false;
+                        });
+                      },
+                      secondary: Icon(
+                        Icons.verified,
+                        color: isGlutenFree ? Colors.green : Colors.grey,
+                      ),
+                      controlAffinity: ListTileControlAffinity.leading,
+                    ),
+
+                    const SizedBox(height: 24),
                     FilledButton(
                       child: Text(isEditing ? 'Aggiorna' : l10n.addItem),
                       onPressed: () async {
@@ -460,6 +499,7 @@ void _showAddItemDialog(
                           quantity: quantity,
                           barcode: barcode ?? item?.barcode,
                           imagePath: finalImagePath,
+                          isGlutenFree: isGlutenFree,
                         );
 
                         // 5. Aggiorna lo stato del carrello
@@ -484,4 +524,29 @@ void _showAddItemDialog(
       );
     },
   );
+}
+
+class _TotalRow extends StatelessWidget {
+  final String label;
+  final double amount;
+  final bool isTotal;
+
+  const _TotalRow(this.label, this.amount, {this.isTotal = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final style = isTotal
+        ? Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)
+        : Theme.of(context).textTheme.titleLarge;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: style),
+        Text('${amount.toStringAsFixed(2)} €', style: style),
+      ],
+    );
+  }
 }

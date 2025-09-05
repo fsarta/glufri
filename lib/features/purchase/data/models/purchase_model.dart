@@ -59,6 +59,20 @@ class PurchaseModel extends HiveObject {
     return '$baseTitle: ${topProduct.name} e altri $remainingCount prodotti';
   }
 
+  // Calcola il totale di soli prodotti contrassegnati come Senza Glutine.
+  double get totalGlutenFree {
+    return items
+        .where((item) => item.isGlutenFree)
+        .fold(0.0, (sum, item) => sum + item.subtotal);
+  }
+
+  // Calcola il totale dei prodotti non contrassegnati come Senza Glutine.
+  double get totalRegular {
+    return items
+        .where((item) => !item.isGlutenFree)
+        .fold(0.0, (sum, item) => sum + item.subtotal);
+  }
+
   PurchaseModel({
     required this.id,
     required this.date,
