@@ -7,6 +7,7 @@ import 'package:glufri/features/backup/presentation/providers/user_provider.dart
 import 'package:glufri/features/backup/presentation/screens/login_screen.dart';
 import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
 import 'package:glufri/features/monetization/presentation/widgets/ad_banner_widget.dart';
+import 'package:glufri/features/purchase/presentation/models/purchase_group_models.dart';
 import 'package:glufri/features/purchase/presentation/providers/cart_provider.dart';
 import 'package:glufri/features/purchase/presentation/providers/purchase_filter_provider.dart';
 import 'package:glufri/features/purchase/presentation/providers/purchase_providers.dart';
@@ -15,6 +16,7 @@ import 'package:glufri/features/purchase/presentation/screens/purchase_session_s
 import 'package:glufri/features/purchase/presentation/widgets/filtered_purchase_item_card.dart';
 import 'package:glufri/features/purchase/presentation/widgets/purchase_card.dart';
 import 'package:glufri/features/settings/presentation/screens/settings_screen.dart';
+import 'package:intl/intl.dart';
 
 /// La schermata principale dell'app che mostra la cronologia degli acquisti.
 ///
@@ -30,13 +32,14 @@ class PurchaseHistoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Osserva i provider necessari per la build della UI.
     // `purchaseListProvider` contiene i dati (o lo stato di caricamento/errore).
+    final groupedPurchases = ref.watch(groupedPurchaseProvider);
     final purchasesAsyncValue = ref.watch(purchaseListProvider);
     // `isProUserProvider` determina se mostrare le funzionalità premium (es. nascondere ads).
     final isPro = ref.watch(isProUserProvider);
     final filters = ref.watch(purchaseFilterProvider);
     final user = ref.watch(userProvider);
     final searchQuery = filters.searchQuery;
-    final bool isSearchActive = searchQuery.isNotEmpty;
+    final bool isSearchActive = filters.searchQuery.isNotEmpty;
 
     // `l10n` per le stringhe tradotte.
     final l10n = AppLocalizations.of(context);
@@ -109,9 +112,9 @@ class PurchaseHistoryScreen extends ConsumerWidget {
           Expanded(
             child: purchasesAsyncValue.when(
               // STATO DATI: la lista è stata caricata con successo.
-              data: (purchases) {
+              data: (_) {
                 // Se la lista è vuota, mostra un messaggio di benvenuto.
-                if (purchases.isEmpty) {
+                if (groupedPurchases.isEmpty) {
                   return Center(
                     child: Text(
                       isSearchActive
@@ -124,7 +127,7 @@ class PurchaseHistoryScreen extends ConsumerWidget {
                 }
 
                 // Se la ricerca NON è attiva, mostra la lista normale
-                if (!isSearchActive) {
+                /* if (!isSearchActive) {
                   return ListView.builder(
                     itemCount: purchases.length,
                     itemBuilder: (context, index) {
@@ -143,27 +146,17 @@ class PurchaseHistoryScreen extends ConsumerWidget {
                       );
                     },
                   );
-                }
+                } */
 
                 // Altrimenti, costruisci la lista con `ListView.builder`.
                 return ListView.builder(
-                  itemCount: purchases.length,
+                  itemCount: groupedPurchases.length, // Numero di anni
                   itemBuilder: (context, index) {
-                    final purchase = purchases[index];
-                    // Se la ricerca È attiva, usiamo la `FilteredPurchaseItemCard`.
-                    return InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (ctx) =>
-                                PurchaseDetailScreen(purchaseId: purchase.id),
-                          ),
-                        );
-                      },
-                      child: FilteredPurchaseItemCard(
-                        purchase: purchase,
-                        searchQuery: searchQuery,
-                      ),
+                    final yearGroup = groupedPurchases[index];
+                    return _YearlyGroupView(
+                      yearGroup: yearGroup,
+                      isSearchActive: isSearchActive,
+                      searchQuery: searchQuery,
                     );
                   },
                 );
@@ -196,6 +189,178 @@ class PurchaseHistoryScreen extends ConsumerWidget {
         label: Text(l10n.newPurchase),
         icon: const Icon(Icons.add_shopping_cart),
       ),
+    );
+  }
+}
+
+/// Un widget per visualizzare un intero gruppo annuale con mesi espandibili.
+class _YearlyGroupView extends StatelessWidget {
+  final YearlyPurchaseGroup yearGroup;
+  final bool isSearchActive;
+  final String searchQuery;
+
+  const _YearlyGroupView({
+    required this.yearGroup,
+    required this.isSearchActive,
+    required this.searchQuery,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2,
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      child: ExpansionTile(
+        initiallyExpanded: isSearchActive,
+        // Il titolo è l'header dell'anno
+        title: _GroupHeader(
+          title: yearGroup.year.toString(),
+          totalGf: yearGroup.totalGlutenFree,
+          totalRegular: yearGroup.totalRegular,
+          totalOverall: yearGroup.totalOverall,
+          isYear: true,
+        ),
+        // I figli sono i mesi di quell'anno
+        children: yearGroup.months.map((monthGroup) {
+          return _MonthlyGroupView(
+            monthGroup: monthGroup,
+            isSearchActive: isSearchActive,
+            searchQuery: searchQuery,
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+/// Un widget per visualizzare un gruppo mensile con gli acquisti espandibili.
+class _MonthlyGroupView extends StatelessWidget {
+  final MonthlyPurchaseGroup monthGroup;
+  final bool isSearchActive;
+  final String searchQuery;
+
+  const _MonthlyGroupView({
+    required this.monthGroup,
+    required this.isSearchActive,
+    required this.searchQuery,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    // Formatta il nome del mese nella lingua corretta
+    final monthName = DateFormat.MMMM(
+      l10n.localeName,
+    ).format(DateTime(monthGroup.year, monthGroup.month));
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 8, bottom: 8),
+      child: ExpansionTile(
+        initiallyExpanded: isSearchActive,
+        title: _GroupHeader(
+          title: monthName,
+          totalGf: monthGroup.totalGlutenFree,
+          totalRegular: monthGroup.totalRegular,
+          totalOverall: monthGroup.totalOverall,
+        ),
+        // I figli sono le card degli acquisti di quel mese
+        children: monthGroup.purchases.map((purchase) {
+          final Widget cardToShow;
+          if (isSearchActive) {
+            // Se la ricerca è attiva, mostra solo i risultati filtrati
+            cardToShow = FilteredPurchaseItemCard(
+              purchase: purchase,
+              searchQuery: searchQuery,
+            );
+          } else {
+            // Altrimenti, la card normale
+            cardToShow = PurchaseCard(purchase: purchase);
+          }
+          return InkWell(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => PurchaseDetailScreen(purchaseId: purchase.id),
+                ),
+              );
+            },
+            // Usiamo la nostra PurchaseCard esistente!
+            child: cardToShow,
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+/// Un widget riutilizzabile per mostrare il titolo e i totali per anni e mesi.
+class _GroupHeader extends StatelessWidget {
+  final String title;
+  final double totalGf;
+  final double totalRegular;
+  final double totalOverall;
+  final bool isYear;
+
+  const _GroupHeader({
+    required this.title,
+    required this.totalGf,
+    required this.totalRegular,
+    required this.totalOverall,
+    this.isYear = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    final titleStyle = isYear
+        ? theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)
+        : theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600);
+
+    final totalStyle = isYear
+        ? theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)
+        : theme.textTheme.bodyMedium;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: titleStyle),
+        const SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('${l10n.totalOverall}:', style: totalStyle),
+            Text(
+              '${totalOverall.toStringAsFixed(2)} €',
+              style: totalStyle?.copyWith(color: theme.colorScheme.primary),
+            ),
+          ],
+        ),
+        if (totalGf > 0 || totalRegular > 0) ...[
+          const SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('${l10n.glutenFree}:', style: theme.textTheme.bodySmall),
+              Text(
+                '${totalGf.toStringAsFixed(2)} €',
+                style: theme.textTheme.bodySmall,
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('${l10n.other}:', style: theme.textTheme.bodySmall),
+              Text(
+                '${totalRegular.toStringAsFixed(2)} €',
+                style: theme.textTheme.bodySmall,
+              ),
+            ],
+          ),
+        ],
+      ],
     );
   }
 }

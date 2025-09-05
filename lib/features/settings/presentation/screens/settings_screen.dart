@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
+import 'package:glufri/core/utils/debug_data_seeder.dart';
 import 'package:glufri/features/backup/domain/auth_repository.dart';
+import 'package:glufri/features/purchase/presentation/providers/purchase_providers.dart';
 import 'package:glufri/features/settings/presentation/providers/settings_provider.dart';
 import 'package:glufri/features/settings/presentation/screens/privacy_policy_screen.dart';
 import 'package:glufri/generated/l10n.dart'; // Ensure this import is present for S
@@ -138,6 +141,71 @@ class SettingsScreen extends ConsumerWidget {
               );
             },
           ),
+          // Questa intera sezione verrà compilata e mostrata SOLO in modalità debug.
+          // Non esisterà nell'app che pubblicherai sullo store.
+          if (kDebugMode) ...[
+            const Divider(thickness: 2, color: Colors.blueGrey),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'Opzioni Sviluppatore',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Colors.blueGrey,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.add_box, color: Colors.green),
+              title: const Text('Aggiungi 50 Acquisti Finti'),
+              subtitle: const Text('Popola la cronologia con dati casuali.'),
+              onTap: () async {
+                // Mostra un caricamento
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Generazione dati in corso...'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+                await DebugDataSeeder.generateAndSavePurchases();
+
+                // Forza l'aggiornamento della UI
+                ref.invalidate(purchaseListProvider);
+
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Dati generati con successo!'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete_forever, color: Colors.red),
+              title: const Text('Cancella TUTTI gli Acquisti Locali'),
+              subtitle: const Text(
+                'Azione irreversibile. Utile per ripartire da zero.',
+              ),
+              onTap: () async {
+                await DebugDataSeeder.clearLocalPurchases();
+
+                // Forza l'aggiornamento della UI
+                ref.invalidate(purchaseListProvider);
+
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Dati locali cancellati.'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+            ),
+            const Divider(thickness: 2, color: Colors.blueGrey),
+          ],
         ],
       ),
     );
