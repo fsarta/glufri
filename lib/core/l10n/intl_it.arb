@@ -174,5 +174,7 @@
   },
   "storeHint": "Es. Supermercato Rossi",
   "loginSuccess": "Benvenuto/a!",
-  "logoutSuccess": "Logout effettuato con successo."
+  "logoutSuccess": "Logout effettuato con successo.",
+  "undoAction": "ANNULLA",
+  "purchaseMarkedForDeletion": "Acquisto eliminato."
 }

@@ -174,5 +174,7 @@
   },
   "storeHint": "E.g. Rossi Supermarket",
   "loginSuccess": "Welcome!",
-  "logoutSuccess": "Logout successful."
+  "logoutSuccess": "Logout successful.",
+  "undoAction": "UNDO",
+  "purchaseMarkedForDeletion": "Purchase deleted."
 }

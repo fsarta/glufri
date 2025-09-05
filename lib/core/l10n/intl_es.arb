@@ -124,5 +124,7 @@
   "purchaseExport": "Exportación de Compra Glufri - {store}",
   "storeHint": "Ej. Supermercado Rossi",
   "loginSuccess": "¡Bienvenido/a!",
-  "logoutSuccess": "Cierre de sesión exitoso."
+  "logoutSuccess": "Cierre de sesión exitoso.",
+  "undoAction": "DESHACER",
+  "purchaseMarkedForDeletion": "Compra eliminada."
 }

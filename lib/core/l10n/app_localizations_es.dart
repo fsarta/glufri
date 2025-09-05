@@ -420,4 +420,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get logoutSuccess => 'Cierre de sesión exitoso.';
+
+  @override
+  String get undoAction => 'DESHACER';
+
+  @override
+  String get purchaseMarkedForDeletion => 'Compra eliminada.';
 }

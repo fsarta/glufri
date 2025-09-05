@@ -421,4 +421,10 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get logoutSuccess => 'Abmeldung erfolgreich.';
+
+  @override
+  String get undoAction => 'RÜCKGÄNGIG MACHEN';
+
+  @override
+  String get purchaseMarkedForDeletion => 'Kauf gelöscht.';
 }

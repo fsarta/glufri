@@ -853,6 +853,18 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Logout effettuato con successo.'**
   String get logoutSuccess;
+
+  /// No description provided for @undoAction.
+  ///
+  /// In it, this message translates to:
+  /// **'ANNULLA'**
+  String get undoAction;
+
+  /// No description provided for @purchaseMarkedForDeletion.
+  ///
+  /// In it, this message translates to:
+  /// **'Acquisto eliminato.'**
+  String get purchaseMarkedForDeletion;
 }
 
 class _AppLocalizationsDelegate

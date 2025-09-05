@@ -417,4 +417,10 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get logoutSuccess => 'Logout effettuato con successo.';
+
+  @override
+  String get undoAction => 'ANNULLA';
+
+  @override
+  String get purchaseMarkedForDeletion => 'Acquisto eliminato.';
 }

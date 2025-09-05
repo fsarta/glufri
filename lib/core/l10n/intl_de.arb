@@ -124,5 +124,7 @@
   "purchaseExport": "Glufri Einkaufsexport - {store}",
   "storeHint": "z.B. Supermarkt Rossi",
   "loginSuccess": "Willkommen!",
-  "logoutSuccess": "Abmeldung erfolgreich."
+  "logoutSuccess": "Abmeldung erfolgreich.",
+  "undoAction": "RÜCKGÄNGIG MACHEN",
+  "purchaseMarkedForDeletion": "Kauf gelöscht."
 }
