@@ -1,13 +1,39 @@
 import 'package:flutter/material.dart';
 
 // Definiamo alcuni colori per riutilizzarli facilmente
-const Color primaryColor = Colors.green;
+/* const Color primaryColor = Colors.green;
 const Color onPrimaryColor = Colors.white;
 const Color secondaryColor = Colors.teal;
 const Color backgroundColorLight = Color(0xFFF5F5F5);
 const Color backgroundColorDark = Color(0xFF121212);
 const Color cardColorLight = Colors.white;
 const Color cardColorDark = Color(0xFF1E1E1E);
+const Color errorColorLight = Colors.redAccent;
+const Color errorColorDark = Colors.red; */
+
+const Color primaryColor = Color(
+  0xFF8BC34A,
+); // Verde acido (Lime Green), più vibrante e naturale
+const Color onPrimaryColor = Colors.white; // Perfetto per il testo
+const Color secondaryColor = Color(
+  0xFF4CAF50,
+); // Un verde più scuro, come contrasto o per icone
+const Color backgroundColorLight = Color(
+  0xFFF9FBE7,
+); // Un bianco sporco, più caldo e meno asettico
+const Color backgroundColorDark = Color(
+  0xFF263238,
+); // Grigio scuro-blu, più moderno del nero
+const Color cardColorLight = Colors.white; // Funziona bene
+const Color cardColorDark = Color(
+  0xFF37474F,
+); // Grigio scuro per le card, si abbina al background
+const Color errorColorLight = Color(
+  0xFFD32F2F,
+); // Rosso profondo per gli errori
+const Color errorColorDark = Color(
+  0xFFE57373,
+); // Rosso più chiaro per l'errore in modalità scura
 
 /// Una classe per centralizzare la configurazione dei temi dell'app.
 /// In questo modo, se vogliamo cambiare il colore primario o un font,
@@ -27,7 +53,7 @@ class AppTheme {
       secondary: secondaryColor,
       background: backgroundColorLight,
       surface: cardColorLight,
-      error: Colors.redAccent,
+      error: errorColorLight,
     ),
     scaffoldBackgroundColor: backgroundColorLight,
     appBarTheme: const AppBarTheme(
@@ -66,7 +92,7 @@ class AppTheme {
       secondary: secondaryColor,
       background: backgroundColorDark,
       surface: cardColorDark,
-      error: Colors.red,
+      error: errorColorDark,
     ),
     scaffoldBackgroundColor: backgroundColorDark,
     appBarTheme: const AppBarTheme(
