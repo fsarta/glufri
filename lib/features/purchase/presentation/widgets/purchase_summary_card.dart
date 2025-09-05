@@ -48,9 +48,9 @@ class PurchaseSummaryCard extends StatelessWidget {
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           Text(
-            DateFormat.yMMMMEEEEd(
-              l10n.localeName,
-            ).format(purchase.date), // ATTENZIONE era 'it_IT'
+            DateFormat.yMMMMEEEEd().format(
+              purchase.date,
+            ), // ATTENZIONE era 'it_IT'
             style: TextStyle(color: Colors.grey.shade600),
           ),
           const SizedBox(height: 16),

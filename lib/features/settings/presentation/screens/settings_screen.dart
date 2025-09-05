@@ -56,14 +56,7 @@ class SettingsScreen extends ConsumerWidget {
                 DropdownMenuItem(value: 'fr', child: Text("Français")),
               ],
               onChanged: (value) {
-                if (value == null) return;
-                if (value == 'system') {
-                  ref
-                      .read(localeProvider.notifier)
-                      .setLocale(const Locale('system'));
-                } else {
-                  ref.read(localeProvider.notifier).setLocale(Locale(value));
-                }
+                ref.read(localeProvider.notifier).setLocaleFromString(value);
               },
             ),
           ),

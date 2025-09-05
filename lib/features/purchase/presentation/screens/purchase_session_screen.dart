@@ -97,7 +97,7 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
               label: Text(l10n!.savePurchase),
               onPressed: cartState.items.isNotEmpty
                   ? () async {
-                      await ref.read(cartProvider.notifier).savePurchase(ref);
+                      await ref.read(cartProvider.notifier).savePurchase();
                       if (context.mounted) {
                         Navigator.of(context).pop();
                         ScaffoldMessenger.of(context).showSnackBar(

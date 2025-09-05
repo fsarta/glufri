@@ -7,6 +7,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
@@ -44,10 +46,10 @@ Future<void> _initializeGoogleSignInIfNeeded() async {
 }
 
 Future<void> main() async {
-  // 1. Assicurati che il binding Flutter sia inizializzato
+  // Assicurati che il binding Flutter sia inizializzato
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 2. Esegui in parallelo le inizializzazioni principali:
+  // Esegui in parallelo le inizializzazioni principali:
   //    - Firebase
   //    - Hive
   //    - Mobile Ads
@@ -57,19 +59,24 @@ Future<void> main() async {
     Hive.initFlutter(),
     MobileAds.instance.initialize(),
     _initializeGoogleSignInIfNeeded(),
+    initializeDateFormatting(),
   ]);
 
-  // 3. Registra gli adapters di Hive prima di aprire le box
+  // Registra gli adapters di Hive prima di aprire le box
   Hive.registerAdapter(PurchaseModelAdapter());
   Hive.registerAdapter(PurchaseItemModelAdapter());
 
   // Apri la box (se è pesante puoi considerarne l'apertura asincrona più tardi)
   await Hive.openBox<PurchaseModel>('purchases');
 
-  // 4. Controlla se l'utente ha già visto l'onboarding
+  // Controlla se l'utente ha già visto l'onboarding
   final prefs = await SharedPreferences.getInstance();
   final bool hasSeenOnboarding = prefs.getBool('hasSeenOnboarding') ?? false;
 
-  // 5. Esegui l'app avvolta in ProviderScope (Riverpod)
+  // Imposta il locale di default per tutta l'app
+  Intl.defaultLocale = WidgetsBinding.instance.platformDispatcher.locale
+      .toLanguageTag();
+
+  // Esegui l'app avvolta in ProviderScope (Riverpod)
   runApp(ProviderScope(child: GlufriApp(hasSeenOnboarding: hasSeenOnboarding)));
 }

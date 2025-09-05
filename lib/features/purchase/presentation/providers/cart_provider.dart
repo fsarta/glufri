@@ -39,7 +39,8 @@ class CartState {
 
 // Il Notifier che gestisce la logica del carrello
 class CartNotifier extends StateNotifier<CartState> {
-  CartNotifier() : super(CartState());
+  final Ref _ref;
+  CartNotifier(this._ref) : super(CartState());
 
   void addItem(PurchaseItemModel item) {
     state = state.copyWith(items: [...state.items, item]);
@@ -74,14 +75,14 @@ class CartNotifier extends StateNotifier<CartState> {
     );
   }
 
-  Future<void> savePurchase(WidgetRef ref) async {
+  Future<void> savePurchase() async {
     if (state.items.isEmpty) return;
 
     // Controlla se siamo in modalità modifica
     final isEditing = state.originalPurchaseId != null;
 
     final purchase = PurchaseModel(
-      id: isEditing ? state.originalPurchaseId! : _uuid.v4(),
+      id: isEditing ? state.originalPurchaseId! : const Uuid().v4(),
       date: DateTime.now(),
       store: state.storeName,
       total: state.total,
@@ -89,7 +90,7 @@ class CartNotifier extends StateNotifier<CartState> {
       currency: 'EUR', // o da impostazioni
     );
 
-    final repository = ref.read(purchaseRepositoryProvider);
+    final repository = _ref.read(purchaseRepositoryProvider);
 
     if (isEditing) {
       await repository.updatePurchase(purchase);
@@ -101,7 +102,7 @@ class CartNotifier extends StateNotifier<CartState> {
     reset();
 
     // Invalida il provider della lista per forzare l'aggiornamento
-    ref.invalidate(purchaseListProvider);
+    _ref.invalidate(purchaseListProvider);
   }
 
   void reset() {
@@ -111,5 +112,5 @@ class CartNotifier extends StateNotifier<CartState> {
 
 // Il Provider effettivo che la UI userà
 final cartProvider = StateNotifierProvider<CartNotifier, CartState>((ref) {
-  return CartNotifier();
+  return CartNotifier(ref);
 });
