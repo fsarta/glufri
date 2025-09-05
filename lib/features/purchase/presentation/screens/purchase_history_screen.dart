@@ -151,44 +151,32 @@ class PurchaseHistoryScreen extends ConsumerWidget {
                 ),
               ),
               data: (_) {
-                // --- NUOVA LOGICA DI VISUALIZZAZIONE ---
-                if (isSearchActive) {
-                  // --- VISTA DI RICERCA (NUOVA) ---
-                  final searchResults = ref.watch(
-                    searchedProductsSummaryProvider,
-                  );
-                  if (searchResults.isEmpty) {
-                    return Center(
-                      child: Text(l10n.noProductsFoundFor(filters.searchQuery)),
-                    );
-                  }
-                  return ListView.builder(
-                    itemCount: searchResults.length,
-                    itemBuilder: (context, index) {
-                      return _SearchedProductSummaryCard(
-                        summary: searchResults[index],
-                      );
-                    },
-                  );
-                } else {
-                  // --- VISTA CRONOLOGICA (VECCHIA) ---
-                  final groupedPurchases = ref.watch(groupedPurchaseProvider);
-                  if (groupedPurchases.isEmpty) {
-                    return Center(child: Text(l10n.noPurchases));
-                  }
-                  return ListView.builder(
-                    itemCount: groupedPurchases.length,
-                    itemBuilder: (context, index) {
-                      final yearGroup = groupedPurchases[index];
-                      // Questa parte deve essere come quella che abbiamo corretto prima
-                      return _YearlyGroupView(
-                        yearGroup: yearGroup,
-                        isSearchActive: false,
-                        searchQuery: "",
-                      );
-                    },
-                  );
-                }
+                final isSearchActive = ref
+                    .watch(purchaseFilterProvider)
+                    .searchQuery
+                    .isNotEmpty;
+
+                // --- INIZIA LA MODIFICA CHIAVE ---
+
+                // Definiamo il widget della lista che vogliamo mostrare
+                final listContent = _buildListContent(ref, isSearchActive);
+
+                // Avvolgiamo la nostra logica della lista nel RefreshIndicator
+                return RefreshIndicator(
+                  // La funzione onRefresh deve essere un Future.
+                  // invalidare un provider è un'operazione sincrona, ma
+                  // il refresh completo dei dati avverrà in modo asincrono.
+                  onRefresh: () async {
+                    // Questa singola riga dice a Riverpod di ricaricare i dati.
+                    ref.invalidate(purchaseListProvider);
+
+                    // Attendiamo che il nuovo stato del Future sia disponibile.
+                    // Questo assicura che l'indicatore di caricamento
+                    // rimanga visibile fino alla fine del fetch dei dati.
+                    await ref.read(purchaseListProvider.future);
+                  },
+                  child: listContent,
+                );
               },
             ),
           ),
@@ -210,6 +198,47 @@ class PurchaseHistoryScreen extends ConsumerWidget {
         icon: const Icon(Icons.add_shopping_cart),
       ),
     );
+  }
+
+  Widget _buildListContent(WidgetRef ref, bool isSearchActive) {
+    // Questa è la logica if/else che avevi già nel blocco 'data'
+    if (isSearchActive) {
+      final searchResults = ref.watch(searchedProductsSummaryProvider);
+      final l10n = AppLocalizations.of(ref.context)!;
+      if (searchResults.isEmpty) {
+        return Center(
+          child: Text(
+            l10n.noProductsFoundFor(
+              ref.read(purchaseFilterProvider).searchQuery,
+            ),
+          ),
+        );
+      }
+      return ListView.builder(
+        itemCount: searchResults.length,
+        itemBuilder: (context, index) {
+          return _SearchedProductSummaryCard(summary: searchResults[index]);
+        },
+      );
+    } else {
+      final groupedPurchases = ref.watch(groupedPurchaseProvider);
+      final l10n = AppLocalizations.of(ref.context)!;
+      if (groupedPurchases.isEmpty) {
+        return Center(child: Text(l10n.noPurchases));
+      }
+      return ListView.builder(
+        itemCount: groupedPurchases.length,
+        itemBuilder: (context, index) {
+          final yearGroup = groupedPurchases[index];
+          final filters = ref.watch(purchaseFilterProvider);
+          return _YearlyGroupView(
+            yearGroup: yearGroup,
+            isSearchActive: false,
+            searchQuery: filters.searchQuery,
+          );
+        },
+      );
+    }
   }
 }
 
