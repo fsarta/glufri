@@ -17,6 +17,7 @@ import 'package:glufri/features/purchase/presentation/widgets/filtered_purchase_
 import 'package:glufri/features/purchase/presentation/widgets/purchase_card.dart';
 import 'package:glufri/features/settings/presentation/screens/settings_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:badges/badges.dart' as badges;
 
 /// La schermata principale dell'app che mostra la cronologia degli acquisti.
 ///
@@ -40,6 +41,7 @@ class PurchaseHistoryScreen extends ConsumerWidget {
     final user = ref.watch(userProvider);
     final searchQuery = filters.searchQuery;
     final bool isSearchActive = filters.searchQuery.isNotEmpty;
+    final isDateFilterActive = filters.dateRange != null;
 
     // `l10n` per le stringhe tradotte.
     final l10n = AppLocalizations.of(context);
@@ -48,6 +50,34 @@ class PurchaseHistoryScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(l10n!.purchaseHistory),
         actions: [
+          IconButton(
+            tooltip: 'Filtra per data', // TODO: Localizza questa stringa
+            icon: badges.Badge(
+              showBadge: isDateFilterActive,
+              child: const Icon(Icons.calendar_month_outlined),
+            ),
+            onPressed: () async {
+              final range = await showDateRangePicker(
+                context: context,
+                firstDate: DateTime(2020),
+                lastDate: DateTime.now(),
+                initialDateRange: filters.dateRange,
+              );
+
+              if (range != null) {
+                ref.read(purchaseFilterProvider.notifier).setDateRange(range);
+              }
+            },
+          ),
+          // Pulsante per cancellare il filtro (appare solo se il filtro è attivo)
+          if (isDateFilterActive)
+            IconButton(
+              tooltip: 'Rimuovi filtro data', // TODO: Localizza
+              icon: const Icon(Icons.filter_alt_off_outlined),
+              onPressed: () {
+                ref.read(purchaseFilterProvider.notifier).clearDateRange();
+              },
+            ),
           IconButton(
             tooltip: user != null ? l10n.account : l10n.login,
             icon: user != null

@@ -38,9 +38,9 @@ final purchaseListProvider = FutureProvider<List<PurchaseModel>>((ref) async {
   final allPurchases = await repository.getPurchases();
 
   // Applica i filtri in memoria (lato client)
-  if (filters.searchQuery.isEmpty && filters.dateRange == null) {
+  /* if (filters.searchQuery.isEmpty && filters.dateRange == null) {
     return allPurchases; // Nessun filtro, restituisce tutto
-  }
+  } */
 
   return allPurchases.where((purchase) {
     // Filtro di ricerca (cerca nel negozio o nei nomi dei prodotti)
@@ -60,7 +60,7 @@ final purchaseListProvider = FutureProvider<List<PurchaseModel>>((ref) async {
     final dateMatch =
         filters.dateRange == null ||
         (purchase.date.isAfter(
-              filters.dateRange!.start.subtract(const Duration(days: 1)),
+              filters.dateRange!.start.subtract(const Duration(seconds: 1)),
             ) &&
             purchase.date.isBefore(
               filters.dateRange!.end.add(const Duration(days: 1)),

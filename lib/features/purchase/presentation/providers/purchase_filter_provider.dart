@@ -13,10 +13,13 @@ class PurchaseFilterState {
   PurchaseFilterState copyWith({
     String? searchQuery,
     DateTimeRange? dateRange,
+    bool clearDateRange = false,
   }) {
     return PurchaseFilterState(
       searchQuery: searchQuery ?? this.searchQuery,
-      dateRange: dateRange ?? this.dateRange,
+      // Se 'clearDateRange' è true, imposta dateRange a null, altrimenti prendi
+      // il nuovo valore o mantieni il vecchio
+      dateRange: clearDateRange ? null : (dateRange ?? this.dateRange),
     );
   }
 }
@@ -29,8 +32,12 @@ class PurchaseFilterNotifier extends StateNotifier<PurchaseFilterState> {
     state = state.copyWith(searchQuery: query);
   }
 
-  void setDateRange(DateTimeRange range) {
+  void setDateRange(DateTimeRange? range) {
     state = state.copyWith(dateRange: range);
+  }
+
+  void clearDateRange() {
+    state = state.copyWith(clearDateRange: true);
   }
 
   void clearFilters() {
