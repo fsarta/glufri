@@ -49,14 +49,11 @@ class SettingsScreen extends ConsumerWidget {
                   value: 'system',
                   child: Text(l10n.settingsLanguageSystem),
                 ),
-                DropdownMenuItem(
-                  value: 'it',
-                  child: Text(l10n.settingsLanguageItalian),
-                ),
-                DropdownMenuItem(
-                  value: 'en',
-                  child: Text(l10n.settingsLanguageEnglish),
-                ),
+                DropdownMenuItem(value: 'it', child: Text("Italiano")),
+                DropdownMenuItem(value: 'en', child: Text("English")),
+                DropdownMenuItem(value: 'es', child: Text("Español")),
+                DropdownMenuItem(value: 'de', child: Text("Deutsch")),
+                DropdownMenuItem(value: 'fr', child: Text("Français")),
               ],
               onChanged: (value) {
                 if (value == null) return;

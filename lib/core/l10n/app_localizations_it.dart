@@ -240,10 +240,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get update => 'Aggiorna';
 
   @override
-  String get glutenFreeProduct => 'Prodotto Senza Glutine (SG)';
+  String get glutenFreeProduct => 'Prodotto Senza Glutine';
 
   @override
-  String get totalGlutenFree => 'Totale Senza Glutine (SG)';
+  String get totalGlutenFree => 'Totale Senza Glutine';
 
   @override
   String get totalOther => 'Totale Altro';
