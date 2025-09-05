@@ -139,7 +139,7 @@ class PurchaseHistoryScreen extends ConsumerWidget {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx) =>
-                                  PurchaseDetailScreen(purchase: purchase),
+                                  PurchaseDetailScreen(purchaseId: purchase.id),
                             ),
                           );
                         },
@@ -160,7 +160,7 @@ class PurchaseHistoryScreen extends ConsumerWidget {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (ctx) =>
-                                PurchaseDetailScreen(purchase: purchase),
+                                PurchaseDetailScreen(purchaseId: purchase.id),
                           ),
                         );
                       },

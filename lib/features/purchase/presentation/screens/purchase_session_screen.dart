@@ -30,23 +30,70 @@ class PurchaseSessionScreen extends ConsumerStatefulWidget {
 }
 
 class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
+  final _storeNameController = TextEditingController();
+  bool _isInitialized = false; // Flag per l'inizializzazione
+
   @override
+  void initState() {
+    super.initState();
+    // Esegui la logica di caricamento qui.
+    // Usiamo `Future.microtask` per assicurarci che la build iniziale sia completata
+    // prima di tentare di modificare lo stato di un provider.
+    // Questo previene potenziali errori di "modifying a provider during build".
+    Future.microtask(() {
+      final purchase = widget.purchaseToEdit;
+      if (purchase != null) {
+        // Chiama la funzione di caricamento sul notifier!
+        ref
+            .read(cartProvider.notifier)
+            .loadPurchase(
+              purchase,
+              isDuplicate: widget.isDuplicate, // Passa anche questo flag!
+            );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _storeNameController.dispose();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
-    final ref = this.ref;
     final cartState = ref.watch(cartProvider);
     final l10n = AppLocalizations.of(context);
     final textTheme = Theme.of(context).textTheme;
 
+    if (!_isInitialized && cartState.storeName != null) {
+      _storeNameController.text = cartState.storeName!;
+      _isInitialized = true;
+    }
+
+    // Ascolta i cambiamenti futuri (utile se lo stato potesse cambiare da altrove)
+    ref.listen<String?>(cartProvider.select((state) => state.storeName), (
+      previous,
+      next,
+    ) {
+      if (next != _storeNameController.text) {
+        _storeNameController.text = next ?? '';
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n!.newPurchase),
+        title: Text(
+          widget.purchaseToEdit != null && !widget.isDuplicate
+              ? 'Modifica Acquisto'
+              : l10n!.newPurchase,
+        ),
         actions: [
           // Bottone Salva abilitato solo se ci sono items
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: FilledButton.icon(
               icon: const Icon(Icons.save),
-              label: Text(l10n.savePurchase),
+              label: Text(l10n!.savePurchase),
               onPressed: cartState.items.isNotEmpty
                   ? () async {
                       await ref.read(cartProvider.notifier).savePurchase(ref);
@@ -70,7 +117,7 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextFormField(
-              initialValue: cartState.storeName,
+              controller: _storeNameController,
               decoration: InputDecoration(
                 labelText: l10n.store,
                 hintText: 'Es. Supermercato Rossi',

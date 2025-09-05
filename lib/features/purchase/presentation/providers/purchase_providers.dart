@@ -66,3 +66,23 @@ final purchaseListProvider = FutureProvider<List<PurchaseModel>>((ref) async {
     return searchMatch && dateMatch;
   }).toList();
 });
+
+// Ascolta la lista completa e trova l'acquisto per ID.
+final singlePurchaseProvider = Provider.autoDispose.family<PurchaseModel?, String>((
+  ref,
+  purchaseId,
+) {
+  // Ascolta la lista intera
+  final purchasesListAsync = ref.watch(purchaseListProvider);
+
+  // Quando la lista è disponibile, cerca l'elemento specifico
+  return purchasesListAsync.whenData((purchases) {
+    try {
+      // Usa .firstWhere per trovare l'acquisto. Se non lo trova, lancia un errore.
+      return purchases.firstWhere((p) => p.id == purchaseId);
+    } catch (e) {
+      // Se l'acquisto non è più nella lista (es. è stato eliminato), restituisce null.
+      return null;
+    }
+  }).value; // .value espone il dato in modo sincrono o null se in caricamento/errore
+});

@@ -17,9 +17,9 @@ import 'package:share_plus/share_plus.dart';
 /// È un ConsumerStatefulWidget per poter utilizzare un `ScreenshotController`
 /// che richiede di essere inizializzato e mantenuto nello stato del widget.
 class PurchaseDetailScreen extends ConsumerStatefulWidget {
-  final PurchaseModel purchase;
+  final String purchaseId;
 
-  const PurchaseDetailScreen({super.key, required this.purchase});
+  const PurchaseDetailScreen({super.key, required this.purchaseId});
 
   @override
   ConsumerState<PurchaseDetailScreen> createState() =>
@@ -32,19 +32,33 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Guarda il nuovo provider usando l'ID passato
+    final purchase = ref.watch(singlePurchaseProvider(widget.purchaseId));
+
+    // Gestisci il caso in cui l'acquisto non sia (ancora) disponibile o sia stato cancellato
+    if (purchase == null) {
+      // Mostra uno stato di caricamento o un messaggio se l'acquisto non c'è più
+      return Scaffold(
+        appBar: AppBar(),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.purchase.store ?? 'Dettaglio Acquisto'),
+        title: Text(purchase.store ?? 'Dettaglio Acquisto'),
         actions: [
           // Bottone diretto per la condivisione veloce.
           IconButton(
             icon: const Icon(Icons.share),
             tooltip: 'Condividi Riepilogo',
-            onPressed: _sharePurchaseAsImage,
+            onPressed: () =>
+                _handleMenuSelection('edit', context, ref, purchase),
           ),
           // Menu a tendina per tutte le altre azioni.
           PopupMenuButton<String>(
-            onSelected: (value) => _handleMenuSelection(value, context, ref),
+            onSelected: (value) =>
+                _handleMenuSelection(value, context, ref, purchase),
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               const PopupMenuItem<String>(
                 value: 'edit',
@@ -96,7 +110,7 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.purchase.store ?? 'Nessun negozio specificato',
+                  purchase.store ?? 'Nessun negozio specificato',
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 4),
@@ -104,12 +118,12 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
                   // Usiamo un formato completo per il dettaglio
                   DateFormat(
                     'EEEE d MMMM yyyy, HH:mm:ss',
-                  ).format(widget.purchase.date),
+                  ).format(purchase.date),
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  '${widget.purchase.total.toStringAsFixed(2)} ${widget.purchase.currency}',
+                  '${purchase.total.toStringAsFixed(2)} ${purchase.currency}',
                   style: Theme.of(context).textTheme.displaySmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -120,12 +134,12 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
           const Divider(thickness: 1.5),
           ListTile(
             title: Text(
-              'Prodotti (${widget.purchase.items.length})',
+              'Prodotti (${purchase.items.length})',
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
           // Lista dei singoli prodotti acquistati.
-          ...widget.purchase.items.map((item) {
+          ...purchase.items.map((item) {
             final hasImage =
                 item.imagePath != null && item.imagePath!.isNotEmpty;
             return ListTile(
@@ -165,13 +179,17 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
   }
 
   /// Gestisce la selezione di un'opzione dal menu a tendina.
-  void _handleMenuSelection(String value, BuildContext context, WidgetRef ref) {
+  void _handleMenuSelection(
+    String value,
+    BuildContext context,
+    WidgetRef ref,
+    PurchaseModel purchase,
+  ) {
     switch (value) {
       case 'edit':
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) =>
-                PurchaseSessionScreen(purchaseToEdit: widget.purchase),
+            builder: (_) => PurchaseSessionScreen(purchaseToEdit: purchase),
           ),
         );
         break;
@@ -179,23 +197,27 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => PurchaseSessionScreen(
-              purchaseToEdit: widget.purchase,
+              purchaseToEdit: purchase,
               isDuplicate: true,
             ),
           ),
         );
         break;
       case 'export_csv':
-        _exportPurchaseAsCsv(context, ref);
+        _exportPurchaseAsCsv(context, ref, purchase);
         break;
       case 'delete':
-        _showDeleteConfirmationDialog(context, ref);
+        _showDeleteConfirmationDialog(context, ref, purchase);
         break;
     }
   }
 
   /// Genera un file CSV e avvia la condivisione nativa (solo per utenti Pro).
-  Future<void> _exportPurchaseAsCsv(BuildContext context, WidgetRef ref) async {
+  Future<void> _exportPurchaseAsCsv(
+    BuildContext context,
+    WidgetRef ref,
+    PurchaseModel purchase,
+  ) async {
     final isPro = ref.read(isProUserProvider);
     if (!isPro && context.mounted) {
       Navigator.of(
@@ -205,18 +227,14 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
     }
 
     try {
-      final csvData = ExportService().purchaseToCsv(widget.purchase);
+      final csvData = ExportService().purchaseToCsv(purchase);
       final tempDir = await getTemporaryDirectory();
-      final file = File(
-        '${tempDir.path}/glufri-export-${widget.purchase.id}.csv',
-      );
+      final file = File('${tempDir.path}/glufri-export-${purchase.id}.csv');
       await file.writeAsString(csvData);
 
-      await Share.shareXFiles(
-        [XFile(file.path)],
-        subject:
-            'Esportazione Acquisto Glufri - ${widget.purchase.store ?? ""}',
-      );
+      await Share.shareXFiles([
+        XFile(file.path),
+      ], subject: 'Esportazione Acquisto Glufri - ${purchase.store ?? ""}');
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -227,19 +245,17 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
   }
 
   /// Cattura il widget di riepilogo come immagine e avvia la condivisione.
-  Future<void> _sharePurchaseAsImage() async {
+  Future<void> _sharePurchaseAsImage(PurchaseModel purchase) async {
     try {
       final image = await _screenshotController.captureFromWidget(
         InheritedTheme.captureAll(
           context,
-          Material(child: PurchaseSummaryCard(purchase: widget.purchase)),
+          Material(child: PurchaseSummaryCard(purchase: purchase)),
         ),
       );
 
       final tempDir = await getTemporaryDirectory();
-      final file = File(
-        '${tempDir.path}/glufri-share-${widget.purchase.id}.png',
-      );
+      final file = File('${tempDir.path}/glufri-share-${purchase.id}.png');
       await file.writeAsBytes(image);
 
       await Share.shareXFiles(
@@ -257,7 +273,11 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
   }
 
   /// Mostra un dialogo di conferma prima di eliminare definitivamente un acquisto.
-  void _showDeleteConfirmationDialog(BuildContext context, WidgetRef ref) {
+  void _showDeleteConfirmationDialog(
+    BuildContext context,
+    WidgetRef ref,
+    PurchaseModel purchase,
+  ) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -278,7 +298,7 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
             onPressed: () async {
               await ref
                   .read(purchaseRepositoryProvider)
-                  .deletePurchase(widget.purchase.id);
+                  .deletePurchase(purchase.id);
               ref.invalidate(purchaseListProvider); // Aggiorna la cronologia
 
               if (context.mounted) {
