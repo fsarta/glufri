@@ -1,5 +1,6 @@
+// lib/features/purchase/presentation/screens/purchase_detail_screen.dart
+
 import 'dart:io';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
@@ -55,8 +56,7 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
           IconButton(
             icon: const Icon(Icons.share),
             tooltip: l10n.shareSummary,
-            onPressed: () =>
-                _handleMenuSelection('edit', context, ref, purchase),
+            onPressed: () => _sharePurchaseAsImage(purchase),
           ),
           // Menu a tendina per tutte le altre azioni.
           PopupMenuButton<String>(
@@ -267,7 +267,7 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
 
       await Share.shareXFiles([
         XFile(file.path),
-      ], subject: 'Esportazione Acquisto Glufri - ${purchase.store ?? ""}');
+      ], subject: l10n.purchaseExport(purchase.store ?? ""));
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(
@@ -293,11 +293,7 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
       final file = File('${tempDir.path}/glufri-share-${purchase.id}.png');
       await file.writeAsBytes(image);
 
-      await Share.shareXFiles(
-        [XFile(file.path)],
-        text:
-            'Ecco il mio ultimo acquisto senza glutine tracciato con l\'app Glufri! 🛒',
-      );
+      await Share.shareXFiles([XFile(file.path)], text: l10n.shareText);
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(

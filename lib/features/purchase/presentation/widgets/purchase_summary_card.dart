@@ -1,4 +1,7 @@
+// lib/features/purchase/presentation/widgets/purchase_summary_card.dart
+
 import 'package:flutter/material.dart';
+import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/purchase/data/models/purchase_model.dart';
 import 'package:intl/intl.dart';
 
@@ -9,6 +12,8 @@ class PurchaseSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.all(20),
       color: Theme.of(context).colorScheme.surface,
@@ -20,9 +25,9 @@ class PurchaseSummaryCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Glufri',
-                style: TextStyle(
+              Text(
+                l10n.appName,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 22,
                   color: Colors.green,
@@ -39,16 +44,18 @@ class PurchaseSummaryCard extends StatelessWidget {
           ),
           const Divider(height: 20),
           Text(
-            purchase.store ?? 'Acquisto generico',
+            purchase.store ?? l10n.genericPurchase,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           Text(
-            DateFormat.yMMMMEEEEd('it_IT').format(purchase.date),
+            DateFormat.yMMMMEEEEd(
+              l10n.localeName,
+            ).format(purchase.date), // ATTENZIONE era 'it_IT'
             style: TextStyle(color: Colors.grey.shade600),
           ),
           const SizedBox(height: 16),
           Text(
-            'Prodotti principali:',
+            l10n.mainProducts,
             style: TextStyle(color: Colors.grey.shade700),
           ),
           ...purchase.items
@@ -60,12 +67,12 @@ class PurchaseSummaryCard extends StatelessWidget {
                 ),
               ),
           if (purchase.items.length > 3)
-            Text('... e altri ${purchase.items.length - 3} prodotti.'),
+            Text(l10n.andMoreProducts(purchase.items.length - 3)),
           const SizedBox(height: 20),
           Align(
             alignment: Alignment.centerRight,
             child: Text(
-              'Tracciato con Glufri App',
+              l10n.trackedWith,
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 color: Colors.grey.shade500,

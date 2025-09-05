@@ -17,7 +17,6 @@
   "light": "Chiaro",
   "dark": "Scuro",
   "system": "Sistema",
-
   "login": "Accedi",
   "loginAction": "ACCEDI",
   "password": "Password",
@@ -32,7 +31,6 @@
   "alreadyHaveAccount": "Hai già un account? Accedi",
   "or": "oppure",
   "loginWithGoogle": "Accedi con Google",
-
   "signup": "Registrati",
   "signupAction": "REGISTRATI",
   "signupTitle": "Crea il tuo account",
@@ -42,7 +40,6 @@
   "passwordLengthError": "La password deve essere di almeno 6 caratteri.",
   "passwordsDoNotMatchError": "Le password non coincidono.",
   "signupError": "Errore durante la registrazione. Riprova. (es. l'email potrebbe essere già in uso)",
-
   "account": "Account",
   "loggedInAs": "Loggato come {email}",
   "@loggedInAs": {
@@ -62,7 +59,6 @@
     }
   },
   "noPurchases": "Nessun acquisto registrato.\nPremi \"+\" per iniziare!",
-
   "purchaseDetail": "Dettaglio Acquisto",
   "shareSummary": "Condividi Riepilogo",
   "edit": "Modifica",
@@ -85,7 +81,6 @@
   "deleteConfirmationMessage": "Sei sicuro di voler eliminare questo acquisto? L'azione è irreversibile.",
   "cancel": "Annulla",
   "purchaseDeletedSuccess": "Acquisto eliminato con successo.",
-
   "editPurchase": "Modifica Acquisto",
   "purchaseSavedSuccess": "Acquisto salvato con successo!",
   "addProductToStart": "Aggiungi un prodotto per iniziare.",
@@ -97,16 +92,14 @@
   "mustBeGreaterThanZero": "Deve essere > 0",
   "barcodeOptional": "Codice a Barre (Opzionale)",
   "update": "Aggiorna",
-  "glutenFreeProduct": "Prodotto Senza Glutine",
-  "totalGlutenFree": "Totale Senza Glutine",
+  "glutenFreeProduct": "Prodotto Senza Glutine (SG)",
+  "totalGlutenFree": "Totale Senza Glutine (SG)",
   "totalOther": "Totale Altro",
   "totalOverall": "Totale Complessivo",
   "foundProducts": "Prodotti trovati:",
   "glutenFree": "Senza Glutine",
   "other": "Altro",
-  
   "scanBarcodeTitle": "Scansiona EAN-13",
-  
   "onboardingWelcomeTitle": "Benvenuto in Glufri!",
   "onboardingWelcomeBody": "La tua app per tracciare gli acquisti senza glutine in modo semplice e veloce.",
   "onboardingScanTitle": "Scansiona e Aggiungi",
@@ -115,7 +108,6 @@
   "onboardingTrackBody": "Salva i tuoi acquisti e consulta la cronologia per analizzare le tue spese.",
   "skip": "Salta",
   "start": "Inizia",
-
   "settingsLanguageSystem": "Sistema",
   "settingsLanguageItalian": "Italiano",
   "settingsLanguageEnglish": "English",
@@ -128,7 +120,6 @@
   "settingsLogout": "Logout",
   "settingsAuthError": "Errore di autenticazione",
   "settingsPrivacyPolicy": "Informativa Privacy",
-  
   "upsellTitle": "Passa a Glufri Pro",
   "upsellHeadline": "Sblocca Funzionalità Potenti!",
   "upsellFeature1": "Backup e Sync Multi-dispositivo",
@@ -137,7 +128,6 @@
   "upsellFeature4": "Supporto Prioritario",
   "upsellAction": "Abbonati Ora (Prezzo Annuo)",
   "upsellRestore": "Ripristina Acquisti",
-
   "migrationDialogTitle": "Acquisti Locali Rilevati",
   "migrationDialogBody": "Hai {count} acquisti salvati su questo dispositivo. Cosa vuoi fare?",
   "@migrationDialogBody": {
@@ -151,5 +141,36 @@
   "migrationDialogActionIgnore": "NO, LASCIA",
   "migrationDialogActionMerge": "SÌ, UNISCI",
   "migrationSuccess": "Acquisti locali uniti al tuo account!",
-  "migrationDeleted": "Dati locali eliminati con successo."
+  "migrationDeleted": "Dati locali eliminati con successo.",
+  "privacyPolicyTitle": "Informativa Privacy",
+  "privacyPolicyBody": "La tua privacy è importante...\n[INSERIRE QUI IL TESTO COMPLETO DELLA PRIVACY POLICY]\n\nDati Raccolti: L'app salva i dati degli acquisti esclusivamente sul tuo dispositivo. Se scegli di utilizzare la funzione di backup cloud (funzionalità Pro), i tuoi dati verranno criptati e salvati sui server sicuri di Google Firebase.\n\nCondivisione Dati: Nessun dato personale o di acquisto viene condiviso con terze parti.\n...",
+  "genericPurchase": "Acquisto generico",
+  "mainProducts": "Prodotti principali:",
+  "andMoreProducts": "... e altri {count} prodotti.",
+  "@andMoreProducts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "trackedWith": "Tracciato con Glufri App",
+  "shareText": "Ecco il mio ultimo acquisto senza glutine tracciato con l'app Glufri! 🛒",
+  "genericError": "Si è verificato un errore:\n{error}",
+  "@genericError": {
+    "placeholders": {
+      "error": {
+        "type": "Object"
+      }
+    }
+  },
+  "purchaseExport": "Esportazione Acquisto Glufri - {store}",
+  "@purchaseExport": {
+    "placeholders": {
+      "store": {
+        "type": "String"
+      }
+    }
+  },
+  "storeHint": "Es. Supermercato Rossi"
 }

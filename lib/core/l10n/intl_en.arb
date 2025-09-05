@@ -17,7 +17,6 @@
   "light": "Light",
   "dark": "Dark",
   "system": "System",
-
   "login": "Login",
   "loginAction": "LOGIN",
   "password": "Password",
@@ -32,7 +31,6 @@
   "alreadyHaveAccount": "Already have an account? Login",
   "or": "or",
   "loginWithGoogle": "Login with Google",
-
   "signup": "Sign Up",
   "signupAction": "SIGN UP",
   "signupTitle": "Create your account",
@@ -42,7 +40,6 @@
   "passwordLengthError": "Password must be at least 6 characters.",
   "passwordsDoNotMatchError": "Passwords do not match.",
   "signupError": "Error during registration. Please try again (e.g., the email might already be in use).",
-
   "account": "Account",
   "loggedInAs": "Logged in as {email}",
   "@loggedInAs": {
@@ -62,7 +59,6 @@
     }
   },
   "noPurchases": "No purchases recorded.\nPress \"+\" to start!",
-
   "purchaseDetail": "Purchase Detail",
   "shareSummary": "Share Summary",
   "edit": "Edit",
@@ -85,7 +81,6 @@
   "deleteConfirmationMessage": "Are you sure you want to delete this purchase? This action is irreversible.",
   "cancel": "Cancel",
   "purchaseDeletedSuccess": "Purchase deleted successfully.",
-  
   "editPurchase": "Edit Purchase",
   "purchaseSavedSuccess": "Purchase saved successfully!",
   "addProductToStart": "Add a product to get started.",
@@ -97,16 +92,14 @@
   "mustBeGreaterThanZero": "Must be > 0",
   "barcodeOptional": "Barcode (Optional)",
   "update": "Update",
-  "glutenFreeProduct": "Gluten-Free Product",
-  "totalGlutenFree": "Gluten-Free Total",
+  "glutenFreeProduct": "Gluten-Free Product (GF)",
+  "totalGlutenFree": "Gluten-Free Total (GF)",
   "totalOther": "Other Total",
   "totalOverall": "Overall Total",
   "foundProducts": "Found products:",
   "glutenFree": "Gluten-Free",
   "other": "Other",
-
   "scanBarcodeTitle": "Scan EAN-13",
-
   "onboardingWelcomeTitle": "Welcome to Glufri!",
   "onboardingWelcomeBody": "Your app to track gluten-free purchases quickly and easily.",
   "onboardingScanTitle": "Scan and Add",
@@ -115,7 +108,6 @@
   "onboardingTrackBody": "Save your purchases and view your history to analyze your spending.",
   "skip": "Skip",
   "start": "Start",
-
   "settingsLanguageSystem": "System",
   "settingsLanguageItalian": "Italiano",
   "settingsLanguageEnglish": "English",
@@ -128,7 +120,6 @@
   "settingsLogout": "Logout",
   "settingsAuthError": "Authentication error",
   "settingsPrivacyPolicy": "Privacy Policy",
-  
   "upsellTitle": "Upgrade to Glufri Pro",
   "upsellHeadline": "Unlock Powerful Features!",
   "upsellFeature1": "Cloud Backup & Multi-device Sync",
@@ -137,7 +128,6 @@
   "upsellFeature4": "Priority Support",
   "upsellAction": "Subscribe Now (Yearly Price)",
   "upsellRestore": "Restore Purchases",
-  
   "migrationDialogTitle": "Local Purchases Detected",
   "migrationDialogBody": "You have {count} purchases saved on this device. What would you like to do?",
   "@migrationDialogBody": {
@@ -151,5 +141,36 @@
   "migrationDialogActionIgnore": "NO, LEAVE THEM",
   "migrationDialogActionMerge": "YES, MERGE",
   "migrationSuccess": "Local purchases merged to your account!",
-  "migrationDeleted": "Local data successfully deleted."
+  "migrationDeleted": "Local data successfully deleted.",
+  "privacyPolicyTitle": "Privacy Policy",
+  "privacyPolicyBody": "Your privacy is important...\n[INSERT FULL PRIVACY POLICY TEXT HERE]\n\nData Collected: The app saves purchase data exclusively on your device. If you choose to use the cloud backup feature (Pro feature), your data will be encrypted and saved on secure Google Firebase servers.\n\nData Sharing: No personal or purchase data is shared with third parties.\n...",
+  "genericPurchase": "Generic Purchase",
+  "mainProducts": "Main products:",
+  "andMoreProducts": "... and {count} more products.",
+  "@andMoreProducts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "trackedWith": "Tracked with Glufri App",
+  "shareText": "Here's my latest gluten-free purchase tracked with the Glufri app! 🛒",
+  "genericError": "An error occurred:\n{error}",
+  "@genericError": {
+    "placeholders": {
+      "error": {
+        "type": "Object"
+      }
+    }
+  },
+  "purchaseExport": "Glufri Purchase Export - {store}",
+  "@purchaseExport": {
+    "placeholders": {
+      "store": {
+        "type": "String"
+      }
+    }
+  },
+  "storeHint": "E.g. Rossi Supermarket"
 }

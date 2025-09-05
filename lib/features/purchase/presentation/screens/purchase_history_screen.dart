@@ -1,14 +1,12 @@
+// lib/features/purchase/presentation/screens/purchase_history_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
-import 'package:glufri/features/backup/domain/user_model.dart';
 import 'package:glufri/features/backup/presentation/providers/user_provider.dart';
 import 'package:glufri/features/backup/presentation/screens/login_screen.dart';
 import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
 import 'package:glufri/features/monetization/presentation/widgets/ad_banner_widget.dart';
-import 'package:glufri/features/purchase/data/datasources/purchase_local_datasource.dart';
-import 'package:glufri/features/purchase/data/models/purchase_item_model.dart';
-import 'package:glufri/features/purchase/data/models/purchase_model.dart';
 import 'package:glufri/features/purchase/presentation/providers/cart_provider.dart';
 import 'package:glufri/features/purchase/presentation/providers/purchase_filter_provider.dart';
 import 'package:glufri/features/purchase/presentation/providers/purchase_providers.dart';
@@ -17,8 +15,6 @@ import 'package:glufri/features/purchase/presentation/screens/purchase_session_s
 import 'package:glufri/features/purchase/presentation/widgets/filtered_purchase_item_card.dart';
 import 'package:glufri/features/purchase/presentation/widgets/purchase_card.dart';
 import 'package:glufri/features/settings/presentation/screens/settings_screen.dart';
-import 'package:hive/hive.dart';
-import 'package:intl/intl.dart';
 
 /// La schermata principale dell'app che mostra la cronologia degli acquisti.
 ///
@@ -177,7 +173,7 @@ class PurchaseHistoryScreen extends ConsumerWidget {
               // STATO ERRORE: mostra un messaggio di errore informativo.
               error: (error, stackTrace) => Center(
                 child: Text(
-                  'Si è verificato un errore:\n$error',
+                  l10n.genericError(error),
                   textAlign: TextAlign.center,
                 ),
               ),

@@ -1,3 +1,5 @@
+// lib/features/backup/domain/sync_service.dart
+
 class SyncService {
   Future<void> backupToCloud() async {
     // 1. Prendi tutti i dati da Hive

@@ -240,10 +240,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get update => 'Aggiorna';
 
   @override
-  String get glutenFreeProduct => 'Prodotto Senza Glutine';
+  String get glutenFreeProduct => 'Prodotto Senza Glutine (SG)';
 
   @override
-  String get totalGlutenFree => 'Totale Senza Glutine';
+  String get totalGlutenFree => 'Totale Senza Glutine (SG)';
 
   @override
   String get totalOther => 'Totale Altro';
@@ -373,4 +373,42 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get migrationDeleted => 'Dati locali eliminati con successo.';
+
+  @override
+  String get privacyPolicyTitle => 'Informativa Privacy';
+
+  @override
+  String get privacyPolicyBody =>
+      'La tua privacy è importante...\n[INSERIRE QUI IL TESTO COMPLETO DELLA PRIVACY POLICY]\n\nDati Raccolti: L\'app salva i dati degli acquisti esclusivamente sul tuo dispositivo. Se scegli di utilizzare la funzione di backup cloud (funzionalità Pro), i tuoi dati verranno criptati e salvati sui server sicuri di Google Firebase.\n\nCondivisione Dati: Nessun dato personale o di acquisto viene condiviso con terze parti.\n...';
+
+  @override
+  String get genericPurchase => 'Acquisto generico';
+
+  @override
+  String get mainProducts => 'Prodotti principali:';
+
+  @override
+  String andMoreProducts(int count) {
+    return '... e altri $count prodotti.';
+  }
+
+  @override
+  String get trackedWith => 'Tracciato con Glufri App';
+
+  @override
+  String get shareText =>
+      'Ecco il mio ultimo acquisto senza glutine tracciato con l\'app Glufri! 🛒';
+
+  @override
+  String genericError(Object error) {
+    return 'Si è verificato un errore:\n$error';
+  }
+
+  @override
+  String purchaseExport(String store) {
+    return 'Esportazione Acquisto Glufri - $store';
+  }
+
+  @override
+  String get storeHint => 'Es. Supermercato Rossi';
 }

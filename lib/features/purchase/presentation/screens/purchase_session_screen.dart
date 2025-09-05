@@ -1,5 +1,6 @@
-import 'dart:io';
+// lib/features/purchase/presentation/screens/purchase_session_screen.dart
 
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
@@ -118,7 +119,7 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
               controller: _storeNameController,
               decoration: InputDecoration(
                 labelText: l10n.store,
-                hintText: 'Es. Supermercato Rossi',
+                hintText: l10n.storeHint,
                 border: const OutlineInputBorder(),
               ),
               onChanged: (value) {

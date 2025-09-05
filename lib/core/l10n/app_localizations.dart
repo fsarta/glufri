@@ -521,13 +521,13 @@ abstract class AppLocalizations {
   /// No description provided for @glutenFreeProduct.
   ///
   /// In it, this message translates to:
-  /// **'Prodotto Senza Glutine'**
+  /// **'Prodotto Senza Glutine (SG)'**
   String get glutenFreeProduct;
 
   /// No description provided for @totalGlutenFree.
   ///
   /// In it, this message translates to:
-  /// **'Totale Senza Glutine'**
+  /// **'Totale Senza Glutine (SG)'**
   String get totalGlutenFree;
 
   /// No description provided for @totalOther.
@@ -775,6 +775,66 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Dati locali eliminati con successo.'**
   String get migrationDeleted;
+
+  /// No description provided for @privacyPolicyTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Informativa Privacy'**
+  String get privacyPolicyTitle;
+
+  /// No description provided for @privacyPolicyBody.
+  ///
+  /// In it, this message translates to:
+  /// **'La tua privacy è importante...\n[INSERIRE QUI IL TESTO COMPLETO DELLA PRIVACY POLICY]\n\nDati Raccolti: L\'app salva i dati degli acquisti esclusivamente sul tuo dispositivo. Se scegli di utilizzare la funzione di backup cloud (funzionalità Pro), i tuoi dati verranno criptati e salvati sui server sicuri di Google Firebase.\n\nCondivisione Dati: Nessun dato personale o di acquisto viene condiviso con terze parti.\n...'**
+  String get privacyPolicyBody;
+
+  /// No description provided for @genericPurchase.
+  ///
+  /// In it, this message translates to:
+  /// **'Acquisto generico'**
+  String get genericPurchase;
+
+  /// No description provided for @mainProducts.
+  ///
+  /// In it, this message translates to:
+  /// **'Prodotti principali:'**
+  String get mainProducts;
+
+  /// No description provided for @andMoreProducts.
+  ///
+  /// In it, this message translates to:
+  /// **'... e altri {count} prodotti.'**
+  String andMoreProducts(int count);
+
+  /// No description provided for @trackedWith.
+  ///
+  /// In it, this message translates to:
+  /// **'Tracciato con Glufri App'**
+  String get trackedWith;
+
+  /// No description provided for @shareText.
+  ///
+  /// In it, this message translates to:
+  /// **'Ecco il mio ultimo acquisto senza glutine tracciato con l\'app Glufri! 🛒'**
+  String get shareText;
+
+  /// No description provided for @genericError.
+  ///
+  /// In it, this message translates to:
+  /// **'Si è verificato un errore:\n{error}'**
+  String genericError(Object error);
+
+  /// No description provided for @purchaseExport.
+  ///
+  /// In it, this message translates to:
+  /// **'Esportazione Acquisto Glufri - {store}'**
+  String purchaseExport(String store);
+
+  /// No description provided for @storeHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Es. Supermercato Rossi'**
+  String get storeHint;
 }
 
 class _AppLocalizationsDelegate
