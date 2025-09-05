@@ -44,10 +44,19 @@ class SettingsScreen extends ConsumerWidget {
             title: Text(l10n.language),
             trailing: DropdownButton<String>(
               value: ref.watch(localeProvider)?.languageCode ?? 'system',
-              items: const [
-                DropdownMenuItem(value: 'system', child: Text("Sistema")),
-                DropdownMenuItem(value: 'it', child: Text("Italiano")),
-                DropdownMenuItem(value: 'en', child: Text("English")),
+              items: [
+                DropdownMenuItem(
+                  value: 'system',
+                  child: Text(l10n.settingsLanguageSystem),
+                ),
+                DropdownMenuItem(
+                  value: 'it',
+                  child: Text(l10n.settingsLanguageItalian),
+                ),
+                DropdownMenuItem(
+                  value: 'en',
+                  child: Text(l10n.settingsLanguageEnglish),
+                ),
               ],
               onChanged: (value) {
                 if (value == null) return;
@@ -64,7 +73,7 @@ class SettingsScreen extends ConsumerWidget {
           const Divider(),
           ListTile(
             title: Text(
-              'Account e Backup (Pro)',
+              l10n.settingsAccountAndBackup,
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
@@ -73,17 +82,13 @@ class SettingsScreen extends ConsumerWidget {
               if (user == null) {
                 return ListTile(
                   leading: const Icon(Icons.login),
-                  title: const Text(
-                    'Accedi con Google per abilitare il backup',
-                  ),
+                  title: Text(l10n.settingsLoginForBackup),
                   onTap: () async {
                     try {
                       await ref.read(authRepositoryProvider).signInWithGoogle();
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Login fallito. Riprova.'),
-                        ),
+                        SnackBar(content: Text(l10n.settingsLoginFailed)),
                       );
                     }
                   },
@@ -100,26 +105,26 @@ class SettingsScreen extends ConsumerWidget {
                           ? const Icon(Icons.person)
                           : null,
                     ),
-                    title: Text(user.displayName ?? 'Utente'),
+                    title: Text(user.displayName ?? l10n.user),
                     subtitle: Text(user.email ?? ''),
                   ),
                   ListTile(
                     leading: const Icon(Icons.cloud_upload_outlined),
-                    title: const Text('Esegui Backup'),
+                    title: Text(l10n.settingsBackupNow),
                     onTap: () {
                       /* TODO: Chiamare SyncService.backupToCloud() */
                     },
                   ),
                   ListTile(
                     leading: const Icon(Icons.cloud_download_outlined),
-                    title: const Text('Ripristina da Cloud'),
+                    title: Text(l10n.settingsRestoreFromCloud),
                     onTap: () {
                       /* TODO: Chiamare SyncService.restoreFromCloud() */
                     },
                   ),
                   ListTile(
                     leading: const Icon(Icons.logout),
-                    title: const Text('Logout'),
+                    title: Text(l10n.settingsLogout),
                     onTap: () => ref.read(authRepositoryProvider).signOut(),
                   ),
                 ],
@@ -131,13 +136,12 @@ class SettingsScreen extends ConsumerWidget {
                 child: CircularProgressIndicator(),
               ),
             ),
-            error: (e, st) =>
-                const ListTile(title: Text('Errore di autenticazione')),
+            error: (e, st) => ListTile(title: Text(l10n.settingsAuthError)),
           ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.privacy_tip_outlined),
-            title: const Text('Informativa Privacy'),
+            title: Text(l10n.settingsPrivacyPolicy),
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => const PrivacyPolicyScreen()),

@@ -38,32 +38,33 @@ class GlufriApp extends ConsumerWidget {
         final choice = await showDialog<String>(
           context: navigator.context,
           barrierDismissible: false,
-          builder: (ctx) => AlertDialog(
-            title: const Text('Acquisti Locali Rilevati'),
-            content: Text(
-              'Hai ${localBox.length} acquisti salvati. Cosa vuoi fare?',
-            ),
-            actions: <Widget>[
-              TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(
-                    navigator.context,
-                  ).colorScheme.error,
+          builder: (ctx) {
+            final l10nDialog = AppLocalizations.of(ctx)!; // Ottieni l10n qui
+            return AlertDialog(
+              title: Text(l10nDialog.migrationDialogTitle),
+              content: Text(l10nDialog.migrationDialogBody(localBox.length)),
+              actions: <Widget>[
+                TextButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Theme.of(
+                      navigator.context,
+                    ).colorScheme.error,
+                  ),
+                  onPressed: () => Navigator.of(ctx).pop('delete'),
+                  child: Text(l10nDialog.migrationDialogActionDelete),
                 ),
-                onPressed: () => Navigator.of(ctx).pop('delete'),
-                child: const Text('ELIMINA'),
-              ),
-              const SizedBox(width: 8),
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop('ignore'),
-                child: const Text('NO, LASCIA'),
-              ),
-              FilledButton(
-                onPressed: () => Navigator.of(ctx).pop('merge'),
-                child: const Text('SÌ, UNISCI'),
-              ),
-            ],
-          ),
+                const SizedBox(width: 8),
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop('ignore'),
+                  child: Text(l10nDialog.migrationDialogActionIgnore),
+                ),
+                FilledButton(
+                  onPressed: () => Navigator.of(ctx).pop('merge'),
+                  child: Text(l10nDialog.migrationDialogActionMerge),
+                ),
+              ],
+            );
+          },
         );
 
         switch (choice) {
@@ -105,8 +106,10 @@ class GlufriApp extends ConsumerWidget {
             await localBox.clear();
 
             ScaffoldMessenger.of(navigator.context).showSnackBar(
-              const SnackBar(
-                content: Text("Acquisti locali uniti al tuo account!"),
+              SnackBar(
+                content: Text(
+                  AppLocalizations.of(navigator.context)!.migrationSuccess,
+                ),
               ),
             );
             ref.invalidate(purchaseListProvider);
@@ -114,8 +117,10 @@ class GlufriApp extends ConsumerWidget {
           case 'delete':
             await localBox.clear();
             ScaffoldMessenger.of(navigator.context).showSnackBar(
-              const SnackBar(
-                content: Text("Dati locali eliminati con successo."),
+              SnackBar(
+                content: Text(
+                  AppLocalizations.of(navigator.context)!.migrationDeleted,
+                ),
               ),
             );
             break;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
 
 class UpsellScreen extends ConsumerWidget {
@@ -7,8 +8,9 @@ class UpsellScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Passa a Glufri Pro')),
+      appBar: AppBar(title: Text(l10n.upsellTitle)),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
@@ -22,36 +24,39 @@ class UpsellScreen extends ConsumerWidget {
                 color: Colors.amber,
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Sblocca Funzionalità Potenti!',
+              Text(
+                l10n.upsellHeadline,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 24),
-              const ListTile(
-                leading: Icon(Icons.cloud_upload_rounded),
-                title: Text('Backup e Sync Multi-dispositivo'),
+              ListTile(
+                leading: const Icon(Icons.cloud_upload_rounded),
+                title: Text(l10n.upsellFeature1),
               ),
-              const ListTile(
-                leading: Icon(Icons.description_rounded),
-                title: Text('Esportazioni illimitate in CSV'),
+              ListTile(
+                leading: const Icon(Icons.description_rounded),
+                title: Text(l10n.upsellFeature2),
               ),
-              const ListTile(
-                leading: Icon(Icons.hdr_off_rounded),
-                title: Text('Esperienza senza pubblicità'),
+              ListTile(
+                leading: const Icon(Icons.hdr_off_rounded),
+                title: Text(l10n.upsellFeature3),
               ),
-              const ListTile(
-                leading: Icon(Icons.support_agent_rounded),
-                title: Text('Supporto Prioritario'),
+              ListTile(
+                leading: const Icon(Icons.support_agent_rounded),
+                title: Text(l10n.upsellFeature4),
               ),
               const SizedBox(height: 32),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: const Text(
-                  'Abbonati Ora (Prezzo Annuo)',
-                  style: TextStyle(fontSize: 18),
+                child: Text(
+                  l10n.upsellAction,
+                  style: const TextStyle(fontSize: 18),
                 ),
                 onPressed: () {
                   ref.read(monetizationProvider.notifier).purchasePro();
@@ -59,7 +64,7 @@ class UpsellScreen extends ConsumerWidget {
                 },
               ),
               TextButton(
-                child: const Text('Ripristina Acquisti'),
+                child: Text(l10n.upsellRestore),
                 onPressed: () {
                   // Aggiungere logica di restore purchases
                 },

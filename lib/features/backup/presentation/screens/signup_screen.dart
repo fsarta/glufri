@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/backup/domain/auth_repository.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
@@ -28,6 +29,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   }
 
   Future<void> _signUp() async {
+    final l10n = AppLocalizations.of(context)!;
     // Nasconde l'errore precedente all'inizio di un nuovo tentativo
     setState(() => _errorMessage = null);
 
@@ -45,8 +47,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       } catch (e) {
         // Gestisci e mostra un errore leggibile per l'utente
         setState(() {
-          _errorMessage =
-              "Errore durante la registrazione. Riprova. (es. l'email potrebbe essere già in uso)";
+          _errorMessage = l10n.signupError;
         });
       } finally {
         if (mounted) setState(() => _isLoading = false);
@@ -56,8 +57,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Registrati')),
+      appBar: AppBar(title: Text(l10n.signup)),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
@@ -67,20 +69,20 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Crea il tuo account',
+                  l10n.signupTitle,
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 24),
                 TextFormField(
                   controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email_outlined),
+                  decoration: InputDecoration(
+                    labelText: l10n.email,
+                    prefixIcon: const Icon(Icons.email_outlined),
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || !value.contains('@')) {
-                      return 'Inserisci un\'email valida.';
+                      return l10n.invalidEmailError;
                     }
                     return null;
                   },
@@ -88,14 +90,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: Icon(Icons.lock_outline),
+                  decoration: InputDecoration(
+                    labelText: l10n.password,
+                    prefixIcon: const Icon(Icons.lock_outline),
                   ),
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.length < 6) {
-                      return 'La password deve essere di almeno 6 caratteri.';
+                      return l10n.passwordLengthError;
                     }
                     return null;
                   },
@@ -103,14 +105,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _confirmPasswordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Conferma Password',
-                    prefixIcon: Icon(Icons.lock_outline),
+                  decoration: InputDecoration(
+                    labelText: l10n.confirmPassword,
+                    prefixIcon: const Icon(Icons.lock_outline),
                   ),
                   obscureText: true,
                   validator: (value) {
                     if (value != _passwordController.text) {
-                      return 'Le password non coincidono.';
+                      return l10n.passwordsDoNotMatchError;
                     }
                     return null;
                   },
@@ -131,12 +133,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     ? const Center(child: CircularProgressIndicator())
                     : FilledButton(
                         onPressed: _signUp,
-                        child: const Text('REGISTRATI'),
+                        child: Text(l10n.signupAction),
                       ),
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Hai già un account? Accedi'),
+                  child: Text(l10n.alreadyHaveAccount),
                 ),
               ],
             ),

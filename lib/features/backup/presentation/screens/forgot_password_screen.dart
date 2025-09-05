@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/backup/domain/auth_repository.dart';
 
 class ForgotPasswordScreen extends ConsumerStatefulWidget {
@@ -16,6 +17,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   bool _isLoading = false;
   String? _successMessage;
   String? _errorMessage;
+  late final l10n = AppLocalizations.of(context)!;
 
   @override
   void dispose() {
@@ -36,13 +38,11 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
             .read(authRepositoryProvider)
             .sendPasswordResetEmail(_emailController.text.trim());
         setState(() {
-          _successMessage =
-              "Email di recupero inviata con successo! Controlla la tua casella di posta.";
+          _successMessage = l10n.resetEmailSuccess;
         });
       } catch (e) {
         setState(() {
-          _errorMessage =
-              "Errore durante l'invio dell'email. L'indirizzo potrebbe non essere valido.";
+          _errorMessage = l10n.resetEmailError;
         });
       } finally {
         if (mounted) setState(() => _isLoading = false);
@@ -53,8 +53,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Recupera Password')),
+      appBar: AppBar(title: Text(l10n.forgotPasswordScreenTitle)),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
@@ -64,24 +65,22 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Password Dimenticata?',
+                  l10n.forgotPasswordTitle,
                   style: theme.textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  "Inserisci l'email associata al tuo account. Ti invieremo un link per reimpostare la tua password.",
-                ),
+                Text(l10n.forgotPasswordInstruction),
                 const SizedBox(height: 24),
                 TextFormField(
                   controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email_outlined),
+                  decoration: InputDecoration(
+                    labelText: l10n.email,
+                    prefixIcon: const Icon(Icons.email_outlined),
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || !value.contains('@')) {
-                      return 'Inserisci un\'email valida.';
+                      return l10n.invalidEmailError;
                     }
                     return null;
                   },
@@ -111,7 +110,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 else
                   FilledButton(
                     onPressed: _sendResetEmail,
-                    child: const Text('INVIA EMAIL DI RECUPERO'),
+                    child: Text(l10n.sendResetEmail),
                   ),
               ],
             ),

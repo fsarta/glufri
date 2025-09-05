@@ -58,4 +58,316 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get system => 'System';
+
+  @override
+  String get login => 'Login';
+
+  @override
+  String get loginAction => 'LOGIN';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get forgotPassword => 'Forgot password?';
+
+  @override
+  String get forgotPasswordScreenTitle => 'Recover Password';
+
+  @override
+  String get forgotPasswordTitle => 'Forgot Password?';
+
+  @override
+  String get forgotPasswordInstruction =>
+      'Enter the email associated with your account. We\'ll send you a link to reset your password.';
+
+  @override
+  String get sendResetEmail => 'SEND RESET EMAIL';
+
+  @override
+  String get resetEmailSuccess =>
+      'Password reset email sent successfully! Check your inbox.';
+
+  @override
+  String get resetEmailError =>
+      'Error sending email. The address might not be valid.';
+
+  @override
+  String get noAccount => 'Don\'t have an account? Sign up';
+
+  @override
+  String get alreadyHaveAccount => 'Already have an account? Login';
+
+  @override
+  String get or => 'or';
+
+  @override
+  String get loginWithGoogle => 'Login with Google';
+
+  @override
+  String get signup => 'Sign Up';
+
+  @override
+  String get signupAction => 'SIGN UP';
+
+  @override
+  String get signupTitle => 'Create your account';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get confirmPassword => 'Confirm Password';
+
+  @override
+  String get invalidEmailError => 'Please enter a valid email.';
+
+  @override
+  String get passwordLengthError => 'Password must be at least 6 characters.';
+
+  @override
+  String get passwordsDoNotMatchError => 'Passwords do not match.';
+
+  @override
+  String get signupError =>
+      'Error during registration. Please try again (e.g., the email might already be in use).';
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String loggedInAs(String email) {
+    return 'Logged in as $email';
+  }
+
+  @override
+  String get searchPlaceholder => 'Search by store or product...';
+
+  @override
+  String noProductsFoundFor(String query) {
+    return 'No products found for \"$query\"';
+  }
+
+  @override
+  String get noPurchases => 'No purchases recorded.\nPress \"+\" to start!';
+
+  @override
+  String get purchaseDetail => 'Purchase Detail';
+
+  @override
+  String get shareSummary => 'Share Summary';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get duplicate => 'Duplicate';
+
+  @override
+  String get exportCsvPro => 'Export CSV (Pro)';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get noStoreSpecified => 'No store specified';
+
+  @override
+  String productsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count products',
+      one: '1 product',
+      zero: 'No products',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get exportError => 'Error during export.';
+
+  @override
+  String get shareError => 'Error during sharing.';
+
+  @override
+  String get deleteConfirmationTitle => 'Confirm Deletion';
+
+  @override
+  String get deleteConfirmationMessage =>
+      'Are you sure you want to delete this purchase? This action is irreversible.';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get purchaseDeletedSuccess => 'Purchase deleted successfully.';
+
+  @override
+  String get editPurchase => 'Edit Purchase';
+
+  @override
+  String get purchaseSavedSuccess => 'Purchase saved successfully!';
+
+  @override
+  String get addProductToStart => 'Add a product to get started.';
+
+  @override
+  String get productNotFoundOrNetworkError =>
+      'Product not found or network error.';
+
+  @override
+  String get editProduct => 'Edit Product';
+
+  @override
+  String get productNameCannotBeEmpty => 'Name cannot be empty';
+
+  @override
+  String get requiredField => 'Required';
+
+  @override
+  String get invalidValue => 'Invalid value';
+
+  @override
+  String get mustBeGreaterThanZero => 'Must be > 0';
+
+  @override
+  String get barcodeOptional => 'Barcode (Optional)';
+
+  @override
+  String get update => 'Update';
+
+  @override
+  String get glutenFreeProduct => 'Gluten-Free Product';
+
+  @override
+  String get totalGlutenFree => 'Gluten-Free Total';
+
+  @override
+  String get totalOther => 'Other Total';
+
+  @override
+  String get totalOverall => 'Overall Total';
+
+  @override
+  String get foundProducts => 'Found products:';
+
+  @override
+  String get glutenFree => 'Gluten-Free';
+
+  @override
+  String get other => 'Other';
+
+  @override
+  String get scanBarcodeTitle => 'Scan EAN-13';
+
+  @override
+  String get onboardingWelcomeTitle => 'Welcome to Glufri!';
+
+  @override
+  String get onboardingWelcomeBody =>
+      'Your app to track gluten-free purchases quickly and easily.';
+
+  @override
+  String get onboardingScanTitle => 'Scan and Add';
+
+  @override
+  String get onboardingScanBody =>
+      'Use your camera to scan product barcodes and add them to your cart.';
+
+  @override
+  String get onboardingTrackTitle => 'Keep Everything Under Control';
+
+  @override
+  String get onboardingTrackBody =>
+      'Save your purchases and view your history to analyze your spending.';
+
+  @override
+  String get skip => 'Skip';
+
+  @override
+  String get start => 'Start';
+
+  @override
+  String get settingsLanguageSystem => 'System';
+
+  @override
+  String get settingsLanguageItalian => 'Italiano';
+
+  @override
+  String get settingsLanguageEnglish => 'English';
+
+  @override
+  String get settingsAccountAndBackup => 'Account & Backup (Pro)';
+
+  @override
+  String get settingsLoginForBackup => 'Login with Google to enable backup';
+
+  @override
+  String get settingsLoginFailed => 'Login failed. Please try again.';
+
+  @override
+  String get user => 'User';
+
+  @override
+  String get settingsBackupNow => 'Backup Now';
+
+  @override
+  String get settingsRestoreFromCloud => 'Restore from Cloud';
+
+  @override
+  String get settingsLogout => 'Logout';
+
+  @override
+  String get settingsAuthError => 'Authentication error';
+
+  @override
+  String get settingsPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get upsellTitle => 'Upgrade to Glufri Pro';
+
+  @override
+  String get upsellHeadline => 'Unlock Powerful Features!';
+
+  @override
+  String get upsellFeature1 => 'Cloud Backup & Multi-device Sync';
+
+  @override
+  String get upsellFeature2 => 'Unlimited CSV Exports';
+
+  @override
+  String get upsellFeature3 => 'Ad-free Experience';
+
+  @override
+  String get upsellFeature4 => 'Priority Support';
+
+  @override
+  String get upsellAction => 'Subscribe Now (Yearly Price)';
+
+  @override
+  String get upsellRestore => 'Restore Purchases';
+
+  @override
+  String get migrationDialogTitle => 'Local Purchases Detected';
+
+  @override
+  String migrationDialogBody(int count) {
+    return 'You have $count purchases saved on this device. What would you like to do?';
+  }
+
+  @override
+  String get migrationDialogActionDelete => 'DELETE';
+
+  @override
+  String get migrationDialogActionIgnore => 'NO, LEAVE THEM';
+
+  @override
+  String get migrationDialogActionMerge => 'YES, MERGE';
+
+  @override
+  String get migrationSuccess => 'Local purchases merged to your account!';
+
+  @override
+  String get migrationDeleted => 'Local data successfully deleted.';
 }

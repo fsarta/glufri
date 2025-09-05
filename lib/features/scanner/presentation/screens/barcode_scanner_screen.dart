@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class BarcodeScannerScreen extends StatefulWidget {
@@ -23,8 +24,10 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
       height: 150,
     );
 
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Scansiona EAN-13')),
+      appBar: AppBar(title: Text(l10n.scanBarcodeTitle)),
       body: Stack(
         fit: StackFit.expand,
         children: [

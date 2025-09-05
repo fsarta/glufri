@@ -50,7 +50,7 @@ class PurchaseHistoryScreen extends ConsumerWidget {
         title: Text(l10n!.purchaseHistory),
         actions: [
           IconButton(
-            tooltip: user != null ? 'Account' : 'Accedi',
+            tooltip: user != null ? l10n.account : l10n.login,
             icon: user != null
                 ? const Icon(Icons.person_outline_rounded, color: Colors.white)
                 : const Icon(Icons.login_rounded, color: Colors.white),
@@ -59,7 +59,7 @@ class PurchaseHistoryScreen extends ConsumerWidget {
                 // Naviga alla pagina dell'account, dove l'utente può fare logout, ecc.
                 // Navigator.of(context).push(MaterialPageRoute(builder: (_) => AccountScreen()));
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Loggato come ${user.email}')),
+                  SnackBar(content: Text(l10n.loggedInAs(user.email!))),
                 );
               } else {
                 // Naviga alla pagina di login/registrazione
@@ -71,7 +71,7 @@ class PurchaseHistoryScreen extends ConsumerWidget {
           ),
           IconButton(
             icon: const Icon(Icons.settings),
-            tooltip: 'Impostazioni',
+            tooltip: l10n.settings,
             onPressed: () {
               Navigator.of(
                 context,
@@ -95,7 +95,7 @@ class PurchaseHistoryScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               decoration: InputDecoration(
-                hintText: 'Cerca per negozio o prodotto...',
+                hintText: l10n.searchPlaceholder,
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -119,8 +119,8 @@ class PurchaseHistoryScreen extends ConsumerWidget {
                   return Center(
                     child: Text(
                       isSearchActive
-                          ? 'Nessun prodotto trovato per "$searchQuery"'
-                          : 'Nessun acquisto registrato.\nPremi "+" per iniziare!',
+                          ? l10n.noProductsFoundFor(searchQuery)
+                          : l10n.noPurchases,
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 16, color: Colors.grey),
                     ),

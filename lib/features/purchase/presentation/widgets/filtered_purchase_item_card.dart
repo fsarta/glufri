@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/purchase/data/models/purchase_model.dart';
 import 'package:intl/intl.dart';
 
@@ -31,6 +32,7 @@ class FilteredPurchaseItemCard extends StatelessWidget {
     }
 
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     // 2. Costruisci la Card con le informazioni filtrate.
     return Card(
@@ -88,7 +90,7 @@ class FilteredPurchaseItemCard extends StatelessWidget {
 
             // Lista dei soli prodotti che hanno matchato la ricerca
             Text(
-              'Prodotti trovati:',
+              l10n.foundProducts,
               style: theme.textTheme.titleMedium?.copyWith(
                 color: theme.colorScheme.primary,
               ),

@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
 import 'package:glufri/features/monetization/presentation/screens/upsell_screen.dart';
 import 'package:glufri/features/purchase/data/models/purchase_model.dart';
@@ -44,14 +46,15 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
       );
     }
 
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text(purchase.store ?? 'Dettaglio Acquisto'),
+        title: Text(purchase.store ?? l10n.purchaseDetail),
         actions: [
           // Bottone diretto per la condivisione veloce.
           IconButton(
             icon: const Icon(Icons.share),
-            tooltip: 'Condividi Riepilogo',
+            tooltip: l10n.shareSummary,
             onPressed: () =>
                 _handleMenuSelection('edit', context, ref, purchase),
           ),
@@ -60,25 +63,25 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
             onSelected: (value) =>
                 _handleMenuSelection(value, context, ref, purchase),
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              const PopupMenuItem<String>(
+              PopupMenuItem<String>(
                 value: 'edit',
                 child: ListTile(
-                  leading: Icon(Icons.edit_note),
-                  title: Text('Modifica'),
+                  leading: const Icon(Icons.edit_note),
+                  title: Text(l10n.edit),
                 ),
               ),
-              const PopupMenuItem<String>(
+              PopupMenuItem<String>(
                 value: 'duplicate',
                 child: ListTile(
-                  leading: Icon(Icons.copy_all_outlined),
-                  title: Text('Duplica'),
+                  leading: const Icon(Icons.copy_all_outlined),
+                  title: Text(l10n.duplicate),
                 ),
               ),
-              const PopupMenuItem<String>(
+              PopupMenuItem<String>(
                 value: 'export_csv',
                 child: ListTile(
-                  leading: Icon(Icons.description_outlined),
-                  title: Text('Esporta CSV (Pro)'),
+                  leading: const Icon(Icons.description_outlined),
+                  title: Text(l10n.exportCsvPro),
                 ),
               ),
               const PopupMenuDivider(),
@@ -90,7 +93,7 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
                     color: Theme.of(context).colorScheme.error,
                   ),
                   title: Text(
-                    'Elimina',
+                    l10n.delete,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.error,
                     ),
@@ -111,7 +114,7 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
               children: [
                 // Manteniamo le informazioni sul negozio e sulla data
                 Text(
-                  purchase.store ?? 'Nessun negozio specificato',
+                  purchase.store ?? l10n.noStoreSpecified,
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 4),
@@ -129,34 +132,33 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
                       CrossAxisAlignment.stretch, // Allarga gli elementi
                   children: [
                     _TotalDetailRow(
-                      'Totale Senza Glutine (SG)',
+                      l10n.totalGlutenFree,
                       purchase.totalGlutenFree,
                       context,
                       color: Colors.green,
                     ),
                     const SizedBox(height: 8),
                     _TotalDetailRow(
-                      'Totale Altro',
+                      l10n.totalOther,
                       purchase.totalRegular,
                       context,
                     ),
                     const Divider(height: 24, thickness: 1.0),
                     _TotalDetailRow(
-                      'Totale Complessivo',
+                      l10n.totalOverall,
                       purchase.total,
                       context,
                       isTotal: true,
                     ),
                   ],
                 ),
-                // --- Fine della nuova sezione dei totali ---
               ],
             ),
           ),
           const Divider(thickness: 1.5),
           ListTile(
             title: Text(
-              'Prodotti (${purchase.items.length})',
+              l10n.productsCount(purchase.items.length),
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
@@ -248,6 +250,7 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
     WidgetRef ref,
     PurchaseModel purchase,
   ) async {
+    final l10n = AppLocalizations.of(context)!;
     final isPro = ref.read(isProUserProvider);
     if (!isPro && context.mounted) {
       Navigator.of(
@@ -267,15 +270,17 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
       ], subject: 'Esportazione Acquisto Glufri - ${purchase.store ?? ""}');
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Errore durante l\'esportazione.')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.exportError)));
       }
     }
   }
 
   /// Cattura il widget di riepilogo come immagine e avvia la condivisione.
   Future<void> _sharePurchaseAsImage(PurchaseModel purchase) async {
+    final l10n = AppLocalizations.of(context)!;
+
     try {
       final image = await _screenshotController.captureFromWidget(
         InheritedTheme.captureAll(
@@ -295,9 +300,9 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
       );
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Errore durante la condivisione.')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.shareError)));
       }
     }
   }
@@ -308,23 +313,23 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
     WidgetRef ref,
     PurchaseModel purchase,
   ) {
+    final l10n = AppLocalizations.of(context)!;
+
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Conferma Eliminazione'),
-        content: const Text(
-          'Sei sicuro di voler eliminare questo acquisto? L\'azione è irreversibile.',
-        ),
+        title: Text(l10n.deleteConfirmationTitle),
+        content: Text(l10n.deleteConfirmationMessage),
         actions: [
           TextButton(
-            child: const Text('Annulla'),
+            child: Text(l10n.cancel),
             onPressed: () => Navigator.of(ctx).pop(),
           ),
           FilledButton(
             style: FilledButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.error,
             ),
-            child: const Text('Elimina'),
+            child: Text(l10n.delete),
             onPressed: () async {
               await ref
                   .read(purchaseRepositoryProvider)
@@ -335,9 +340,7 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
                 Navigator.of(ctx).pop(); // Chiude il dialogo
                 Navigator.of(context).pop(); // Torna alla cronologia
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Acquisto eliminato con successo.'),
-                  ),
+                  SnackBar(content: Text(l10n.purchaseDeletedSuccess)),
                 );
               }
             },

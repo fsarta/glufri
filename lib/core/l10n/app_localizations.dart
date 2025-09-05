@@ -199,6 +199,582 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Sistema'**
   String get system;
+
+  /// No description provided for @login.
+  ///
+  /// In it, this message translates to:
+  /// **'Accedi'**
+  String get login;
+
+  /// No description provided for @loginAction.
+  ///
+  /// In it, this message translates to:
+  /// **'ACCEDI'**
+  String get loginAction;
+
+  /// No description provided for @password.
+  ///
+  /// In it, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In it, this message translates to:
+  /// **'Password dimenticata?'**
+  String get forgotPassword;
+
+  /// No description provided for @forgotPasswordScreenTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Recupera Password'**
+  String get forgotPasswordScreenTitle;
+
+  /// No description provided for @forgotPasswordTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Password Dimenticata?'**
+  String get forgotPasswordTitle;
+
+  /// No description provided for @forgotPasswordInstruction.
+  ///
+  /// In it, this message translates to:
+  /// **'Inserisci l\'email associata al tuo account. Ti invieremo un link per reimpostare la tua password.'**
+  String get forgotPasswordInstruction;
+
+  /// No description provided for @sendResetEmail.
+  ///
+  /// In it, this message translates to:
+  /// **'INVIA EMAIL DI RECUPERO'**
+  String get sendResetEmail;
+
+  /// No description provided for @resetEmailSuccess.
+  ///
+  /// In it, this message translates to:
+  /// **'Email di recupero inviata con successo! Controlla la tua casella di posta.'**
+  String get resetEmailSuccess;
+
+  /// No description provided for @resetEmailError.
+  ///
+  /// In it, this message translates to:
+  /// **'Errore durante l\'invio dell\'email. L\'indirizzo potrebbe non essere valido.'**
+  String get resetEmailError;
+
+  /// No description provided for @noAccount.
+  ///
+  /// In it, this message translates to:
+  /// **'Non hai un account? Registrati'**
+  String get noAccount;
+
+  /// No description provided for @alreadyHaveAccount.
+  ///
+  /// In it, this message translates to:
+  /// **'Hai già un account? Accedi'**
+  String get alreadyHaveAccount;
+
+  /// No description provided for @or.
+  ///
+  /// In it, this message translates to:
+  /// **'oppure'**
+  String get or;
+
+  /// No description provided for @loginWithGoogle.
+  ///
+  /// In it, this message translates to:
+  /// **'Accedi con Google'**
+  String get loginWithGoogle;
+
+  /// No description provided for @signup.
+  ///
+  /// In it, this message translates to:
+  /// **'Registrati'**
+  String get signup;
+
+  /// No description provided for @signupAction.
+  ///
+  /// In it, this message translates to:
+  /// **'REGISTRATI'**
+  String get signupAction;
+
+  /// No description provided for @signupTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Crea il tuo account'**
+  String get signupTitle;
+
+  /// No description provided for @email.
+  ///
+  /// In it, this message translates to:
+  /// **'Email'**
+  String get email;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In it, this message translates to:
+  /// **'Conferma Password'**
+  String get confirmPassword;
+
+  /// No description provided for @invalidEmailError.
+  ///
+  /// In it, this message translates to:
+  /// **'Inserisci un\'email valida.'**
+  String get invalidEmailError;
+
+  /// No description provided for @passwordLengthError.
+  ///
+  /// In it, this message translates to:
+  /// **'La password deve essere di almeno 6 caratteri.'**
+  String get passwordLengthError;
+
+  /// No description provided for @passwordsDoNotMatchError.
+  ///
+  /// In it, this message translates to:
+  /// **'Le password non coincidono.'**
+  String get passwordsDoNotMatchError;
+
+  /// No description provided for @signupError.
+  ///
+  /// In it, this message translates to:
+  /// **'Errore durante la registrazione. Riprova. (es. l\'email potrebbe essere già in uso)'**
+  String get signupError;
+
+  /// No description provided for @account.
+  ///
+  /// In it, this message translates to:
+  /// **'Account'**
+  String get account;
+
+  /// No description provided for @loggedInAs.
+  ///
+  /// In it, this message translates to:
+  /// **'Loggato come {email}'**
+  String loggedInAs(String email);
+
+  /// No description provided for @searchPlaceholder.
+  ///
+  /// In it, this message translates to:
+  /// **'Cerca per negozio o prodotto...'**
+  String get searchPlaceholder;
+
+  /// No description provided for @noProductsFoundFor.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun prodotto trovato per \"{query}\"'**
+  String noProductsFoundFor(String query);
+
+  /// No description provided for @noPurchases.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun acquisto registrato.\nPremi \"+\" per iniziare!'**
+  String get noPurchases;
+
+  /// No description provided for @purchaseDetail.
+  ///
+  /// In it, this message translates to:
+  /// **'Dettaglio Acquisto'**
+  String get purchaseDetail;
+
+  /// No description provided for @shareSummary.
+  ///
+  /// In it, this message translates to:
+  /// **'Condividi Riepilogo'**
+  String get shareSummary;
+
+  /// No description provided for @edit.
+  ///
+  /// In it, this message translates to:
+  /// **'Modifica'**
+  String get edit;
+
+  /// No description provided for @duplicate.
+  ///
+  /// In it, this message translates to:
+  /// **'Duplica'**
+  String get duplicate;
+
+  /// No description provided for @exportCsvPro.
+  ///
+  /// In it, this message translates to:
+  /// **'Esporta CSV (Pro)'**
+  String get exportCsvPro;
+
+  /// No description provided for @delete.
+  ///
+  /// In it, this message translates to:
+  /// **'Elimina'**
+  String get delete;
+
+  /// No description provided for @noStoreSpecified.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun negozio specificato'**
+  String get noStoreSpecified;
+
+  /// Numero di prodotti in un acquisto
+  ///
+  /// In it, this message translates to:
+  /// **'{count,plural, =0{Nessun prodotto} =1{1 prodotto} other{{count} prodotti}}'**
+  String productsCount(int count);
+
+  /// No description provided for @exportError.
+  ///
+  /// In it, this message translates to:
+  /// **'Errore durante l\'esportazione.'**
+  String get exportError;
+
+  /// No description provided for @shareError.
+  ///
+  /// In it, this message translates to:
+  /// **'Errore durante la condivisione.'**
+  String get shareError;
+
+  /// No description provided for @deleteConfirmationTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Conferma Eliminazione'**
+  String get deleteConfirmationTitle;
+
+  /// No description provided for @deleteConfirmationMessage.
+  ///
+  /// In it, this message translates to:
+  /// **'Sei sicuro di voler eliminare questo acquisto? L\'azione è irreversibile.'**
+  String get deleteConfirmationMessage;
+
+  /// No description provided for @cancel.
+  ///
+  /// In it, this message translates to:
+  /// **'Annulla'**
+  String get cancel;
+
+  /// No description provided for @purchaseDeletedSuccess.
+  ///
+  /// In it, this message translates to:
+  /// **'Acquisto eliminato con successo.'**
+  String get purchaseDeletedSuccess;
+
+  /// No description provided for @editPurchase.
+  ///
+  /// In it, this message translates to:
+  /// **'Modifica Acquisto'**
+  String get editPurchase;
+
+  /// No description provided for @purchaseSavedSuccess.
+  ///
+  /// In it, this message translates to:
+  /// **'Acquisto salvato con successo!'**
+  String get purchaseSavedSuccess;
+
+  /// No description provided for @addProductToStart.
+  ///
+  /// In it, this message translates to:
+  /// **'Aggiungi un prodotto per iniziare.'**
+  String get addProductToStart;
+
+  /// No description provided for @productNotFoundOrNetworkError.
+  ///
+  /// In it, this message translates to:
+  /// **'Prodotto non trovato o errore di rete.'**
+  String get productNotFoundOrNetworkError;
+
+  /// No description provided for @editProduct.
+  ///
+  /// In it, this message translates to:
+  /// **'Modifica Prodotto'**
+  String get editProduct;
+
+  /// No description provided for @productNameCannotBeEmpty.
+  ///
+  /// In it, this message translates to:
+  /// **'Il nome non può essere vuoto'**
+  String get productNameCannotBeEmpty;
+
+  /// No description provided for @requiredField.
+  ///
+  /// In it, this message translates to:
+  /// **'Obbligatorio'**
+  String get requiredField;
+
+  /// No description provided for @invalidValue.
+  ///
+  /// In it, this message translates to:
+  /// **'Valore non valido'**
+  String get invalidValue;
+
+  /// No description provided for @mustBeGreaterThanZero.
+  ///
+  /// In it, this message translates to:
+  /// **'Deve essere > 0'**
+  String get mustBeGreaterThanZero;
+
+  /// No description provided for @barcodeOptional.
+  ///
+  /// In it, this message translates to:
+  /// **'Codice a Barre (Opzionale)'**
+  String get barcodeOptional;
+
+  /// No description provided for @update.
+  ///
+  /// In it, this message translates to:
+  /// **'Aggiorna'**
+  String get update;
+
+  /// No description provided for @glutenFreeProduct.
+  ///
+  /// In it, this message translates to:
+  /// **'Prodotto Senza Glutine'**
+  String get glutenFreeProduct;
+
+  /// No description provided for @totalGlutenFree.
+  ///
+  /// In it, this message translates to:
+  /// **'Totale Senza Glutine'**
+  String get totalGlutenFree;
+
+  /// No description provided for @totalOther.
+  ///
+  /// In it, this message translates to:
+  /// **'Totale Altro'**
+  String get totalOther;
+
+  /// No description provided for @totalOverall.
+  ///
+  /// In it, this message translates to:
+  /// **'Totale Complessivo'**
+  String get totalOverall;
+
+  /// No description provided for @foundProducts.
+  ///
+  /// In it, this message translates to:
+  /// **'Prodotti trovati:'**
+  String get foundProducts;
+
+  /// No description provided for @glutenFree.
+  ///
+  /// In it, this message translates to:
+  /// **'Senza Glutine'**
+  String get glutenFree;
+
+  /// No description provided for @other.
+  ///
+  /// In it, this message translates to:
+  /// **'Altro'**
+  String get other;
+
+  /// No description provided for @scanBarcodeTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Scansiona EAN-13'**
+  String get scanBarcodeTitle;
+
+  /// No description provided for @onboardingWelcomeTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Benvenuto in Glufri!'**
+  String get onboardingWelcomeTitle;
+
+  /// No description provided for @onboardingWelcomeBody.
+  ///
+  /// In it, this message translates to:
+  /// **'La tua app per tracciare gli acquisti senza glutine in modo semplice e veloce.'**
+  String get onboardingWelcomeBody;
+
+  /// No description provided for @onboardingScanTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Scansiona e Aggiungi'**
+  String get onboardingScanTitle;
+
+  /// No description provided for @onboardingScanBody.
+  ///
+  /// In it, this message translates to:
+  /// **'Usa la fotocamera per scansionare il codice a barre dei prodotti e aggiungerli al tuo carrello.'**
+  String get onboardingScanBody;
+
+  /// No description provided for @onboardingTrackTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Tieni Tutto Sotto Controllo'**
+  String get onboardingTrackTitle;
+
+  /// No description provided for @onboardingTrackBody.
+  ///
+  /// In it, this message translates to:
+  /// **'Salva i tuoi acquisti e consulta la cronologia per analizzare le tue spese.'**
+  String get onboardingTrackBody;
+
+  /// No description provided for @skip.
+  ///
+  /// In it, this message translates to:
+  /// **'Salta'**
+  String get skip;
+
+  /// No description provided for @start.
+  ///
+  /// In it, this message translates to:
+  /// **'Inizia'**
+  String get start;
+
+  /// No description provided for @settingsLanguageSystem.
+  ///
+  /// In it, this message translates to:
+  /// **'Sistema'**
+  String get settingsLanguageSystem;
+
+  /// No description provided for @settingsLanguageItalian.
+  ///
+  /// In it, this message translates to:
+  /// **'Italiano'**
+  String get settingsLanguageItalian;
+
+  /// No description provided for @settingsLanguageEnglish.
+  ///
+  /// In it, this message translates to:
+  /// **'English'**
+  String get settingsLanguageEnglish;
+
+  /// No description provided for @settingsAccountAndBackup.
+  ///
+  /// In it, this message translates to:
+  /// **'Account e Backup (Pro)'**
+  String get settingsAccountAndBackup;
+
+  /// No description provided for @settingsLoginForBackup.
+  ///
+  /// In it, this message translates to:
+  /// **'Accedi con Google per abilitare il backup'**
+  String get settingsLoginForBackup;
+
+  /// No description provided for @settingsLoginFailed.
+  ///
+  /// In it, this message translates to:
+  /// **'Login fallito. Riprova.'**
+  String get settingsLoginFailed;
+
+  /// No description provided for @user.
+  ///
+  /// In it, this message translates to:
+  /// **'Utente'**
+  String get user;
+
+  /// No description provided for @settingsBackupNow.
+  ///
+  /// In it, this message translates to:
+  /// **'Esegui Backup'**
+  String get settingsBackupNow;
+
+  /// No description provided for @settingsRestoreFromCloud.
+  ///
+  /// In it, this message translates to:
+  /// **'Ripristina da Cloud'**
+  String get settingsRestoreFromCloud;
+
+  /// No description provided for @settingsLogout.
+  ///
+  /// In it, this message translates to:
+  /// **'Logout'**
+  String get settingsLogout;
+
+  /// No description provided for @settingsAuthError.
+  ///
+  /// In it, this message translates to:
+  /// **'Errore di autenticazione'**
+  String get settingsAuthError;
+
+  /// No description provided for @settingsPrivacyPolicy.
+  ///
+  /// In it, this message translates to:
+  /// **'Informativa Privacy'**
+  String get settingsPrivacyPolicy;
+
+  /// No description provided for @upsellTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Passa a Glufri Pro'**
+  String get upsellTitle;
+
+  /// No description provided for @upsellHeadline.
+  ///
+  /// In it, this message translates to:
+  /// **'Sblocca Funzionalità Potenti!'**
+  String get upsellHeadline;
+
+  /// No description provided for @upsellFeature1.
+  ///
+  /// In it, this message translates to:
+  /// **'Backup e Sync Multi-dispositivo'**
+  String get upsellFeature1;
+
+  /// No description provided for @upsellFeature2.
+  ///
+  /// In it, this message translates to:
+  /// **'Esportazioni illimitate in CSV'**
+  String get upsellFeature2;
+
+  /// No description provided for @upsellFeature3.
+  ///
+  /// In it, this message translates to:
+  /// **'Esperienza senza pubblicità'**
+  String get upsellFeature3;
+
+  /// No description provided for @upsellFeature4.
+  ///
+  /// In it, this message translates to:
+  /// **'Supporto Prioritario'**
+  String get upsellFeature4;
+
+  /// No description provided for @upsellAction.
+  ///
+  /// In it, this message translates to:
+  /// **'Abbonati Ora (Prezzo Annuo)'**
+  String get upsellAction;
+
+  /// No description provided for @upsellRestore.
+  ///
+  /// In it, this message translates to:
+  /// **'Ripristina Acquisti'**
+  String get upsellRestore;
+
+  /// No description provided for @migrationDialogTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Acquisti Locali Rilevati'**
+  String get migrationDialogTitle;
+
+  /// No description provided for @migrationDialogBody.
+  ///
+  /// In it, this message translates to:
+  /// **'Hai {count} acquisti salvati su questo dispositivo. Cosa vuoi fare?'**
+  String migrationDialogBody(int count);
+
+  /// No description provided for @migrationDialogActionDelete.
+  ///
+  /// In it, this message translates to:
+  /// **'ELIMINA'**
+  String get migrationDialogActionDelete;
+
+  /// No description provided for @migrationDialogActionIgnore.
+  ///
+  /// In it, this message translates to:
+  /// **'NO, LASCIA'**
+  String get migrationDialogActionIgnore;
+
+  /// No description provided for @migrationDialogActionMerge.
+  ///
+  /// In it, this message translates to:
+  /// **'SÌ, UNISCI'**
+  String get migrationDialogActionMerge;
+
+  /// No description provided for @migrationSuccess.
+  ///
+  /// In it, this message translates to:
+  /// **'Acquisti locali uniti al tuo account!'**
+  String get migrationSuccess;
+
+  /// No description provided for @migrationDeleted.
+  ///
+  /// In it, this message translates to:
+  /// **'Dati locali eliminati con successo.'**
+  String get migrationDeleted;
 }
 
 class _AppLocalizationsDelegate

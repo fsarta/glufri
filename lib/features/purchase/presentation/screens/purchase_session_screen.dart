@@ -84,7 +84,7 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
       appBar: AppBar(
         title: Text(
           widget.purchaseToEdit != null && !widget.isDuplicate
-              ? 'Modifica Acquisto'
+              ? l10n!.editPurchase
               : l10n!.newPurchase,
         ),
         actions: [
@@ -100,9 +100,7 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
                       if (context.mounted) {
                         Navigator.of(context).pop();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Acquisto salvato con successo!'),
-                          ),
+                          SnackBar(content: Text(l10n.purchaseSavedSuccess)),
                         );
                       }
                     }
@@ -132,7 +130,7 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
           // Lista dei prodotti
           Expanded(
             child: cartState.items.isEmpty
-                ? Center(child: Text('Aggiungi un prodotto per iniziare.'))
+                ? Center(child: Text(l10n.addProductToStart))
                 : ListView.builder(
                     itemCount: cartState.items.length,
                     itemBuilder: (context, index) {
@@ -225,9 +223,7 @@ Widget _buildActionButtons(
                     context,
                   ); // Chiude il loading dialog in caso di errore
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Prodotto non trovato o errore di rete.'),
-                    ),
+                    SnackBar(content: Text(l10n.productNotFoundOrNetworkError)),
                   );
                   // Apri comunque il dialog per l'inserimento manuale
                   _showAddItemDialog(context, ref, barcode: barcode);
@@ -243,6 +239,7 @@ Widget _buildActionButtons(
 
 // UI per il totale
 Widget _buildTotalSummary(BuildContext context, CartState cartState) {
+  final l10n = AppLocalizations.of(context)!;
   // Ora calcoliamo i totali direttamente dallo stato del carrello
   final double totalSg = cartState.items
       .where((i) => i.isGlutenFree)
@@ -260,11 +257,11 @@ Widget _buildTotalSummary(BuildContext context, CartState cartState) {
     child: Column(
       children: [
         if (totalSg > 0) ...[
-          _TotalRow('Totale Senza Glutine (SG)', totalSg),
+          _TotalRow(l10n.totalGlutenFree, totalSg),
           const SizedBox(height: 8),
         ],
         if (totalRegular > 0) ...[
-          _TotalRow('Totale Altro', totalRegular),
+          _TotalRow(l10n.totalOther, totalRegular),
           const SizedBox(height: 8),
         ],
         const Divider(),
@@ -342,7 +339,7 @@ void _showAddItemDialog(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      isEditing ? 'Modifica Prodotto' : l10n.addItem,
+                      isEditing ? l10n.editProduct : l10n.addItem,
                       style: theme.textTheme.headlineMedium,
                       textAlign: TextAlign.center,
                     ),
@@ -355,7 +352,7 @@ void _showAddItemDialog(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Il nome non può essere vuoto';
+                          return l10n.productNameCannotBeEmpty;
                         }
                         return null;
                       },
@@ -377,15 +374,16 @@ void _showAddItemDialog(
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             validator: (value) {
-                              if (value == null || value.isEmpty)
-                                return 'Obbligatorio';
+                              if (value == null || value.isEmpty) {
+                                return l10n.requiredField;
+                              }
                               // Gestisce sia il punto che la virgola
                               final normalizedValue = value.replaceAll(
                                 ',',
                                 '.',
                               );
                               if (double.tryParse(normalizedValue) == null) {
-                                return 'Valore non valido';
+                                return l10n.invalidValue;
                               }
                               return null;
                             },
@@ -405,17 +403,18 @@ void _showAddItemDialog(
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             validator: (value) {
-                              if (value == null || value.isEmpty)
-                                return 'Obbligatorio';
+                              if (value == null || value.isEmpty) {
+                                return l10n.requiredField;
+                              }
                               final normalizedValue = value.replaceAll(
                                 ',',
                                 '.',
                               );
                               if (double.tryParse(normalizedValue) == null) {
-                                return 'Valore non valido';
+                                return l10n.invalidValue;
                               }
                               if (double.parse(normalizedValue) <= 0) {
-                                return 'Deve essere > 0';
+                                return l10n.mustBeGreaterThanZero;
                               }
                               return null;
                             },
@@ -430,7 +429,7 @@ void _showAddItemDialog(
                       controller: barcodeController,
                       readOnly: isFromScan,
                       decoration: InputDecoration(
-                        labelText: 'Codice a Barre (Opzionale)',
+                        labelText: l10n.barcodeOptional,
                         prefixIcon: const Icon(Icons.qr_code_2),
                         filled: isFromScan,
                         fillColor: isFromScan
@@ -441,7 +440,7 @@ void _showAddItemDialog(
 
                     const SizedBox(height: 16), // Spazio prima del checkbox
                     CheckboxListTile(
-                      title: const Text('Prodotto Senza Glutine (SG)'),
+                      title: Text(l10n.glutenFreeProduct),
                       value: isGlutenFree,
                       onChanged: (bool? value) {
                         setStateDialog(() {
@@ -458,7 +457,7 @@ void _showAddItemDialog(
 
                     const SizedBox(height: 24),
                     FilledButton(
-                      child: Text(isEditing ? 'Aggiorna' : l10n.addItem),
+                      child: Text(isEditing ? l10n.update : l10n.addItem),
                       onPressed: () async {
                         // La funzione diventa async
                         // 1. Controlla la validità del form

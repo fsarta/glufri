@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/backup/domain/auth_repository.dart';
 import 'package:glufri/features/backup/presentation/screens/forgot_password_screen.dart';
 import 'package:glufri/features/backup/presentation/screens/signup_screen.dart';
@@ -52,8 +53,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Accedi')),
+      appBar: AppBar(title: Text(l10n.login)),
       body: Form(
         key: _formKey,
         child: Padding(
@@ -62,14 +64,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             children: [
               TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                ) /* validator */,
+                decoration: InputDecoration(labelText: l10n.email),
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _passwordController,
-                decoration: const InputDecoration(labelText: 'Password'),
+                decoration: InputDecoration(labelText: l10n.password),
                 obscureText: true /* validator */,
               ),
               Align(
@@ -82,7 +82,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                     );
                   },
-                  child: const Text('Password dimenticata?'),
+                  child: Text(l10n.forgotPassword),
                 ),
               ),
               const SizedBox(height: 10),
@@ -90,7 +90,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ? const CircularProgressIndicator()
                   : ElevatedButton(
                       onPressed: _login,
-                      child: const Text('Accedi'),
+                      child: Text(l10n.loginAction),
                     ),
               const SizedBox(height: 16),
               TextButton(
@@ -99,14 +99,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     MaterialPageRoute(builder: (ctx) => const SignUpScreen()),
                   );
                 },
-                child: const Text('Non hai un account? Registrati'),
+                child: Text(l10n.noAccount),
               ),
               // Aggiungere link per "Password dimenticata"
-              const Text("oppure"),
+              Text(l10n.or),
               ElevatedButton.icon(
                 onPressed: _loginWithGoogle,
                 icon: const Icon(Icons.g_mobiledata),
-                label: const Text('Accedi con Google'),
+                label: Text(l10n.loginWithGoogle),
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(200, 48),
                 ),

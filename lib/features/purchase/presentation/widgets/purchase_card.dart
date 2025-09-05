@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/purchase/data/models/purchase_model.dart';
 import 'package:intl/intl.dart';
 
@@ -12,6 +13,7 @@ class PurchaseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     // Abbiamo rimosso l'InkWell che avvolgeva il Padding.
     // L'evento di tocco sarà gestito dal GestureDetector nella schermata principale.
@@ -81,7 +83,7 @@ class PurchaseCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      '${purchase.items.length} prodotti',
+                      l10n.productsCount(purchase.items.length),
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: Colors.grey.shade600,
                       ),
@@ -96,13 +98,13 @@ class PurchaseCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _SummaryChip(
-                    label: 'Senza Glutine',
+                    label: l10n.glutenFree,
                     total: purchase.totalGlutenFree,
                     icon: Icons.verified,
                     color: Colors.green,
                   ),
                   _SummaryChip(
-                    label: 'Altro',
+                    label: l10n.other,
                     total: purchase.totalRegular,
                     icon: Icons.label_outline,
                     color: Colors.grey.shade700,
