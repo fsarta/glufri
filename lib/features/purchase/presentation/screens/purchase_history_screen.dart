@@ -459,7 +459,6 @@ class _GroupHeader extends StatelessWidget {
   }
 }
 
-// --- AGGIUNGI QUESTO NUOVO WIDGET ALLA FINE DEL FILE ---
 class _SearchedProductSummaryCard extends StatelessWidget {
   final SearchedProductSummary summary;
   const _SearchedProductSummaryCard({required this.summary});
@@ -468,6 +467,10 @@ class _SearchedProductSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+
+    // Determiniamo se si tratta di un singolo acquisto o di acquisti multipli
+    final isSinglePurchase = summary.purchaseCount == 1;
+    final singleItem = isSinglePurchase ? summary.items.first : null;
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -482,35 +485,88 @@ class _SearchedProductSummaryCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-            Text(
-              '${l10n.totalOverall}: ${summary.totalSpent.toStringAsFixed(2)} €',
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.primary,
+            if (isSinglePurchase && singleItem != null) ...[
+              // CASO 1: UN SINGOLO ACQUISTO
+              // Mostriamo Quantità x Prezzo Unitario = Subtotale
+              Text.rich(
+                TextSpan(
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: theme.colorScheme.primary,
+                  ),
+                  children: [
+                    TextSpan(
+                      text:
+                          '${singleItem.quantity.toString()} x ${singleItem.unitPrice.toStringAsFixed(2)} € = ',
+                    ),
+                    TextSpan(
+                      text: '${singleItem.subtotal.toStringAsFixed(2)} €',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Text(
-              '${l10n.quantity}: ${summary.totalQuantity.toStringAsFixed(2)} (${l10n.productsCount(summary.purchaseCount)})',
-              style: theme.textTheme.bodySmall,
-            ),
+            ] else ...[
+              // CASO 2: ACQUISTI MULTIPLI
+              // Mostriamo il totale speso
+              Text(
+                '${l10n.totalOverall}: ${summary.totalSpent.toStringAsFixed(2)} €',
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+            if (!isSinglePurchase)
+              Text(
+                '${l10n.quantity}: ${summary.totalQuantity.toStringAsFixed(2)} (${l10n.productsCount(summary.purchaseCount)})',
+                style: theme.textTheme.bodySmall,
+              )
+            else if (singleItem !=
+                null) // Se è un acquisto singolo, mostriamo dove
+              Text(
+                '${summary.purchaseContext[singleItem.id]?.store ?? l10n.genericPurchase} - ${DateFormat.yMd(l10n.localeName).format(summary.purchaseContext[singleItem.id]!.date)}',
+                style: theme.textTheme.bodySmall,
+              ),
           ],
         ),
-        children: summary.items.map((item) {
-          final purchase = summary.purchaseContext[item.id]!;
-          return ListTile(
-            title: Text('${purchase.store ?? l10n.genericPurchase}'),
-            subtitle: Text(
-              DateFormat.yMd(l10n.localeName).format(purchase.date),
-            ),
-            trailing: Text('${item.subtotal.toStringAsFixed(2)} €'),
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => PurchaseDetailScreen(purchaseId: purchase.id),
-                ),
-              );
-            },
-          );
-        }).toList(),
+
+        // La parte espandibile (children) appare solo se ci sono acquisti multipli.
+        // Se c'è un solo acquisto, il titolo mostra già tutte le info.
+        children: isSinglePurchase
+            ? [] // Non mostrare nulla se l'acquisto è singolo
+            : summary.items.map((item) {
+                final purchase = summary.purchaseContext[item.id]!;
+                return ListTile(
+                  title: Text('${purchase.store ?? l10n.genericPurchase}'),
+                  subtitle: Text(
+                    DateFormat.yMd(l10n.localeName).format(purchase.date),
+                  ),
+                  trailing: Text.rich(
+                    // Usiamo Text.rich anche qui per chiarezza
+                    TextSpan(
+                      style: theme.textTheme.bodyMedium,
+                      children: [
+                        TextSpan(
+                          text:
+                              '${item.quantity.toString()} x ${item.unitPrice.toStringAsFixed(2)} = ',
+                        ),
+                        TextSpan(
+                          text: '${item.subtotal.toStringAsFixed(2)} €',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            PurchaseDetailScreen(purchaseId: purchase.id),
+                      ),
+                    );
+                  },
+                );
+              }).toList(),
       ),
     );
   }
