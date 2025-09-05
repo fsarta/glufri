@@ -408,4 +408,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get storeHint => 'E.g. Rossi Supermarket';
+
+  @override
+  String get loginSuccess => 'Welcome!';
+
+  @override
+  String get logoutSuccess => 'Logout successful.';
 }

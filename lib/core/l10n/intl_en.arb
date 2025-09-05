@@ -172,5 +172,7 @@
       }
     }
   },
-  "storeHint": "E.g. Rossi Supermarket"
+  "storeHint": "E.g. Rossi Supermarket",
+  "loginSuccess": "Welcome!",
+  "logoutSuccess": "Logout successful."
 }

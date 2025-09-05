@@ -841,6 +841,18 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Es. Supermercato Rossi'**
   String get storeHint;
+
+  /// No description provided for @loginSuccess.
+  ///
+  /// In it, this message translates to:
+  /// **'Benvenuto/a!'**
+  String get loginSuccess;
+
+  /// No description provided for @logoutSuccess.
+  ///
+  /// In it, this message translates to:
+  /// **'Logout effettuato con successo.'**
+  String get logoutSuccess;
 }
 
 class _AppLocalizationsDelegate

@@ -137,9 +137,33 @@ class GlufriApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<UserModel?>(userProvider, (previousUser, newUser) {
-      if (previousUser == null && newUser != null) {
-        Future.microtask(() => _showMigrationDialog(ref, newUser.uid));
+    ref.listen<UserModel?>(userProvider, (previous, next) {
+      final navigatorContext = navigatorKey.currentContext;
+      if (navigatorContext == null) return;
+
+      final l10n = AppLocalizations.of(navigatorContext)!;
+
+      // 1. Caso LOGIN: da null a un utente
+      if (previous == null && next != null) {
+        // Mostra la Snackbar di benvenuto
+        ScaffoldMessenger.of(navigatorContext).showSnackBar(
+          SnackBar(
+            content: Text(l10n.loginSuccess),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        // Esegui la logica di migrazione (come prima)
+        Future.microtask(() => _showMigrationDialog(ref, next.uid));
+      }
+      // 2. Caso LOGOUT: da un utente a null
+      else if (previous != null && next == null) {
+        ScaffoldMessenger.of(navigatorContext).showSnackBar(
+          SnackBar(
+            content: Text(l10n.logoutSuccess),
+            backgroundColor: Theme.of(navigatorContext).colorScheme.primary,
+          ),
+        );
       }
     });
     final themeMode = ref.watch(themeModeProvider);

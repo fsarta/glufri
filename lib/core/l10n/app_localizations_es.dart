@@ -414,4 +414,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get storeHint => 'Ej. Supermercado Rossi';
+
+  @override
+  String get loginSuccess => '¡Bienvenido/a!';
+
+  @override
+  String get logoutSuccess => 'Cierre de sesión exitoso.';
 }

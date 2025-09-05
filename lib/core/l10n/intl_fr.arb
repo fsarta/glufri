@@ -122,5 +122,7 @@
   "shareText": "Voici mon dernier achat sans gluten suivi avec l'app Glufri ! 🛒",
   "genericError": "Une erreur est survenue :\n{error}",
   "purchaseExport": "Exportation d'Achat Glufri - {store}",
-  "storeHint": "Ex. Supermarché Rossi"
+  "storeHint": "Ex. Supermarché Rossi",
+  "loginSuccess": "Bienvenue !",
+  "logoutSuccess": "Déconnexion réussie."
 }

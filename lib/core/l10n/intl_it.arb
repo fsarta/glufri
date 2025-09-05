@@ -172,5 +172,7 @@
       }
     }
   },
-  "storeHint": "Es. Supermercato Rossi"
+  "storeHint": "Es. Supermercato Rossi",
+  "loginSuccess": "Benvenuto/a!",
+  "logoutSuccess": "Logout effettuato con successo."
 }
