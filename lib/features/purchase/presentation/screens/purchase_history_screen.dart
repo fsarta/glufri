@@ -111,56 +111,6 @@ class PurchaseHistoryScreen extends ConsumerWidget {
           // Il `when` di Riverpod gestisce elegantemente i diversi stati del Future.
           Expanded(
             child: purchasesAsyncValue.when(
-              // STATO DATI: la lista è stata caricata con successo.
-              data: (_) {
-                // Se la lista è vuota, mostra un messaggio di benvenuto.
-                if (groupedPurchases.isEmpty) {
-                  return Center(
-                    child: Text(
-                      isSearchActive
-                          ? l10n.noProductsFoundFor(searchQuery)
-                          : l10n.noPurchases,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 16, color: Colors.grey),
-                    ),
-                  );
-                }
-
-                // Se la ricerca NON è attiva, mostra la lista normale
-                /* if (!isSearchActive) {
-                  return ListView.builder(
-                    itemCount: purchases.length,
-                    itemBuilder: (context, index) {
-                      final purchase = purchases[index];
-                      // Usiamo InkWell per un effetto visivo migliore. Avvolgiamo DIRETTAMENTE la card.
-                      return InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (ctx) =>
-                                  PurchaseDetailScreen(purchaseId: purchase.id),
-                            ),
-                          );
-                        },
-                        child: PurchaseCard(purchase: purchase),
-                      );
-                    },
-                  );
-                } */
-
-                // Altrimenti, costruisci la lista con `ListView.builder`.
-                return ListView.builder(
-                  itemCount: groupedPurchases.length, // Numero di anni
-                  itemBuilder: (context, index) {
-                    final yearGroup = groupedPurchases[index];
-                    return _YearlyGroupView(
-                      yearGroup: yearGroup,
-                      isSearchActive: isSearchActive,
-                      searchQuery: searchQuery,
-                    );
-                  },
-                );
-              },
               // STATO CARICAMENTO: mostra un indicatore di progresso.
               loading: () => const Center(child: CircularProgressIndicator()),
               // STATO ERRORE: mostra un messaggio di errore informativo.
@@ -170,6 +120,46 @@ class PurchaseHistoryScreen extends ConsumerWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
+              data: (_) {
+                // --- NUOVA LOGICA DI VISUALIZZAZIONE ---
+                if (isSearchActive) {
+                  // --- VISTA DI RICERCA (NUOVA) ---
+                  final searchResults = ref.watch(
+                    searchedProductsSummaryProvider,
+                  );
+                  if (searchResults.isEmpty) {
+                    return Center(
+                      child: Text(l10n.noProductsFoundFor(filters.searchQuery)),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: searchResults.length,
+                    itemBuilder: (context, index) {
+                      return _SearchedProductSummaryCard(
+                        summary: searchResults[index],
+                      );
+                    },
+                  );
+                } else {
+                  // --- VISTA CRONOLOGICA (VECCHIA) ---
+                  final groupedPurchases = ref.watch(groupedPurchaseProvider);
+                  if (groupedPurchases.isEmpty) {
+                    return Center(child: Text(l10n.noPurchases));
+                  }
+                  return ListView.builder(
+                    itemCount: groupedPurchases.length,
+                    itemBuilder: (context, index) {
+                      final yearGroup = groupedPurchases[index];
+                      // Questa parte deve essere come quella che abbiamo corretto prima
+                      return _YearlyGroupView(
+                        yearGroup: yearGroup,
+                        isSearchActive: false,
+                        searchQuery: "",
+                      );
+                    },
+                  );
+                }
+              },
             ),
           ),
         ],
@@ -361,6 +351,63 @@ class _GroupHeader extends StatelessWidget {
           ),
         ],
       ],
+    );
+  }
+}
+
+// --- AGGIUNGI QUESTO NUOVO WIDGET ALLA FINE DEL FILE ---
+class _SearchedProductSummaryCard extends StatelessWidget {
+  final SearchedProductSummary summary;
+  const _SearchedProductSummaryCard({required this.summary});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      child: ExpansionTile(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              summary.productName,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              '${l10n.totalOverall}: ${summary.totalSpent.toStringAsFixed(2)} €',
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: theme.colorScheme.primary,
+              ),
+            ),
+            Text(
+              '${l10n.quantity}: ${summary.totalQuantity.toStringAsFixed(2)} (${l10n.productsCount(summary.purchaseCount)})',
+              style: theme.textTheme.bodySmall,
+            ),
+          ],
+        ),
+        children: summary.items.map((item) {
+          final purchase = summary.purchaseContext[item.id]!;
+          return ListTile(
+            title: Text('${purchase.store ?? l10n.genericPurchase}'),
+            subtitle: Text(
+              DateFormat.yMd(l10n.localeName).format(purchase.date),
+            ),
+            trailing: Text('${item.subtotal.toStringAsFixed(2)} €'),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => PurchaseDetailScreen(purchaseId: purchase.id),
+                ),
+              );
+            },
+          );
+        }).toList(),
+      ),
     );
   }
 }
