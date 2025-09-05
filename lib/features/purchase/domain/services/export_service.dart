@@ -30,14 +30,14 @@ class ExportService {
       ['Store', purchase.store ?? 'N/A'],
       ['Date', DateFormat.yMd().format(purchase.date)],
       ['Total', purchase.total],
-      <String>[], // Riga vuota per separazione
+      <String>[],
       headers,
     ];
 
     // Combina riepilogo e righe di dati
-    final allRows = summaryRows..addAll(rows as Iterable<List<Object>>);
+    final List<List<Object?>> allRows = [...summaryRows, ...rows];
 
     // Converte la lista di liste in una stringa CSV
-    return const ListToCsvConverter().convert(allRows);
+    return const ListToCsvConverter(eol: '\n').convert(allRows);
   }
 }
