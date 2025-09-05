@@ -15,6 +15,7 @@ import 'package:glufri/features/purchase/presentation/screens/purchase_detail_sc
 import 'package:glufri/features/purchase/presentation/screens/purchase_session_screen.dart';
 import 'package:glufri/features/purchase/presentation/widgets/filtered_purchase_item_card.dart';
 import 'package:glufri/features/purchase/presentation/widgets/purchase_card.dart';
+import 'package:glufri/features/scanner/presentation/screens/barcode_scanner_screen.dart';
 import 'package:glufri/features/settings/presentation/screens/settings_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:badges/badges.dart' as badges;
@@ -26,11 +27,33 @@ import 'package:badges/badges.dart' as badges;
 /// - Fornisce una barra di ricerca per filtrare gli acquisti.
 /// - Visualizza la lista di acquisti recuperata dal database locale.
 /// - Permette di navigare al dettaglio di un acquisto o di crearne uno nuovo.
-class PurchaseHistoryScreen extends ConsumerWidget {
+class PurchaseHistoryScreen extends ConsumerStatefulWidget {
   const PurchaseHistoryScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PurchaseHistoryScreen> createState() =>
+      _PurchaseHistoryScreenState();
+}
+
+class _PurchaseHistoryScreenState extends ConsumerState<PurchaseHistoryScreen> {
+  // Creiamo un controller per poter modificare il testo programmaticamente
+  final _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Sincronizziamo lo stato del provider con il controller all'inizio
+    _searchController.text = ref.read(purchaseFilterProvider).searchQuery;
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     // Osserva i provider necessari per la build della UI.
     // `purchaseListProvider` contiene i dati (o lo stato di caricamento/errore).
     final groupedPurchases = ref.watch(groupedPurchaseProvider);
@@ -114,7 +137,7 @@ class PurchaseHistoryScreen extends ConsumerWidget {
           // 1. Mostra il banner pubblicitario solo se l'utente NON è Pro.
           // Il widget `AdBannerWidget` gestisce internamente il caricamento
           // e la visualizzazione dell'annuncio.
-          if (!isPro) const AdBannerWidget(),
+          if (!ref.watch(isProUserProvider)) const AdBannerWidget(),
 
           // 2. Barra di ricerca che aggiorna il provider dei filtri.
           // Ad ogni carattere digitato, `setSearchQuery` viene chiamato,
@@ -123,9 +146,31 @@ class PurchaseHistoryScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
+              controller: _searchController,
               decoration: InputDecoration(
                 hintText: l10n.searchPlaceholder,
                 prefixIcon: const Icon(Icons.search),
+                suffixIcon: IconButton(
+                  tooltip: l10n.scanBarcode, // Aggiungi la traduzione se manca
+                  icon: const Icon(Icons.qr_code_scanner),
+                  onPressed: () async {
+                    // Avvia lo scanner
+                    final barcode = await Navigator.of(context).push<String>(
+                      MaterialPageRoute(
+                        builder: (_) => const BarcodeScannerScreen(),
+                      ),
+                    );
+
+                    // Se lo scanner restituisce un codice
+                    if (barcode != null && barcode.isNotEmpty) {
+                      // Aggiorna sia il controller della UI che il provider dello stato
+                      _searchController.text = barcode;
+                      ref
+                          .read(purchaseFilterProvider.notifier)
+                          .setSearchQuery(barcode);
+                    }
+                  },
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),

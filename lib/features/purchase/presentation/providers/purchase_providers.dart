@@ -51,9 +51,11 @@ final purchaseListProvider = FutureProvider<List<PurchaseModel>>((ref) async {
             ) ??
             false) ||
         purchase.items.any(
-          (item) => item.name.toLowerCase().contains(
-            filters.searchQuery.toLowerCase(),
-          ),
+          (item) =>
+              item.name.toLowerCase().contains(
+                filters.searchQuery.toLowerCase(),
+              ) ||
+              (item.barcode?.contains(filters.searchQuery) ?? false),
         );
 
     // Filtro per data
@@ -154,70 +156,6 @@ final groupedPurchaseProvider = Provider.autoDispose<List<YearlyPurchaseGroup>>(
     ..sort((a, b) => b.year.compareTo(a.year));
 });
 
-/* /// Provider che, data una query di ricerca, aggrega tutti gli item
-/// corrispondenti in riepiloghi per prodotto.
-final searchedProductsSummaryProvider = Provider.autoDispose<List<SearchedProductSummary>>((
-  ref,
-) {
-  // 1. Osserva sia la lista di acquisti che i filtri
-  final purchases = ref.watch(purchaseListProvider).valueOrNull ?? [];
-  final searchQuery = ref
-      .watch(purchaseFilterProvider)
-      .searchQuery
-      .toLowerCase();
-
-  if (searchQuery.isEmpty || purchases.isEmpty) {
-    return []; // Nessuna ricerca, nessun risultato
-  }
-
-  // 2. "Appiattiamo" la struttura: creiamo una lista di tutti gli item di tutti gli acquisti
-  // e una mappa per recuperare il contesto di ogni acquisto tramite il suo ID
-  final allItems = <PurchaseItemModel>[];
-  final purchaseMap = {for (var p in purchases) p.id: p};
-
-  for (final purchase in purchases) {
-    allItems.addAll(purchase.items);
-  }
-
-  // 3. Filtra solo gli item il cui nome contiene la query di ricerca
-  final matchingItems = allItems
-      .where((item) => item.name.toLowerCase().contains(searchQuery))
-      .toList();
-
-  // 4. Raggruppa gli item filtrati per nome del prodotto
-  final groupedByName = matchingItems.groupListsBy((item) => item.name);
-
-  // 5. Trasforma ogni gruppo in un oggetto `SearchedProductSummary`
-  return groupedByName.entries.map((entry) {
-    final productName = entry.key;
-    final items = entry.value;
-
-    // Aggrega i dati
-    final totalSpent = items.map((i) => i.subtotal).sum;
-    final totalQuantity = items.map((i) => i.quantity).sum;
-
-    // Per ottenere il purchaseContext corretto, usiamo la mappa creata prima
-    final contextMap = <String, PurchaseModel>{};
-    for (final item in items) {
-      // Ogni HiveObject ha un riferimento alla sua box e chiave, ma per risalire al PurchaseModel
-      // è più robusto avere una mappa come abbiamo fatto. Dobbiamo però associare l'item al suo purchase.
-      // Modifichiamo l'approccio per essere più robusti.
-    }
-
-    return SearchedProductSummary(
-      productName: productName,
-      items: items,
-      purchaseCount: items.length,
-      totalSpent: totalSpent,
-      totalQuantity: totalQuantity,
-      purchaseContext: {}, // Lo sistemiamo dopo
-    );
-  }).toList()..sort(
-    (a, b) => b.totalSpent.compareTo(a.totalSpent),
-  ); // Ordina per spesa
-}); */
-
-// -- Correzione Robusta per il Contesto --
 // Il modo migliore per passare il contesto è modificare la logica di appiattimento.
 
 final searchedProductsSummaryProvider =
@@ -239,7 +177,8 @@ final searchedProductsSummaryProvider =
 
       final matchingItems = allItemsWithContext.where((data) {
         final item = data['item'] as PurchaseItemModel;
-        return item.name.toLowerCase().contains(searchQuery);
+        return item.name.toLowerCase().contains(searchQuery) ||
+            (item.barcode?.contains(searchQuery) ?? false);
       }).toList();
 
       final groupedByName = matchingItems.groupListsBy((data) {
