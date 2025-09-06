@@ -86,11 +86,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get resetEmailSuccess =>
-      'Password reset email sent successfully! Check your inbox.';
+      'Recovery email sent successfully! Check your inbox.';
 
   @override
   String get resetEmailError =>
-      'Error sending email. The address might not be valid.';
+      'Error sending the email. The address may not be valid.';
 
   @override
   String get noAccount => 'Don\'t have an account? Sign up';
@@ -105,7 +105,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginWithGoogle => 'Login with Google';
 
   @override
-  String get signup => 'Sign Up';
+  String get signup => 'Sign up';
 
   @override
   String get signupAction => 'SIGN UP';
@@ -123,14 +123,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalidEmailError => 'Please enter a valid email.';
 
   @override
-  String get passwordLengthError => 'Password must be at least 6 characters.';
+  String get passwordLengthError =>
+      'The password must be at least 6 characters long.';
 
   @override
   String get passwordsDoNotMatchError => 'Passwords do not match.';
 
   @override
   String get signupError =>
-      'Error during registration. Please try again (e.g., the email might already be in use).';
+      'Error during signup. Please try again. (e.g., the email might already be in use)';
 
   @override
   String get account => 'Account';
@@ -149,7 +150,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get noPurchases => 'No purchases recorded.\nPress \"+\" to start!';
+  String get noPurchases =>
+      'No purchases recorded.\nPress \"+\" to get started!';
 
   @override
   String get purchaseDetail => 'Purchase Detail';
@@ -185,13 +187,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get exportError => 'Error during export.';
+  String get exportError => 'Export error.';
 
   @override
-  String get shareError => 'Error during sharing.';
+  String get shareError => 'Sharing error.';
 
   @override
-  String get deleteConfirmationTitle => 'Confirm Deletion';
+  String get deleteConfirmationTitle => 'Delete Confirmation';
 
   @override
   String get deleteConfirmationMessage =>
@@ -273,14 +275,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingScanBody =>
-      'Use your camera to scan product barcodes and add them to your cart.';
+      'Use the camera to scan product barcodes and add them to your cart.';
 
   @override
   String get onboardingTrackTitle => 'Keep Everything Under Control';
 
   @override
   String get onboardingTrackBody =>
-      'Save your purchases and view your history to analyze your spending.';
+      'Save your purchases and view the history to analyze your spending.';
 
   @override
   String get skip => 'Skip';
@@ -292,16 +294,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsLanguageSystem => 'System';
 
   @override
-  String get settingsLanguageItalian => 'Italiano';
+  String get settingsLanguageItalian => 'Italian';
 
   @override
   String get settingsLanguageEnglish => 'English';
 
   @override
-  String get settingsAccountAndBackup => 'Account & Backup (Pro)';
+  String get settingsAccountAndBackup => 'Account and Backup (Pro)';
 
   @override
-  String get settingsLoginForBackup => 'Login with Google to enable backup';
+  String get settingsLoginForBackup => 'Log in with Google to enable backup';
 
   @override
   String get settingsLoginFailed => 'Login failed. Please try again.';
@@ -310,7 +312,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get user => 'User';
 
   @override
-  String get settingsBackupNow => 'Backup Now';
+  String get settingsBackupNow => 'Back Up Now';
 
   @override
   String get settingsRestoreFromCloud => 'Restore from Cloud';
@@ -325,25 +327,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsPrivacyPolicy => 'Privacy Policy';
 
   @override
-  String get upsellTitle => 'Upgrade to Glufri Pro';
+  String get upsellTitle => 'Go Pro with Glufri';
 
   @override
   String get upsellHeadline => 'Unlock Powerful Features!';
 
   @override
-  String get upsellFeature1 => 'Cloud Backup & Multi-device Sync';
+  String get upsellFeature1 => 'Multi-device Backup and Sync';
 
   @override
   String get upsellFeature2 => 'Unlimited CSV Exports';
 
   @override
-  String get upsellFeature3 => 'Ad-free Experience';
+  String get upsellFeature3 => 'Ad-free experience';
 
   @override
   String get upsellFeature4 => 'Priority Support';
 
   @override
-  String get upsellAction => 'Subscribe Now (Yearly Price)';
+  String get upsellAction => 'Subscribe Now (Annual Price)';
 
   @override
   String get upsellRestore => 'Restore Purchases';
@@ -353,7 +355,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String migrationDialogBody(int count) {
-    return 'You have $count purchases saved on this device. What would you like to do?';
+    return 'You have $count purchases saved on this device. What do you want to do?';
   }
 
   @override
@@ -366,20 +368,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get migrationDialogActionMerge => 'YES, MERGE';
 
   @override
-  String get migrationSuccess => 'Local purchases merged to your account!';
+  String get migrationSuccess => 'Local purchases merged with your account!';
 
   @override
-  String get migrationDeleted => 'Local data successfully deleted.';
+  String get migrationDeleted => 'Local data deleted successfully.';
 
   @override
   String get privacyPolicyTitle => 'Privacy Policy';
 
   @override
   String get privacyPolicyBody =>
-      'Your privacy is important...\n[INSERT FULL PRIVACY POLICY TEXT HERE]\n\nData Collected: The app saves purchase data exclusively on your device. If you choose to use the cloud backup feature (Pro feature), your data will be encrypted and saved on secure Google Firebase servers.\n\nData Sharing: No personal or purchase data is shared with third parties.\n...';
+      'Your privacy is important...\n[INSERT FULL PRIVACY POLICY TEXT HERE]\n\nData Collected: The app saves purchase data exclusively on your device. If you choose to use the cloud backup feature (Pro feature), your data will be encrypted and saved on Google Firebase\'s secure servers.\n\nData Sharing: No personal or purchase data is shared with third parties.\n...';
 
   @override
-  String get genericPurchase => 'Generic Purchase';
+  String get genericPurchase => 'Generic purchase';
 
   @override
   String get mainProducts => 'Main products:';
@@ -407,17 +409,42 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get storeHint => 'E.g. Rossi Supermarket';
+  String get storeHint => 'e.g., Rossi Supermarket';
 
   @override
   String get loginSuccess => 'Welcome!';
 
   @override
-  String get logoutSuccess => 'Logout successful.';
+  String get logoutSuccess => 'Logged out successfully.';
 
   @override
   String get undoAction => 'UNDO';
 
   @override
   String get purchaseMarkedForDeletion => 'Purchase deleted.';
+
+  @override
+  String get backupInProgress => 'Backup in progress...';
+
+  @override
+  String get backupSuccess => 'Backup completed successfully!';
+
+  @override
+  String get backupError => 'Error during backup.';
+
+  @override
+  String get restoreConfirmationTitle => 'Restore Confirmation';
+
+  @override
+  String get restoreConfirmationBody =>
+      'This will overwrite all local data with the data saved in the cloud. Continue?';
+
+  @override
+  String get restoreInProgress => 'Restoring in progress...';
+
+  @override
+  String get restoreSuccess => 'Data restored successfully!';
+
+  @override
+  String get restoreError => 'Error during restore.';
 }

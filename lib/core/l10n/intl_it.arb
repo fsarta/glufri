@@ -176,5 +176,14 @@
   "loginSuccess": "Benvenuto/a!",
   "logoutSuccess": "Logout effettuato con successo.",
   "undoAction": "ANNULLA",
-  "purchaseMarkedForDeletion": "Acquisto eliminato."
+  "purchaseMarkedForDeletion": "Acquisto eliminato.",
+
+  "backupInProgress": "Backup in corso...", 
+  "backupSuccess": "Backup completato con successo!", 
+  "backupError": "Errore durante il backup.", 
+  "restoreConfirmationTitle": "Conferma Ripristino", 
+  "restoreConfirmationBody": "Questo sovrascriverà tutti i dati locali con quelli salvati nel cloud. Continuare?", 
+  "restoreInProgress": "Ripristino in corso...", 
+  "restoreSuccess": "Dati ripristinati con successo!", 
+  "restoreError": "Errore durante il ripristino."
 }

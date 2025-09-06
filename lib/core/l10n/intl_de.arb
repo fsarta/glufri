@@ -2,9 +2,9 @@
   "@@locale": "de",
   "appName": "Glufri",
   "newPurchase": "Neuer Einkauf",
-  "purchaseHistory": "Einkaufshistorie",
+  "purchaseHistory": "Einkaufsverlauf",
   "settings": "Einstellungen",
-  "addItem": "Artikel hinzufügen",
+  "addItem": "Produkt hinzufügen",
   "scanBarcode": "Barcode scannen",
   "savePurchase": "Einkauf speichern",
   "store": "Geschäft",
@@ -24,11 +24,11 @@
   "forgotPasswordScreenTitle": "Passwort wiederherstellen",
   "forgotPasswordTitle": "Passwort vergessen?",
   "forgotPasswordInstruction": "Gib die mit deinem Konto verknüpfte E-Mail-Adresse ein. Wir senden dir einen Link zum Zurücksetzen deines Passworts.",
-  "sendResetEmail": "RÜCKSETZ-E-MAIL SENDEN",
-  "resetEmailSuccess": "E-Mail zum Zurücksetzen des Passworts erfolgreich gesendet! Überprüfe deinen Posteingang.",
+  "sendResetEmail": "WIEDERHERSTELLUNGS-E-MAIL SENDEN",
+  "resetEmailSuccess": "Wiederherstellungs-E-Mail erfolgreich gesendet! Überprüfe deinen Posteingang.",
   "resetEmailError": "Fehler beim Senden der E-Mail. Die Adresse ist möglicherweise ungültig.",
-  "noAccount": "Kein Konto? Registrieren",
-  "alreadyHaveAccount": "Bereits ein Konto? Anmelden",
+  "noAccount": "Du hast kein Konto? Registrieren",
+  "alreadyHaveAccount": "Du hast bereits ein Konto? Anmelden",
   "or": "oder",
   "loginWithGoogle": "Mit Google anmelden",
   "signup": "Registrieren",
@@ -36,27 +36,49 @@
   "signupTitle": "Erstelle dein Konto",
   "email": "E-Mail",
   "confirmPassword": "Passwort bestätigen",
-  "invalidEmailError": "Bitte eine gültige E-Mail-Adresse eingeben.",
+  "invalidEmailError": "Bitte gib eine gültige E-Mail-Adresse ein.",
   "passwordLengthError": "Das Passwort muss mindestens 6 Zeichen lang sein.",
   "passwordsDoNotMatchError": "Die Passwörter stimmen nicht überein.",
-  "signupError": "Fehler bei der Registrierung. Bitte versuche es erneut (z.B. die E-Mail ist möglicherweise bereits in Gebrauch).",
+  "signupError": "Fehler bei der Registrierung. Bitte versuche es erneut. (z. B. die E-Mail-Adresse wird bereits verwendet)",
   "account": "Konto",
   "loggedInAs": "Angemeldet als {email}",
+  "@loggedInAs": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
   "searchPlaceholder": "Nach Geschäft oder Produkt suchen...",
   "noProductsFoundFor": "Keine Produkte für \"{query}\" gefunden",
-  "noPurchases": "Keine Einkäufe erfasst.\nDrücke \"+\", um zu beginnen!",
+  "@noProductsFoundFor": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "noPurchases": "Keine Einkäufe aufgezeichnet.\nDrücke \"+\", um zu beginnen!",
   "purchaseDetail": "Einkaufsdetails",
   "shareSummary": "Zusammenfassung teilen",
   "edit": "Bearbeiten",
   "duplicate": "Duplizieren",
-  "exportCsvPro": "Als CSV exportieren (Pro)",
+  "exportCsvPro": "CSV exportieren (Pro)",
   "delete": "Löschen",
   "noStoreSpecified": "Kein Geschäft angegeben",
   "productsCount": "{count,plural, =0{Keine Produkte} =1{1 Produkt} other{{count} Produkte}}",
-  "exportError": "Fehler beim Export.",
+  "@productsCount": {
+    "description": "Anzahl der Produkte in einem Einkauf",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exportError": "Exportfehler.",
   "shareError": "Fehler beim Teilen.",
-  "deleteConfirmationTitle": "Löschen bestätigen",
-  "deleteConfirmationMessage": "Möchtest du diesen Einkauf wirklich löschen? Diese Aktion ist unwiderruflich.",
+  "deleteConfirmationTitle": "Löschbestätigung",
+  "deleteConfirmationMessage": "Möchtest du diesen Einkauf wirklich löschen? Die Aktion ist irreversibel.",
   "cancel": "Abbrechen",
   "purchaseDeletedSuccess": "Einkauf erfolgreich gelöscht.",
   "editPurchase": "Einkauf bearbeiten",
@@ -64,33 +86,33 @@
   "addProductToStart": "Füge ein Produkt hinzu, um zu beginnen.",
   "productNotFoundOrNetworkError": "Produkt nicht gefunden oder Netzwerkfehler.",
   "editProduct": "Produkt bearbeiten",
-  "productNameCannotBeEmpty": "Der Name darf nicht leer sein.",
+  "productNameCannotBeEmpty": "Der Name darf nicht leer sein",
   "requiredField": "Erforderlich",
   "invalidValue": "Ungültiger Wert",
   "mustBeGreaterThanZero": "Muss > 0 sein",
   "barcodeOptional": "Barcode (Optional)",
   "update": "Aktualisieren",
   "glutenFreeProduct": "Glutenfreies Produkt",
-  "totalGlutenFree": "Gesamt Glutenfrei",
-  "totalOther": "Gesamt Andere",
-  "totalOverall": "Gesamtbetrag",
+  "totalGlutenFree": "Glutenfreies Gesamt",
+  "totalOther": "Anderes Gesamt",
+  "totalOverall": "Gesamtsumme",
   "foundProducts": "Gefundene Produkte:",
   "glutenFree": "Glutenfrei",
-  "other": "Andere",
+  "other": "Anderes",
   "scanBarcodeTitle": "EAN-13 scannen",
   "onboardingWelcomeTitle": "Willkommen bei Glufri!",
-  "onboardingWelcomeBody": "Deine App, um glutenfreie Einkäufe schnell und einfach zu erfassen.",
+  "onboardingWelcomeBody": "Deine App, um glutenfreie Einkäufe einfach und schnell zu verfolgen.",
   "onboardingScanTitle": "Scannen und Hinzufügen",
-  "onboardingScanBody": "Nutze deine Kamera, um Produktbarcodes zu scannen und sie deinem Warenkorb hinzuzufügen.",
+  "onboardingScanBody": "Verwende die Kamera, um Produkt-Barcodes zu scannen und sie deinem Einkaufswagen hinzuzufügen.",
   "onboardingTrackTitle": "Behalte alles unter Kontrolle",
-  "onboardingTrackBody": "Speichere deine Einkäufe und sieh dir deine Historie an, um deine Ausgaben zu analysieren.",
+  "onboardingTrackBody": "Speichere deine Einkäufe und sieh dir den Verlauf an, um deine Ausgaben zu analysieren.",
   "skip": "Überspringen",
-  "start": "Start",
+  "start": "Starten",
   "settingsLanguageSystem": "System",
-  "settingsLanguageItalian": "Italiano",
-  "settingsLanguageEnglish": "English",
-  "settingsAccountAndBackup": "Konto & Backup (Pro)",
-  "settingsLoginForBackup": "Mit Google anmelden, um Backup zu aktivieren",
+  "settingsLanguageItalian": "Italienisch",
+  "settingsLanguageEnglish": "Englisch",
+  "settingsAccountAndBackup": "Konto und Backup (Pro)",
+  "settingsLoginForBackup": "Mit Google anmelden, um das Backup zu aktivieren",
   "settingsLoginFailed": "Anmeldung fehlgeschlagen. Bitte versuche es erneut.",
   "user": "Benutzer",
   "settingsBackupNow": "Jetzt sichern",
@@ -98,33 +120,69 @@
   "settingsLogout": "Abmelden",
   "settingsAuthError": "Authentifizierungsfehler",
   "settingsPrivacyPolicy": "Datenschutzerklärung",
-  "upsellTitle": "Auf Glufri Pro upgraden",
+  "upsellTitle": "Wechsle zu Glufri Pro",
   "upsellHeadline": "Schalte leistungsstarke Funktionen frei!",
-  "upsellFeature1": "Cloud-Backup & Synchronisation auf mehreren Geräten",
+  "upsellFeature1": "Multi-Geräte-Backup und -Synchronisation",
   "upsellFeature2": "Unbegrenzte CSV-Exporte",
   "upsellFeature3": "Werbefreie Erfahrung",
-  "upsellFeature4": "Bevorzugter Support",
+  "upsellFeature4": "Priorisierter Support",
   "upsellAction": "Jetzt abonnieren (Jahrespreis)",
-  "upsellRestore": "Käufe wiederherstellen",
-  "migrationDialogTitle": "Lokale Einkäufe gefunden",
+  "upsellRestore": "Einkäufe wiederherstellen",
+  "migrationDialogTitle": "Lokale Einkäufe erkannt",
   "migrationDialogBody": "Du hast {count} Einkäufe auf diesem Gerät gespeichert. Was möchtest du tun?",
+  "@migrationDialogBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "migrationDialogActionDelete": "LÖSCHEN",
   "migrationDialogActionIgnore": "NEIN, BEHALTEN",
   "migrationDialogActionMerge": "JA, ZUSAMMENFÜHREN",
-  "migrationSuccess": "Lokale Einkäufe mit deinem Konto zusammengeführt!",
+  "migrationSuccess": "Lokale Einkäufe erfolgreich mit deinem Konto zusammengeführt!",
   "migrationDeleted": "Lokale Daten erfolgreich gelöscht.",
   "privacyPolicyTitle": "Datenschutzerklärung",
-  "privacyPolicyBody": "Deine Privatsphäre ist wichtig...\n[VOLLSTÄNDIGEN DATENSCHUTZTEXT HIER EINFÜGEN]\n\nGesammelte Daten: Die App speichert Einkaufsdaten ausschließlich auf deinem Gerät. Wenn du die Cloud-Backup-Funktion (Pro-Funktion) nutzt, werden deine Daten verschlüsselt auf sicheren Google Firebase-Servern gespeichert.\n\nDatenweitergabe: Es werden keine persönlichen oder Einkaufsdaten an Dritte weitergegeben.\n...",
-  "genericPurchase": "Allgemeiner Einkauf",
+  "privacyPolicyBody": "Deine Privatsphäre ist uns wichtig...\n[VOLLSTÄNDIGER TEXT DER DATENSCHUTZERKLÄRUNG HIER EINFÜGEN]\n\nGesammelte Daten: Die App speichert Einkaufsdaten ausschließlich auf deinem Gerät. Wenn du die Cloud-Backup-Funktion (Pro-Funktion) nutzt, werden deine Daten verschlüsselt und auf den sicheren Servern von Google Firebase gespeichert.\n\nDatenweitergabe: Es werden keine persönlichen oder Einkaufsdaten an Dritte weitergegeben.\n...",
+  "genericPurchase": "Generischer Einkauf",
   "mainProducts": "Hauptprodukte:",
   "andMoreProducts": "... und {count} weitere Produkte.",
-  "trackedWith": "Erfasst mit der Glufri App",
-  "shareText": "Hier ist mein letzter glutenfreier Einkauf, erfasst mit der Glufri App! 🛒",
-  "genericError": "Ein Fehler ist aufgetreten:\n{error}",
+  "@andMoreProducts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "trackedWith": "Verfolgt mit Glufri App",
+  "shareText": "Hier ist mein letzter glutenfreier Einkauf, verfolgt mit der Glufri App! 🛒",
+  "genericError": "Es ist ein Fehler aufgetreten:\n{error}",
+  "@genericError": {
+    "placeholders": {
+      "error": {
+        "type": "Object"
+      }
+    }
+  },
   "purchaseExport": "Glufri Einkaufsexport - {store}",
+  "@purchaseExport": {
+    "placeholders": {
+      "store": {
+        "type": "String"
+      }
+    }
+  },
   "storeHint": "z.B. Supermarkt Rossi",
   "loginSuccess": "Willkommen!",
-  "logoutSuccess": "Abmeldung erfolgreich.",
-  "undoAction": "RÜCKGÄNGIG MACHEN",
-  "purchaseMarkedForDeletion": "Kauf gelöscht."
+  "logoutSuccess": "Erfolgreich abgemeldet.",
+  "undoAction": "RÜCKGÄNGIG",
+  "purchaseMarkedForDeletion": "Einkauf gelöscht.",
+  "backupInProgress": "Sicherung läuft...",
+  "backupSuccess": "Sicherung erfolgreich abgeschlossen!",
+  "backupError": "Fehler bei der Sicherung.",
+  "restoreConfirmationTitle": "Wiederherstellung bestätigen",
+  "restoreConfirmationBody": "Dies wird alle lokalen Daten mit den in der Cloud gespeicherten Daten überschreiben. Fortfahren?",
+  "restoreInProgress": "Wiederherstellung läuft...",
+  "restoreSuccess": "Daten erfolgreich wiederhergestellt!",
+  "restoreError": "Fehler bei der Wiederherstellung."
 }

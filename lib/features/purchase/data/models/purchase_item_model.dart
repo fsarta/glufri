@@ -36,4 +36,29 @@ class PurchaseItemModel extends HiveObject {
   });
 
   double get subtotal => unitPrice * quantity;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'unitPrice': unitPrice,
+      'quantity': quantity,
+      'barcode': barcode,
+      'imagePath':
+          imagePath, // Nota: imagePath è locale, non funzionerà su altri device
+      'isGlutenFree': isGlutenFree,
+    };
+  }
+
+  factory PurchaseItemModel.fromJson(Map<String, dynamic> json) {
+    return PurchaseItemModel(
+      id: json['id'],
+      name: json['name'],
+      unitPrice: json['unitPrice'],
+      quantity: (json['quantity'] as num).toDouble(),
+      barcode: json['barcode'],
+      imagePath: json['imagePath'],
+      isGlutenFree: json['isGlutenFree'],
+    );
+  }
 }

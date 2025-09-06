@@ -21,10 +21,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settings => 'Paramètres';
 
   @override
-  String get addItem => 'Ajouter Article';
+  String get addItem => 'Ajouter un Produit';
 
   @override
-  String get scanBarcode => 'Scanner le Code';
+  String get scanBarcode => 'Scanner le Code-barres';
 
   @override
   String get savePurchase => 'Enregistrer l\'Achat';
@@ -60,10 +60,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get system => 'Système';
 
   @override
-  String get login => 'Connexion';
+  String get login => 'Se connecter';
 
   @override
-  String get loginAction => 'CONNEXION';
+  String get loginAction => 'SE CONNECTER';
 
   @override
   String get password => 'Mot de passe';
@@ -75,28 +75,28 @@ class AppLocalizationsFr extends AppLocalizations {
   String get forgotPasswordScreenTitle => 'Récupérer le Mot de Passe';
 
   @override
-  String get forgotPasswordTitle => 'Mot de passe oublié ?';
+  String get forgotPasswordTitle => 'Mot de Passe Oublié ?';
 
   @override
   String get forgotPasswordInstruction =>
-      'Saisissez l\'e-mail associé à votre compte. Nous vous enverrons un lien pour réinitialiser votre mot de passe.';
+      'Entrez l\'e-mail associé à votre compte. Nous vous enverrons un lien pour réinitialiser votre mot de passe.';
 
   @override
   String get sendResetEmail => 'ENVOYER L\'E-MAIL DE RÉINITIALISATION';
 
   @override
   String get resetEmailSuccess =>
-      'E-mail de réinitialisation envoyé avec succès ! Vérifiez votre boîte de réception.';
+      'E-mail de récupération envoyé avec succès ! Vérifiez votre boîte de réception.';
 
   @override
   String get resetEmailError =>
       'Erreur lors de l\'envoi de l\'e-mail. L\'adresse pourrait ne pas être valide.';
 
   @override
-  String get noAccount => 'Pas de compte ? S\'inscrire';
+  String get noAccount => 'Vous n\'avez pas de compte ? S\'inscrire';
 
   @override
-  String get alreadyHaveAccount => 'Déjà un compte ? Se connecter';
+  String get alreadyHaveAccount => 'Vous avez déjà un compte ? Se connecter';
 
   @override
   String get or => 'ou';
@@ -117,10 +117,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get email => 'E-mail';
 
   @override
-  String get confirmPassword => 'Confirmer le mot de passe';
+  String get confirmPassword => 'Confirmer le Mot de passe';
 
   @override
-  String get invalidEmailError => 'Veuillez saisir une adresse e-mail valide.';
+  String get invalidEmailError => 'Veuillez entrer une adresse e-mail valide.';
 
   @override
   String get passwordLengthError =>
@@ -132,7 +132,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get signupError =>
-      'Erreur lors de l\'inscription. Veuillez réessayer (par exemple, l\'e-mail pourrait déjà être utilisé).';
+      'Erreur lors de l\'inscription. Veuillez réessayer. (ex. l\'e-mail pourrait déjà être utilisé)';
 
   @override
   String get account => 'Compte';
@@ -188,13 +188,13 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get exportError => 'Erreur lors de l\'exportation.';
+  String get exportError => 'Erreur d\'exportation.';
 
   @override
-  String get shareError => 'Erreur lors du partage.';
+  String get shareError => 'Erreur de partage.';
 
   @override
-  String get deleteConfirmationTitle => 'Confirmer la Suppression';
+  String get deleteConfirmationTitle => 'Confirmation de Suppression';
 
   @override
   String get deleteConfirmationMessage =>
@@ -217,13 +217,13 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get productNotFoundOrNetworkError =>
-      'Produit non trouvé ou erreur réseau.';
+      'Produit non trouvé ou erreur de réseau.';
 
   @override
   String get editProduct => 'Modifier le Produit';
 
   @override
-  String get productNameCannotBeEmpty => 'Le nom ne peut pas être vide.';
+  String get productNameCannotBeEmpty => 'Le nom ne peut pas être vide';
 
   @override
   String get requiredField => 'Obligatoire';
@@ -235,7 +235,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mustBeGreaterThanZero => 'Doit être > 0';
 
   @override
-  String get barcodeOptional => 'Code-barres (Optionnel)';
+  String get barcodeOptional => 'Code-barres (Facultatif)';
 
   @override
   String get update => 'Mettre à jour';
@@ -250,7 +250,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get totalOther => 'Total Autre';
 
   @override
-  String get totalOverall => 'Total Général';
+  String get totalOverall => 'Total Global';
 
   @override
   String get foundProducts => 'Produits trouvés :';
@@ -269,21 +269,21 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get onboardingWelcomeBody =>
-      'Votre application pour suivre les achats sans gluten rapidement et facilement.';
+      'Votre application pour suivre les achats sans gluten de manière simple et rapide.';
 
   @override
-  String get onboardingScanTitle => 'Scannez et Ajoutez';
+  String get onboardingScanTitle => 'Scanner et Ajouter';
 
   @override
   String get onboardingScanBody =>
-      'Utilisez votre appareil photo pour scanner les codes-barres des produits et les ajouter à votre panier.';
+      'Utilisez la caméra pour scanner le code-barres des produits et les ajouter à votre panier.';
 
   @override
-  String get onboardingTrackTitle => 'Gardez Tout Sous Contrôle';
+  String get onboardingTrackTitle => 'Gardez Tout sous Contrôle';
 
   @override
   String get onboardingTrackBody =>
-      'Enregistrez vos achats et consultez votre historique pour analyser vos dépenses.';
+      'Enregistrez vos achats et consultez l\'historique pour analyser vos dépenses.';
 
   @override
   String get skip => 'Passer';
@@ -295,10 +295,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsLanguageSystem => 'Système';
 
   @override
-  String get settingsLanguageItalian => 'Italiano';
+  String get settingsLanguageItalian => 'Italien';
 
   @override
-  String get settingsLanguageEnglish => 'English';
+  String get settingsLanguageEnglish => 'Anglais';
 
   @override
   String get settingsAccountAndBackup => 'Compte et Sauvegarde (Pro)';
@@ -330,13 +330,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsPrivacyPolicy => 'Politique de Confidentialité';
 
   @override
-  String get upsellTitle => 'Passer à Glufri Pro';
+  String get upsellTitle => 'Passez à Glufri Pro';
 
   @override
   String get upsellHeadline => 'Débloquez des Fonctionnalités Puissantes !';
 
   @override
-  String get upsellFeature1 => 'Sauvegarde Cloud et Synchro multi-appareils';
+  String get upsellFeature1 => 'Sauvegarde et Sync Multi-appareils';
 
   @override
   String get upsellFeature2 => 'Exportations CSV illimitées';
@@ -348,7 +348,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get upsellFeature4 => 'Support Prioritaire';
 
   @override
-  String get upsellAction => 'Abonnez-vous Maintenant (Prix Annuel)';
+  String get upsellAction => 'S\'abonner Maintenant (Prix Annuel)';
 
   @override
   String get upsellRestore => 'Restaurer les Achats';
@@ -358,7 +358,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String migrationDialogBody(int count) {
-    return 'Vous avez $count achats enregistrés sur cet appareil. Que souhaitez-vous faire ?';
+    return 'Vous avez $count achats sauvegardés sur cet appareil. Que voulez-vous faire ?';
   }
 
   @override
@@ -381,7 +381,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get privacyPolicyBody =>
-      'Votre vie privée est importante...\n[INSÉRER LE TEXTE COMPLET DE LA POLITIQUE DE CONFIDENTIALITÉ ICI]\n\nDonnées Collectées : L\'application enregistre les données d\'achat exclusivement sur votre appareil. Si vous choisissez d\'utiliser la fonction de sauvegarde cloud (fonctionnalité Pro), vos données seront cryptées et enregistrées sur les serveurs sécurisés de Google Firebase.\n\nPartage de Données : Aucune donnée personnelle ou d\'achat n\'est partagée avec des tiers.\n...';
+      'Votre vie privée est importante...\n[INSÉRER ICI LE TEXTE COMPLET DE LA POLITIQUE DE CONFIDENTIALITÉ]\n\nDonnées Collectées : L\'application sauvegarde les données d\'achat exclusivement sur votre appareil. Si vous choisissez d\'utiliser la fonction de sauvegarde cloud (fonctionnalité Pro), vos données seront cryptées et sauvegardées sur les serveurs sécurisés de Google Firebase.\n\nPartage de Données : Aucune donnée personnelle ou d\'achat n\'est partagée avec des tiers.\n...';
 
   @override
   String get genericPurchase => 'Achat générique';
@@ -408,7 +408,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String purchaseExport(String store) {
-    return 'Exportation d\'Achat Glufri - $store';
+    return 'Exportation Achat Glufri - $store';
   }
 
   @override
@@ -425,4 +425,29 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get purchaseMarkedForDeletion => 'Achat supprimé.';
+
+  @override
+  String get backupInProgress => 'Sauvegarde en cours...';
+
+  @override
+  String get backupSuccess => 'Sauvegarde terminée avec succès !';
+
+  @override
+  String get backupError => 'Erreur lors de la sauvegarde.';
+
+  @override
+  String get restoreConfirmationTitle => 'Confirmation de Restauration';
+
+  @override
+  String get restoreConfirmationBody =>
+      'Cela écrasera toutes les données locales avec les données sauvegardées dans le cloud. Continuer ?';
+
+  @override
+  String get restoreInProgress => 'Restauration en cours...';
+
+  @override
+  String get restoreSuccess => 'Données restaurées avec succès !';
+
+  @override
+  String get restoreError => 'Erreur lors de la restauration.';
 }

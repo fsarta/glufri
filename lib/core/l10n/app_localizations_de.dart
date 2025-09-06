@@ -15,13 +15,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get newPurchase => 'Neuer Einkauf';
 
   @override
-  String get purchaseHistory => 'Einkaufshistorie';
+  String get purchaseHistory => 'Einkaufsverlauf';
 
   @override
   String get settings => 'Einstellungen';
 
   @override
-  String get addItem => 'Artikel hinzufügen';
+  String get addItem => 'Produkt hinzufügen';
 
   @override
   String get scanBarcode => 'Barcode scannen';
@@ -82,21 +82,21 @@ class AppLocalizationsDe extends AppLocalizations {
       'Gib die mit deinem Konto verknüpfte E-Mail-Adresse ein. Wir senden dir einen Link zum Zurücksetzen deines Passworts.';
 
   @override
-  String get sendResetEmail => 'RÜCKSETZ-E-MAIL SENDEN';
+  String get sendResetEmail => 'WIEDERHERSTELLUNGS-E-MAIL SENDEN';
 
   @override
   String get resetEmailSuccess =>
-      'E-Mail zum Zurücksetzen des Passworts erfolgreich gesendet! Überprüfe deinen Posteingang.';
+      'Wiederherstellungs-E-Mail erfolgreich gesendet! Überprüfe deinen Posteingang.';
 
   @override
   String get resetEmailError =>
       'Fehler beim Senden der E-Mail. Die Adresse ist möglicherweise ungültig.';
 
   @override
-  String get noAccount => 'Kein Konto? Registrieren';
+  String get noAccount => 'Du hast kein Konto? Registrieren';
 
   @override
-  String get alreadyHaveAccount => 'Bereits ein Konto? Anmelden';
+  String get alreadyHaveAccount => 'Du hast bereits ein Konto? Anmelden';
 
   @override
   String get or => 'oder';
@@ -120,7 +120,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get confirmPassword => 'Passwort bestätigen';
 
   @override
-  String get invalidEmailError => 'Bitte eine gültige E-Mail-Adresse eingeben.';
+  String get invalidEmailError => 'Bitte gib eine gültige E-Mail-Adresse ein.';
 
   @override
   String get passwordLengthError =>
@@ -132,7 +132,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get signupError =>
-      'Fehler bei der Registrierung. Bitte versuche es erneut (z.B. die E-Mail ist möglicherweise bereits in Gebrauch).';
+      'Fehler bei der Registrierung. Bitte versuche es erneut. (z. B. die E-Mail-Adresse wird bereits verwendet)';
 
   @override
   String get account => 'Konto';
@@ -152,7 +152,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get noPurchases =>
-      'Keine Einkäufe erfasst.\nDrücke \"+\", um zu beginnen!';
+      'Keine Einkäufe aufgezeichnet.\nDrücke \"+\", um zu beginnen!';
 
   @override
   String get purchaseDetail => 'Einkaufsdetails';
@@ -167,7 +167,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get duplicate => 'Duplizieren';
 
   @override
-  String get exportCsvPro => 'Als CSV exportieren (Pro)';
+  String get exportCsvPro => 'CSV exportieren (Pro)';
 
   @override
   String get delete => 'Löschen';
@@ -188,17 +188,17 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get exportError => 'Fehler beim Export.';
+  String get exportError => 'Exportfehler.';
 
   @override
   String get shareError => 'Fehler beim Teilen.';
 
   @override
-  String get deleteConfirmationTitle => 'Löschen bestätigen';
+  String get deleteConfirmationTitle => 'Löschbestätigung';
 
   @override
   String get deleteConfirmationMessage =>
-      'Möchtest du diesen Einkauf wirklich löschen? Diese Aktion ist unwiderruflich.';
+      'Möchtest du diesen Einkauf wirklich löschen? Die Aktion ist irreversibel.';
 
   @override
   String get cancel => 'Abbrechen';
@@ -223,7 +223,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get editProduct => 'Produkt bearbeiten';
 
   @override
-  String get productNameCannotBeEmpty => 'Der Name darf nicht leer sein.';
+  String get productNameCannotBeEmpty => 'Der Name darf nicht leer sein';
 
   @override
   String get requiredField => 'Erforderlich';
@@ -244,13 +244,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get glutenFreeProduct => 'Glutenfreies Produkt';
 
   @override
-  String get totalGlutenFree => 'Gesamt Glutenfrei';
+  String get totalGlutenFree => 'Glutenfreies Gesamt';
 
   @override
-  String get totalOther => 'Gesamt Andere';
+  String get totalOther => 'Anderes Gesamt';
 
   @override
-  String get totalOverall => 'Gesamtbetrag';
+  String get totalOverall => 'Gesamtsumme';
 
   @override
   String get foundProducts => 'Gefundene Produkte:';
@@ -259,7 +259,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get glutenFree => 'Glutenfrei';
 
   @override
-  String get other => 'Andere';
+  String get other => 'Anderes';
 
   @override
   String get scanBarcodeTitle => 'EAN-13 scannen';
@@ -269,43 +269,43 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get onboardingWelcomeBody =>
-      'Deine App, um glutenfreie Einkäufe schnell und einfach zu erfassen.';
+      'Deine App, um glutenfreie Einkäufe einfach und schnell zu verfolgen.';
 
   @override
   String get onboardingScanTitle => 'Scannen und Hinzufügen';
 
   @override
   String get onboardingScanBody =>
-      'Nutze deine Kamera, um Produktbarcodes zu scannen und sie deinem Warenkorb hinzuzufügen.';
+      'Verwende die Kamera, um Produkt-Barcodes zu scannen und sie deinem Einkaufswagen hinzuzufügen.';
 
   @override
   String get onboardingTrackTitle => 'Behalte alles unter Kontrolle';
 
   @override
   String get onboardingTrackBody =>
-      'Speichere deine Einkäufe und sieh dir deine Historie an, um deine Ausgaben zu analysieren.';
+      'Speichere deine Einkäufe und sieh dir den Verlauf an, um deine Ausgaben zu analysieren.';
 
   @override
   String get skip => 'Überspringen';
 
   @override
-  String get start => 'Start';
+  String get start => 'Starten';
 
   @override
   String get settingsLanguageSystem => 'System';
 
   @override
-  String get settingsLanguageItalian => 'Italiano';
+  String get settingsLanguageItalian => 'Italienisch';
 
   @override
-  String get settingsLanguageEnglish => 'English';
+  String get settingsLanguageEnglish => 'Englisch';
 
   @override
-  String get settingsAccountAndBackup => 'Konto & Backup (Pro)';
+  String get settingsAccountAndBackup => 'Konto und Backup (Pro)';
 
   @override
   String get settingsLoginForBackup =>
-      'Mit Google anmelden, um Backup zu aktivieren';
+      'Mit Google anmelden, um das Backup zu aktivieren';
 
   @override
   String get settingsLoginFailed =>
@@ -330,14 +330,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsPrivacyPolicy => 'Datenschutzerklärung';
 
   @override
-  String get upsellTitle => 'Auf Glufri Pro upgraden';
+  String get upsellTitle => 'Wechsle zu Glufri Pro';
 
   @override
   String get upsellHeadline => 'Schalte leistungsstarke Funktionen frei!';
 
   @override
-  String get upsellFeature1 =>
-      'Cloud-Backup & Synchronisation auf mehreren Geräten';
+  String get upsellFeature1 => 'Multi-Geräte-Backup und -Synchronisation';
 
   @override
   String get upsellFeature2 => 'Unbegrenzte CSV-Exporte';
@@ -346,16 +345,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get upsellFeature3 => 'Werbefreie Erfahrung';
 
   @override
-  String get upsellFeature4 => 'Bevorzugter Support';
+  String get upsellFeature4 => 'Priorisierter Support';
 
   @override
   String get upsellAction => 'Jetzt abonnieren (Jahrespreis)';
 
   @override
-  String get upsellRestore => 'Käufe wiederherstellen';
+  String get upsellRestore => 'Einkäufe wiederherstellen';
 
   @override
-  String get migrationDialogTitle => 'Lokale Einkäufe gefunden';
+  String get migrationDialogTitle => 'Lokale Einkäufe erkannt';
 
   @override
   String migrationDialogBody(int count) {
@@ -373,7 +372,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get migrationSuccess =>
-      'Lokale Einkäufe mit deinem Konto zusammengeführt!';
+      'Lokale Einkäufe erfolgreich mit deinem Konto zusammengeführt!';
 
   @override
   String get migrationDeleted => 'Lokale Daten erfolgreich gelöscht.';
@@ -383,10 +382,10 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get privacyPolicyBody =>
-      'Deine Privatsphäre ist wichtig...\n[VOLLSTÄNDIGEN DATENSCHUTZTEXT HIER EINFÜGEN]\n\nGesammelte Daten: Die App speichert Einkaufsdaten ausschließlich auf deinem Gerät. Wenn du die Cloud-Backup-Funktion (Pro-Funktion) nutzt, werden deine Daten verschlüsselt auf sicheren Google Firebase-Servern gespeichert.\n\nDatenweitergabe: Es werden keine persönlichen oder Einkaufsdaten an Dritte weitergegeben.\n...';
+      'Deine Privatsphäre ist uns wichtig...\n[VOLLSTÄNDIGER TEXT DER DATENSCHUTZERKLÄRUNG HIER EINFÜGEN]\n\nGesammelte Daten: Die App speichert Einkaufsdaten ausschließlich auf deinem Gerät. Wenn du die Cloud-Backup-Funktion (Pro-Funktion) nutzt, werden deine Daten verschlüsselt und auf den sicheren Servern von Google Firebase gespeichert.\n\nDatenweitergabe: Es werden keine persönlichen oder Einkaufsdaten an Dritte weitergegeben.\n...';
 
   @override
-  String get genericPurchase => 'Allgemeiner Einkauf';
+  String get genericPurchase => 'Generischer Einkauf';
 
   @override
   String get mainProducts => 'Hauptprodukte:';
@@ -397,15 +396,15 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get trackedWith => 'Erfasst mit der Glufri App';
+  String get trackedWith => 'Verfolgt mit Glufri App';
 
   @override
   String get shareText =>
-      'Hier ist mein letzter glutenfreier Einkauf, erfasst mit der Glufri App! 🛒';
+      'Hier ist mein letzter glutenfreier Einkauf, verfolgt mit der Glufri App! 🛒';
 
   @override
   String genericError(Object error) {
-    return 'Ein Fehler ist aufgetreten:\n$error';
+    return 'Es ist ein Fehler aufgetreten:\n$error';
   }
 
   @override
@@ -420,11 +419,36 @@ class AppLocalizationsDe extends AppLocalizations {
   String get loginSuccess => 'Willkommen!';
 
   @override
-  String get logoutSuccess => 'Abmeldung erfolgreich.';
+  String get logoutSuccess => 'Erfolgreich abgemeldet.';
 
   @override
-  String get undoAction => 'RÜCKGÄNGIG MACHEN';
+  String get undoAction => 'RÜCKGÄNGIG';
 
   @override
-  String get purchaseMarkedForDeletion => 'Kauf gelöscht.';
+  String get purchaseMarkedForDeletion => 'Einkauf gelöscht.';
+
+  @override
+  String get backupInProgress => 'Sicherung läuft...';
+
+  @override
+  String get backupSuccess => 'Sicherung erfolgreich abgeschlossen!';
+
+  @override
+  String get backupError => 'Fehler bei der Sicherung.';
+
+  @override
+  String get restoreConfirmationTitle => 'Wiederherstellung bestätigen';
+
+  @override
+  String get restoreConfirmationBody =>
+      'Dies wird alle lokalen Daten mit den in der Cloud gespeicherten Daten überschreiben. Fortfahren?';
+
+  @override
+  String get restoreInProgress => 'Wiederherstellung läuft...';
+
+  @override
+  String get restoreSuccess => 'Daten erfolgreich wiederhergestellt!';
+
+  @override
+  String get restoreError => 'Fehler bei der Wiederherstellung.';
 }

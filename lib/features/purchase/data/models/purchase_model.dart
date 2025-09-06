@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 import 'package:glufri/features/purchase/data/models/purchase_item_model.dart';
 import 'package:intl/intl.dart';
@@ -81,4 +82,31 @@ class PurchaseModel extends HiveObject {
     required this.items,
     this.currency = 'EUR',
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'date': Timestamp.fromDate(
+        date,
+      ), // <-- Converte DateTime in Timestamp di Firestore
+      'store': store,
+      'total': total,
+      'items': items.map((item) => item.toJson()).toList(), // Converte la lista
+      'currency': currency,
+    };
+  }
+
+  factory PurchaseModel.fromJson(Map<String, dynamic> json) {
+    return PurchaseModel(
+      id: json['id'],
+      date: (json['date'] as Timestamp)
+          .toDate(), // <-- Converte Timestamp in DateTime
+      store: json['store'],
+      total: json['total'],
+      items: (json['items'] as List)
+          .map((itemJson) => PurchaseItemModel.fromJson(itemJson))
+          .toList(), // Converte la lista
+      currency: json['currency'],
+    );
+  }
 }

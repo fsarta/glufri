@@ -3,19 +3,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/core/utils/debug_data_seeder.dart';
+import 'package:glufri/core/utils/debug_overrides.dart';
 import 'package:glufri/features/backup/domain/auth_repository.dart';
+import 'package:glufri/features/backup/domain/sync_service.dart';
+import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
+import 'package:glufri/features/monetization/presentation/screens/upsell_screen.dart';
 import 'package:glufri/features/purchase/presentation/providers/purchase_providers.dart';
 import 'package:glufri/features/settings/presentation/providers/settings_provider.dart';
 import 'package:glufri/features/settings/presentation/screens/privacy_policy_screen.dart';
 import 'package:glufri/generated/l10n.dart'; // Ensure this import is present for S
 
-class SettingsScreen extends ConsumerWidget {
+class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
+  bool _isBackupLoading = false;
+  bool _isRestoreLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final authState = ref.watch(authStateChangesProvider);
+    final isPro = ref.watch(isProUserProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n!.settings)),
@@ -101,18 +114,109 @@ class SettingsScreen extends ConsumerWidget {
                     title: Text(user.displayName ?? l10n.user),
                     subtitle: Text(user.email ?? ''),
                   ),
+                  // Pulsante Backup
                   ListTile(
-                    leading: const Icon(Icons.cloud_upload_outlined),
+                    enabled: !_isBackupLoading && !_isRestoreLoading,
+                    leading: _isBackupLoading
+                        ? const CircularProgressIndicator()
+                        : const Icon(Icons.cloud_upload_outlined),
                     title: Text(l10n.settingsBackupNow),
-                    onTap: () {
-                      /* TODO: Chiamare SyncService.backupToCloud() */
+                    onTap: () async {
+                      if (!isPro) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const UpsellScreen(),
+                          ),
+                        );
+                        return;
+                      }
+
+                      setState(() => _isBackupLoading = true);
+                      try {
+                        await ref.read(syncServiceProvider).backupToCloud();
+                        if (mounted)
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(l10n.backupSuccess),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                      } catch (e) {
+                        if (mounted)
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(l10n.backupError),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                      } finally {
+                        if (mounted) setState(() => _isBackupLoading = false);
+                      }
                     },
                   ),
+                  // Pulsante Ripristino
                   ListTile(
-                    leading: const Icon(Icons.cloud_download_outlined),
+                    enabled: !_isBackupLoading && !_isRestoreLoading,
+                    leading: _isRestoreLoading
+                        ? const CircularProgressIndicator()
+                        : const Icon(Icons.cloud_download_outlined),
                     title: Text(l10n.settingsRestoreFromCloud),
-                    onTap: () {
-                      /* TODO: Chiamare SyncService.restoreFromCloud() */
+                    onTap: () async {
+                      if (!isPro) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const UpsellScreen(),
+                          ),
+                        );
+                        return;
+                      }
+
+                      final confirmed =
+                          await showDialog<bool>(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: Text(l10n.restoreConfirmationTitle),
+                              content: Text(l10n.restoreConfirmationBody),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(ctx).pop(false),
+                                  child: Text(l10n.cancel),
+                                ),
+                                FilledButton(
+                                  onPressed: () => Navigator.of(ctx).pop(true),
+                                  child: Text(l10n.settingsRestoreFromCloud),
+                                ),
+                              ],
+                            ),
+                          ) ??
+                          false;
+
+                      if (!confirmed) return;
+
+                      setState(() => _isRestoreLoading = true);
+                      try {
+                        await ref.read(syncServiceProvider).restoreFromCloud();
+                        ref.invalidate(
+                          purchaseListProvider,
+                        ); // <-- FONDAMENTALE
+                        if (mounted)
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(l10n.restoreSuccess),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                      } catch (e) {
+                        if (mounted)
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(l10n.restoreError),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                      } finally {
+                        if (mounted) setState(() => _isRestoreLoading = false);
+                      }
                     },
                   ),
                   ListTile(
@@ -154,6 +258,30 @@ class SettingsScreen extends ConsumerWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+            ),
+            SwitchListTile(
+              title: const Text('Simula Account PRO'),
+              subtitle: const Text(
+                'Attiva per testare le funzionalità Pro senza pagare.',
+              ),
+              // Leggi il valore direttamente dal provider
+              value: ref.watch(debugProVersionOverrideProvider),
+              onChanged: (newValue) {
+                // Scrivi il nuovo valore nel provider.
+                // Questo notificherà TUTTI i listener (incluso isProUserProvider)
+                ref.read(debugProVersionOverrideProvider.notifier).state =
+                    newValue;
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Versione PRO ${newValue ? "ATTIVATA" : "DISATTIVATA"} (Solo Debug)',
+                    ),
+                    backgroundColor: newValue ? Colors.purple : Colors.grey,
+                  ),
+                );
+              },
+              secondary: const Icon(Icons.star, color: Colors.amber),
             ),
             ListTile(
               leading: const Icon(Icons.add_box, color: Colors.green),

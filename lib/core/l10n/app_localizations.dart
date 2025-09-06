@@ -865,6 +865,54 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Acquisto eliminato.'**
   String get purchaseMarkedForDeletion;
+
+  /// No description provided for @backupInProgress.
+  ///
+  /// In it, this message translates to:
+  /// **'Backup in corso...'**
+  String get backupInProgress;
+
+  /// No description provided for @backupSuccess.
+  ///
+  /// In it, this message translates to:
+  /// **'Backup completato con successo!'**
+  String get backupSuccess;
+
+  /// No description provided for @backupError.
+  ///
+  /// In it, this message translates to:
+  /// **'Errore durante il backup.'**
+  String get backupError;
+
+  /// No description provided for @restoreConfirmationTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Conferma Ripristino'**
+  String get restoreConfirmationTitle;
+
+  /// No description provided for @restoreConfirmationBody.
+  ///
+  /// In it, this message translates to:
+  /// **'Questo sovrascriverà tutti i dati locali con quelli salvati nel cloud. Continuare?'**
+  String get restoreConfirmationBody;
+
+  /// No description provided for @restoreInProgress.
+  ///
+  /// In it, this message translates to:
+  /// **'Ripristino in corso...'**
+  String get restoreInProgress;
+
+  /// No description provided for @restoreSuccess.
+  ///
+  /// In it, this message translates to:
+  /// **'Dati ripristinati con successo!'**
+  String get restoreSuccess;
+
+  /// No description provided for @restoreError.
+  ///
+  /// In it, this message translates to:
+  /// **'Errore durante il ripristino.'**
+  String get restoreError;
 }
 
 class _AppLocalizationsDelegate

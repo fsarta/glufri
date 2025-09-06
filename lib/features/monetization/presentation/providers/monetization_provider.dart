@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:glufri/core/utils/debug_overrides.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 // Per un mock, possiamo usare anche shared_preferences
 // import 'package:shared_preferences/shared_preferences.dart';
@@ -89,5 +91,14 @@ final monetizationProvider =
 
 // Provider semplice per sapere se l'utente è PRO
 final isProUserProvider = Provider<bool>((ref) {
+  // Ora "osserviamo" il nostro nuovo provider di debug
+  final isDebugOverrideActive = ref.watch(debugProVersionOverrideProvider);
+
+  // La logica rimane la stessa, ma ora è REATTIVA
+  if (kDebugMode && isDebugOverrideActive) {
+    return true;
+  }
+
+  // Altrimenti (sia in debug senza override che in release), usa la logica reale.
   return ref.watch(monetizationProvider).isPro;
 });

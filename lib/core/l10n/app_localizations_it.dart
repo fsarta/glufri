@@ -423,4 +423,29 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get purchaseMarkedForDeletion => 'Acquisto eliminato.';
+
+  @override
+  String get backupInProgress => 'Backup in corso...';
+
+  @override
+  String get backupSuccess => 'Backup completato con successo!';
+
+  @override
+  String get backupError => 'Errore durante il backup.';
+
+  @override
+  String get restoreConfirmationTitle => 'Conferma Ripristino';
+
+  @override
+  String get restoreConfirmationBody =>
+      'Questo sovrascriverà tutti i dati locali con quelli salvati nel cloud. Continuare?';
+
+  @override
+  String get restoreInProgress => 'Ripristino in corso...';
+
+  @override
+  String get restoreSuccess => 'Dati ripristinati con successo!';
+
+  @override
+  String get restoreError => 'Errore durante il ripristino.';
 }
