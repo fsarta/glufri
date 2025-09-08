@@ -113,8 +113,9 @@ class FavoriteProductsScreen extends ConsumerWidget {
                           "${l10n.lastPrice} ${product.defaultPrice!.toStringAsFixed(2)} €",
                         )
                       : null,
+                  trailing: null,
                   // PULSANTE DI ELIMINAZIONE ALTERNATIVO (CON CONFERMA)
-                  trailing: IconButton(
+                  /* trailing: IconButton(
                     icon: Icon(
                       Icons.delete_outline,
                       color: Theme.of(context).colorScheme.error,
@@ -151,7 +152,7 @@ class FavoriteProductsScreen extends ConsumerWidget {
                         ),
                       );
                     },
-                  ),
+                  ), */
                   // Azione per MODIFICARE il preferito
                   onTap: () {
                     showAddEditFavoriteDialog(context, product: product);
