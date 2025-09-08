@@ -1,3 +1,5 @@
+// lib/features/shopping_list/presentation/providers/shopping_list_providers.dart
+
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,13 +18,29 @@ final shoppingListItemBoxProvider = Provider(
 
 final shoppingListsProvider = StreamProvider<List<ShoppingListModel>>((ref) {
   final box = ref.watch(shoppingListBoxProvider);
-  return box.watch().map((_) {
+
+  // Stesso pattern di prima
+  final controller = StreamController<List<ShoppingListModel>>();
+
+  void emitCurrentLists() {
     final lists = box.values.toList();
     lists.sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
-    return lists;
-  });
-});
+    if (!controller.isClosed) {
+      controller.add(lists);
+    }
+  }
 
+  emitCurrentLists();
+
+  final subscription = box.watch().listen((_) => emitCurrentLists());
+
+  ref.onDispose(() {
+    subscription.cancel();
+    controller.close();
+  });
+
+  return controller.stream;
+});
 // Fornisce una SINGOLA lista della spesa. Si aggiorna automaticamente.
 final singleShoppingListProvider = StreamProvider.autoDispose
     .family<ShoppingListModel?, String>((ref, listId) {

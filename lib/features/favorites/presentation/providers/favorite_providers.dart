@@ -1,5 +1,7 @@
 // lib/features/favorites/presentation/providers/favorite_providers.dart
 
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/features/favorites/data/models/favorite_product_model.dart';
 import 'package:glufri/features/purchase/data/models/purchase_item_model.dart';
@@ -15,14 +17,33 @@ final favoriteBoxProvider = Provider(
 /// e si aggiorna automaticamente quando la box cambia.
 final favoriteListProvider = StreamProvider<List<FavoriteProductModel>>((ref) {
   final box = ref.watch(favoriteBoxProvider);
-  // `watch()` sulla box restituisce uno Stream che emette un nuovo evento
-  // ogni volta che i dati nella box cambiano.
-  return box.watch().map((event) {
+
+  // 1. Crea un controller
+  final controller = StreamController<List<FavoriteProductModel>>();
+
+  // 2. Funzione helper per emettere lo stato attuale
+  void emitCurrentFavorites() {
     final favorites = box.values.toList();
-    // Ordina i preferiti alfabeticamente per nome
     favorites.sort((a, b) => a.name.compareTo(b.name));
-    return favorites;
+
+    if (!controller.isClosed) {
+      controller.add(favorites);
+    }
+  }
+
+  // 3. Emetti subito i dati iniziali (anche se la lista è vuota!)
+  emitCurrentFavorites();
+
+  // 4. Mettiti in ascolto dei cambiamenti futuri
+  final subscription = box.watch().listen((_) => emitCurrentFavorites());
+
+  // 5. Pulisci tutto quando il provider viene distrutto
+  ref.onDispose(() {
+    subscription.cancel();
+    controller.close();
   });
+
+  return controller.stream;
 });
 
 /// Un controller/notifier per le azioni sui preferiti (Aggiungi, Rimuovi).
