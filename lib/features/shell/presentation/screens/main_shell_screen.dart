@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
+import 'package:glufri/features/backup/presentation/providers/sync_providers.dart';
 import 'package:glufri/features/budget/presentation/screens/budget_screen.dart';
 import 'package:glufri/features/favorites/presentation/screens/favorite_products_screen.dart';
 import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
@@ -60,13 +61,27 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      // Usiamo IndexedStack: è molto efficiente. Costruisce tutti i figli
-      // una volta, li mantiene in memoria, ma ne mostra solo uno alla volta
-      // (quello corrispondente a `_selectedIndex`). Questo rende il cambio
-      // di tab istantaneo e il layout stabile.
-      body: IndexedStack(index: _selectedIndex, children: _screens),
+    // 1. OSSERVIAMO il nostro nuovo provider di stato di sincronizzazione
+    final isSyncing = ref.watch(syncInProgressProvider);
 
+    return Scaffold(
+      // 2. AVVOLGIAMO il body in uno Stack
+      body: Stack(
+        children: [
+          // Widget principale (era il vecchio body)
+          IndexedStack(index: _selectedIndex, children: _screens),
+
+          // 3. MOSTRIAMO L'OVERLAY di caricamento in modo condizionale
+          // se isSyncing è true.
+          if (isSyncing)
+            const ColoredBox(
+              color: Colors.black45,
+              child: Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              ),
+            ),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
