@@ -1,3 +1,5 @@
+// lib/features/shell/presentation/screens/main_shell_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
@@ -8,7 +10,6 @@ import 'package:glufri/features/monetization/presentation/screens/upsell_screen.
 import 'package:glufri/features/purchase/presentation/screens/purchase_history_screen.dart';
 import 'package:glufri/features/settings/presentation/screens/settings_screen.dart';
 import 'package:glufri/features/shopping_list/presentation/screens/shopping_lists_screen.dart';
-// ... importa le altre schermate principali
 
 class MainShellScreen extends ConsumerStatefulWidget {
   const MainShellScreen({super.key});
@@ -18,35 +19,38 @@ class MainShellScreen extends ConsumerStatefulWidget {
 }
 
 class _MainShellScreenState extends ConsumerState<MainShellScreen> {
-  int _selectedIndex = 0; // L'indice della tab corrente
+  int _selectedIndex = 0;
 
-  // La lista delle schermate principali dell'app
-  static const List<Widget> _widgetOptions = <Widget>[
-    PurchaseHistoryScreen(), // Index 0
-    ShoppingListsScreen(), // Index 1
-    BudgetScreen(), // Index 2
-    FavoriteProductsScreen(), // Index 3
-    SettingsScreen(), // Index 4
+  // Manteniamo la lista di widget come prima
+  static const List<Widget> _screens = <Widget>[
+    PurchaseHistoryScreen(), // 0
+    ShoppingListsScreen(), // 1
+    BudgetScreen(), // 2
+    FavoriteProductsScreen(), // 3
+    SettingsScreen(), // 4
   ];
 
-  // Definiamo quali indici sono "Pro"
-  final proScreenIndexes = {1, 2, 3}; // Indici di Liste, Budget e Preferiti
+  // Lista separata degli ID delle schermate (per riferimento futuro)
+  final _screenKeys = [
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+  ];
+
+  final proScreenIndexes = {1, 2, 3};
 
   void _onItemTapped(int index) {
-    // Ora usiamo 'ref' che è disponibile nello state
     final isPro = ref.read(isProUserProvider);
 
-    // Se l'indice cliccato è una feature Pro e l'utente non è Pro...
     if (proScreenIndexes.contains(index) && !isPro) {
-      // ...mostra la schermata di upsell.
       Navigator.of(
         context,
       ).push(MaterialPageRoute(builder: (_) => const UpsellScreen()));
-      // NOTA: Non cambiamo _selectedIndex, così la tab rimane visivamente su quella precedente.
       return;
     }
 
-    // Altrimenti, cambia la tab normalmente
     setState(() {
       _selectedIndex = index;
     });
@@ -57,25 +61,29 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      // Il body ora è dinamico in base all'indice selezionato
-      body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
+      // Usiamo IndexedStack: è molto efficiente. Costruisce tutti i figli
+      // una volta, li mantiene in memoria, ma ne mostra solo uno alla volta
+      // (quello corrispondente a `_selectedIndex`). Questo rende il cambio
+      // di tab istantaneo e il layout stabile.
+      body: IndexedStack(index: _selectedIndex, children: _screens),
+
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: const Icon(Icons.history),
             label: l10n.purchaseHistory,
           ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.list_alt),
-            label: 'Liste Spesa', // TODO: Localizza
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.list_alt_outlined),
+            label: 'Liste', // Todo: l10n.shoppingLists
           ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.assessment),
-            label: 'Budget', // TODO: Localizza
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.assessment_outlined),
+            label: 'Budget', // Todo: l10n.budget
           ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Preferiti', // TODO: Localizza
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.favorite_border),
+            label: 'Preferiti', // Todo: l10n.favoriteProducts
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.settings),
@@ -84,11 +92,10 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        // Questi stili migliorano l'aspetto quando ci sono più di 3 item
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Colors.grey,
-        showUnselectedLabels: false, // Stile pulito per tante icone
+        showUnselectedLabels: false,
       ),
     );
   }
