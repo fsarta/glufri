@@ -20,6 +20,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _isLoading = false;
   String? _errorMessage;
+  bool _isPasswordVisible = false;
 
   @override
   void dispose() {
@@ -123,8 +124,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _passwordController,
-                  decoration: InputDecoration(labelText: l10n.password),
-                  obscureText: true,
+                  // L'oscuramento del testo ora dipende dalla nostra variabile di stato
+                  obscureText: !_isPasswordVisible,
+                  decoration: InputDecoration(
+                    labelText: l10n.password,
+                    // Aggiungiamo un'icona alla fine del campo
+                    suffixIcon: IconButton(
+                      // L'icona cambia in base alla visibilità
+                      icon: Icon(
+                        _isPasswordVisible
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                      onPressed: () {
+                        // 3. AGGIORNA LO STATO QUANDO L'ICONA VIENE PREMUTA
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
+                    ),
+                  ),
                   validator: (value) =>
                       (value?.isEmpty ?? true) ? l10n.requiredField : null,
                 ),

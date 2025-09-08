@@ -19,6 +19,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final _confirmPasswordController = TextEditingController();
   bool _isLoading = false;
   String? _errorMessage;
+  bool _isPasswordVisible = false;
 
   @override
   void dispose() {
@@ -59,6 +60,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -106,11 +108,21 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _passwordController,
+                  obscureText: !_isPasswordVisible,
                   decoration: InputDecoration(
                     labelText: l10n.password,
                     prefixIcon: const Icon(Icons.lock_outline),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isPasswordVisible
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                      onPressed: () => setState(
+                        () => _isPasswordVisible = !_isPasswordVisible,
+                      ),
+                    ),
                   ),
-                  obscureText: true,
                   validator: (value) {
                     if (value == null || value.length < 6) {
                       return l10n.passwordLengthError;
@@ -121,11 +133,23 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _confirmPasswordController,
+                  obscureText: !_isPasswordVisible,
                   decoration: InputDecoration(
                     labelText: l10n.confirmPassword,
                     prefixIcon: const Icon(Icons.lock_outline),
+                    // Non è strettamente necessario avere il pulsante anche qui,
+                    // ma non fa male e mantiene la coerenza visiva.
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isPasswordVisible
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                      onPressed: () => setState(
+                        () => _isPasswordVisible = !_isPasswordVisible,
+                      ),
+                    ),
                   ),
-                  obscureText: true,
                   validator: (value) {
                     if (value != _passwordController.text) {
                       return l10n.passwordsDoNotMatchError;
