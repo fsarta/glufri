@@ -228,7 +228,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     title: Text(l10n.settingsLogout),
                     onTap: () => ref.read(authRepositoryProvider).signOut(),
                   ),
-                  ListTile(
+                  /* ListTile(
                     leading: const Icon(Icons.assessment_outlined),
                     title: const Text(
                       'Budget Mensile (Pro)',
@@ -293,7 +293,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         ),
                       );
                     },
-                  ),
+                  ), */
                 ],
               );
             },

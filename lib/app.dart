@@ -14,6 +14,7 @@ import 'package:glufri/features/settings/presentation/providers/settings_provide
 
 // --- I due import che risolvono gli errori ---
 import 'package:glufri/core/config/app_theme.dart';
+import 'package:glufri/features/shell/presentation/screens/main_shell_screen.dart';
 import 'package:hive/hive.dart';
 // ------------------------------------------
 
@@ -184,7 +185,7 @@ class GlufriApp extends ConsumerWidget {
       supportedLocales: AppLocalizations.supportedLocales,
 
       home: hasSeenOnboarding
-          ? const PurchaseHistoryScreen()
+          ? const MainShellScreen()
           : const OnboardingScreen(),
       debugShowCheckedModeBanner: false,
     );

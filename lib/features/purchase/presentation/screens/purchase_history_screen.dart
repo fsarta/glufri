@@ -140,7 +140,7 @@ class _PurchaseHistoryScreenState extends ConsumerState<PurchaseHistoryScreen> {
               }
             },
           ),
-          IconButton(
+          /* IconButton(
             icon: const Icon(Icons.settings),
             tooltip: l10n.settings,
             onPressed: () {
@@ -148,7 +148,7 @@ class _PurchaseHistoryScreenState extends ConsumerState<PurchaseHistoryScreen> {
                 context,
               ).push(MaterialPageRoute(builder: (_) => const SettingsScreen()));
             },
-          ),
+          ), */
         ],
       ),
       body: Column(
