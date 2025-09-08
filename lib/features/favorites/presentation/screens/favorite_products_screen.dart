@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/core/widgets/skeletons/shimmer_list.dart';
 import 'package:glufri/core/widgets/skeletons/skeleton_card.dart';
@@ -66,62 +67,43 @@ class FavoriteProductsScreen extends ConsumerWidget {
             itemBuilder: (context, index) {
               final product = favorites[index];
 
-              // --- WIDGET DISMISSIBLE PER LO SWIPE ---
-              return Dismissible(
-                // Chiave univoca per identificare l'elemento
+              return Slidable(
+                // Chiave univoca, come prima
                 key: ValueKey(product.id),
-                // Abilita lo swipe solo da destra verso sinistra
-                direction: DismissDirection.endToStart,
-                confirmDismiss: (direction) async {
-                  return await showDialog<bool>(
-                        context: context,
-                        builder: (dCtx) => AlertDialog(
-                          title: Text(l10n.deleteConfirmationTitle),
-                          content: Text(
-                            l10n.deleteFavoriteConfirmationBody(product.name),
+
+                // --- 2. DEFINIAMO IL PANNELLO DELLE AZIONI A DESTRA (endActionPane) ---
+                endActionPane: ActionPane(
+                  // `motion` definisce l'animazione. `StretchMotion` è un bell'effetto elastico.
+                  motion: const StretchMotion(),
+                  // `children` è la lista dei pulsanti di azione che vogliamo mostrare.
+                  children: [
+                    SlidableAction(
+                      onPressed: (context) {
+                        // Rimuovi il dialogo e chiama direttamente l'azione di eliminazione.
+                        ref
+                            .read(favoriteActionsProvider)
+                            .removeFavorite(product.id);
+                        // Mostra una SnackBar per conferma (e futuro "Annulla")
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              "'${product.name}' rimosso dai preferiti.",
+                            ), // TODO: Localizza
                           ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(dCtx).pop(false),
-                              child: Text(l10n.cancel),
-                            ),
-                            FilledButton(
-                              style: FilledButton.styleFrom(
-                                backgroundColor: Theme.of(
-                                  context,
-                                ).colorScheme.error,
-                              ),
-                              onPressed: () {
-                                ref
-                                    .read(favoriteActionsProvider)
-                                    .removeFavorite(product.id);
-                                Navigator.of(dCtx).pop(true);
-                              },
-                              child: Text(l10n.delete),
-                            ),
-                          ],
-                        ),
-                      ) ??
-                      false; // Restituisce false se il dialogo viene chiuso senza scelta
-                },
-                // Sfondo che appare durante lo swipe
-                background: Container(
-                  color: Colors.red.shade700,
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Elimina",
-                        style: TextStyle(color: Colors.white),
-                      ), // TODO: Localizza
-                      SizedBox(width: 8),
-                      Icon(Icons.delete_sweep, color: Colors.white),
-                    ],
-                  ),
+                        );
+                      },
+                      backgroundColor: const Color(
+                        0xFFFE4A49,
+                      ), // Un rosso standard per l'eliminazione
+                      foregroundColor: Colors.white,
+                      icon: Icons.delete,
+                      label: l10n.delete,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ],
                 ),
-                // Il contenuto visibile della riga è il nostro ListTile
+
+                // --- 3. IL NOSTRO LISTTILE È ORA IL "child" DI SLIDABLE ---
                 child: ListTile(
                   leading: Icon(
                     product.isGlutenFree ? Icons.verified : Icons.label,
@@ -133,47 +115,10 @@ class FavoriteProductsScreen extends ConsumerWidget {
                           "${l10n.lastPrice} ${product.defaultPrice!.toStringAsFixed(2)} €",
                         )
                       : null,
-                  trailing: null,
-                  // PULSANTE DI ELIMINAZIONE ALTERNATIVO (CON CONFERMA)
-                  /* trailing: IconButton(
-                    icon: Icon(
-                      Icons.delete_outline,
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                    tooltip: l10n.delete,
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (dCtx) => AlertDialog(
-                          title: Text(l10n.deleteConfirmationTitle),
-                          content: Text(
-                            l10n.deleteFavoriteConfirmationBody(product.name),
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(dCtx).pop(),
-                              child: Text(l10n.cancel),
-                            ),
-                            FilledButton(
-                              style: FilledButton.styleFrom(
-                                backgroundColor: Theme.of(
-                                  context,
-                                ).colorScheme.error,
-                              ),
-                              onPressed: () {
-                                ref
-                                    .read(favoriteActionsProvider)
-                                    .removeFavorite(product.id);
-                                Navigator.of(dCtx).pop();
-                              },
-                              child: Text(l10n.delete),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ), */
-                  // Azione per MODIFICARE il preferito
+                  // NON abbiamo più bisogno del trailing: IconButton. La UI è più pulita.
+                  // L'unica azione ora è lo swipe.
+
+                  // L'onTap rimane per la MODIFICA
                   onTap: () {
                     showAddEditFavoriteDialog(context, product: product);
                   },

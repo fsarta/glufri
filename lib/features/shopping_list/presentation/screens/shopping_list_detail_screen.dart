@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/favorites/data/models/favorite_product_model.dart';
 import 'package:glufri/features/favorites/presentation/providers/favorite_providers.dart';
@@ -313,55 +314,26 @@ class _ShoppingListItemTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Il widget si costruisce con i dati dell'item che gli vengono passati.
 
-    return Dismissible(
-      key: key!, // Usa la key passata dal costruttore
-      direction: DismissDirection.endToStart,
-      confirmDismiss: (direction) async {
-        final l10n = AppLocalizations.of(context)!;
-        return await showDialog<bool>(
-              context: context,
-              builder: (ctx) => AlertDialog(
-                title: Text(l10n.deleteConfirmationTitle),
-                content: Text(
-                  "Eliminare '${item.name}' dalla lista?",
-                ), // TODO: Localizza
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(ctx).pop(false),
-                    child: Text(l10n.cancel),
-                  ),
-                  FilledButton(
-                    style: FilledButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.error,
-                    ),
-                    onPressed: () {
-                      ref
-                          .read(shoppingListActionsProvider)
-                          .deleteItemFromList(list, item);
-                      Navigator.of(ctx).pop(true);
-                    },
-                    child: Text(l10n.delete),
-                  ),
-                ],
-              ),
-            ) ??
-            false;
-      },
-      background: Container(
-        color: Colors.red.shade700,
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              "Elimina", // TODO: Localizza
-              style: TextStyle(color: Colors.white),
-            ),
-            SizedBox(width: 8),
-            Icon(Icons.delete_sweep, color: Colors.white),
-          ],
-        ),
+    return Slidable(
+      key: key!,
+      endActionPane: ActionPane(
+        motion: const StretchMotion(),
+        children: [
+          SlidableAction(
+            onPressed: (context) {
+              // Qui usiamo l'eliminazione diretta, perché
+              // l'item può essere facilmente ri-aggiunto.
+              ref
+                  .read(shoppingListActionsProvider)
+                  .deleteItemFromList(list, item);
+            },
+            backgroundColor: const Color(0xFFFE4A49),
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: AppLocalizations.of(context)!.delete, // Usa l10n
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ],
       ),
       child: CheckboxListTile(
         value: item.isChecked,
@@ -375,12 +347,8 @@ class _ShoppingListItemTile extends ConsumerWidget {
           ),
         ),
         onChanged: (newValue) {
-          // Quando si interagisce con il checkbox, si chiama l'azione
-          // che aggiornerà lo stato in Hive. Riverpod farà ricostruire
-          // questo specifico widget con il nuovo stato `item.isChecked`.
           ref.read(shoppingListActionsProvider).toggleItemChecked(item);
         },
-        // Aggiungi un colore più visibile per il check attivo
         activeColor: Theme.of(context).colorScheme.primary,
       ),
     );

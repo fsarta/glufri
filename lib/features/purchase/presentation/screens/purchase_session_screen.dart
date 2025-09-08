@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/budget/presentation/providers/budget_providers.dart';
 import 'package:glufri/features/favorites/data/models/favorite_product_model.dart';
@@ -141,57 +142,26 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
                     itemCount: cartState.items.length,
                     itemBuilder: (context, index) {
                       final item = cartState.items[index];
-                      return Dismissible(
+                      return Slidable(
                         key: ValueKey(item.id),
-                        direction: DismissDirection.endToStart,
-                        confirmDismiss: (direction) async {
-                          final confirmed = await showDialog<bool>(
-                            context: context,
-                            builder: (ctx) => AlertDialog(
-                              title: Text(l10n.deleteConfirmationTitle),
-                              content: Text(
-                                "Rimuovere '${item.name}' dall'acquisto?",
-                              ), // TODO: Localizza
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.of(ctx).pop(false),
-                                  child: Text(l10n.cancel),
-                                ),
-                                FilledButton(
-                                  style: FilledButton.styleFrom(
-                                    backgroundColor: Theme.of(
-                                      context,
-                                    ).colorScheme.error,
-                                  ),
-                                  onPressed: () => Navigator.of(ctx).pop(true),
-                                  child: Text(l10n.delete),
-                                ),
-                              ],
+                        endActionPane: ActionPane(
+                          motion: const StretchMotion(),
+                          children: [
+                            SlidableAction(
+                              onPressed: (context) {
+                                // Non serve un'ulteriore conferma qui, l'azione
+                                // di per sé è a basso rischio in questa schermata.
+                                ref
+                                    .read(cartProvider.notifier)
+                                    .removeItem(item.id);
+                              },
+                              backgroundColor: const Color(0xFFFE4A49),
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete,
+                              label: l10n.delete,
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                          );
-                          // Se confirmed è true (l'utente ha premuto Elimina), allora procedi
-                          if (confirmed ?? false) {
-                            ref.read(cartProvider.notifier).removeItem(item.id);
-                            return true;
-                          }
-                          // Altrimenti, annulla
-                          return false;
-                        },
-                        background: Container(
-                          color: Colors.red.shade700,
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "Elimina",
-                                style: TextStyle(color: Colors.white),
-                              ), // TODO: Localizza
-                              SizedBox(width: 8),
-                              Icon(Icons.delete_sweep, color: Colors.white),
-                            ],
-                          ),
+                          ],
                         ),
                         child: ListTile(
                           leading: item.isGlutenFree
