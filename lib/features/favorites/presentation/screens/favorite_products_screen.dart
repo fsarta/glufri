@@ -72,17 +72,37 @@ class FavoriteProductsScreen extends ConsumerWidget {
                 key: ValueKey(product.id),
                 // Abilita lo swipe solo da destra verso sinistra
                 direction: DismissDirection.endToStart,
-                // Azione eseguita dopo l'animazione di swipe
-                onDismissed: (direction) {
-                  ref.read(favoriteActionsProvider).removeFavorite(product.id);
-                  // Feedback visivo immediato per l'utente
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        "'${product.name}' rimosso dai preferiti.",
-                      ), // TODO: Localizza
-                    ),
-                  );
+                confirmDismiss: (direction) async {
+                  return await showDialog<bool>(
+                        context: context,
+                        builder: (dCtx) => AlertDialog(
+                          title: Text(l10n.deleteConfirmationTitle),
+                          content: Text(
+                            l10n.deleteFavoriteConfirmationBody(product.name),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(dCtx).pop(false),
+                              child: Text(l10n.cancel),
+                            ),
+                            FilledButton(
+                              style: FilledButton.styleFrom(
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.error,
+                              ),
+                              onPressed: () {
+                                ref
+                                    .read(favoriteActionsProvider)
+                                    .removeFavorite(product.id);
+                                Navigator.of(dCtx).pop(true);
+                              },
+                              child: Text(l10n.delete),
+                            ),
+                          ],
+                        ),
+                      ) ??
+                      false; // Restituisce false se il dialogo viene chiuso senza scelta
                 },
                 // Sfondo che appare durante lo swipe
                 background: Container(

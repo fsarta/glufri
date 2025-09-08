@@ -144,13 +144,38 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
                       return Dismissible(
                         key: ValueKey(item.id),
                         direction: DismissDirection.endToStart,
-                        onDismissed: (direction) {
-                          ref.read(cartProvider.notifier).removeItem(item.id);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("'${item.name}' rimosso."),
-                            ), // TODO: Localizza
+                        confirmDismiss: (direction) async {
+                          final confirmed = await showDialog<bool>(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: Text(l10n.deleteConfirmationTitle),
+                              content: Text(
+                                "Rimuovere '${item.name}' dall'acquisto?",
+                              ), // TODO: Localizza
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(ctx).pop(false),
+                                  child: Text(l10n.cancel),
+                                ),
+                                FilledButton(
+                                  style: FilledButton.styleFrom(
+                                    backgroundColor: Theme.of(
+                                      context,
+                                    ).colorScheme.error,
+                                  ),
+                                  onPressed: () => Navigator.of(ctx).pop(true),
+                                  child: Text(l10n.delete),
+                                ),
+                              ],
+                            ),
                           );
+                          // Se confirmed è true (l'utente ha premuto Elimina), allora procedi
+                          if (confirmed ?? false) {
+                            ref.read(cartProvider.notifier).removeItem(item.id);
+                            return true;
+                          }
+                          // Altrimenti, annulla
+                          return false;
                         },
                         background: Container(
                           color: Colors.red.shade700,

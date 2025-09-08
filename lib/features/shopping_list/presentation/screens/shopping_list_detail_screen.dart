@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/favorites/data/models/favorite_product_model.dart';
 import 'package:glufri/features/favorites/presentation/providers/favorite_providers.dart';
 import 'package:glufri/features/purchase/data/models/purchase_item_model.dart';
@@ -315,8 +316,36 @@ class _ShoppingListItemTile extends ConsumerWidget {
     return Dismissible(
       key: key!, // Usa la key passata dal costruttore
       direction: DismissDirection.endToStart,
-      onDismissed: (_) {
-        ref.read(shoppingListActionsProvider).deleteItemFromList(list, item);
+      confirmDismiss: (direction) async {
+        final l10n = AppLocalizations.of(context)!;
+        return await showDialog<bool>(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title: Text(l10n.deleteConfirmationTitle),
+                content: Text(
+                  "Eliminare '${item.name}' dalla lista?",
+                ), // TODO: Localizza
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(ctx).pop(false),
+                    child: Text(l10n.cancel),
+                  ),
+                  FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                    ),
+                    onPressed: () {
+                      ref
+                          .read(shoppingListActionsProvider)
+                          .deleteItemFromList(list, item);
+                      Navigator.of(ctx).pop(true);
+                    },
+                    child: Text(l10n.delete),
+                  ),
+                ],
+              ),
+            ) ??
+            false;
       },
       background: Container(
         color: Colors.red.shade700,
