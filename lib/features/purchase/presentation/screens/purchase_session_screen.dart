@@ -68,9 +68,6 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
   }
 
   Widget build(BuildContext context) {
-    // Riepilogo e Totale
-    _buildTotalSummary(context, ref);
-
     final cartState = ref.watch(cartProvider);
     final l10n = AppLocalizations.of(context);
     final textTheme = Theme.of(context).textTheme;
@@ -142,22 +139,50 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
                     itemCount: cartState.items.length,
                     itemBuilder: (context, index) {
                       final item = cartState.items[index];
-                      return ListTile(
-                        leading: item.isGlutenFree
-                            ? const Icon(Icons.verified, color: Colors.green)
-                            : const Icon(Icons.shopping_cart_outlined),
-                        title: Text(item.name),
-                        subtitle: Text(
-                          '${item.quantity} x ${item.unitPrice.toStringAsFixed(2)} €',
-                        ),
-                        trailing: Text(
-                          '${item.subtotal.toStringAsFixed(2)} €',
-                          style: textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
+                      return Dismissible(
+                        key: ValueKey(item.id),
+                        direction: DismissDirection.endToStart,
+                        onDismissed: (direction) {
+                          ref.read(cartProvider.notifier).removeItem(item.id);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("'${item.name}' rimosso."),
+                            ), // TODO: Localizza
+                          );
+                        },
+                        background: Container(
+                          color: Colors.red.shade700,
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "Elimina",
+                                style: TextStyle(color: Colors.white),
+                              ), // TODO: Localizza
+                              SizedBox(width: 8),
+                              Icon(Icons.delete_sweep, color: Colors.white),
+                            ],
                           ),
                         ),
-                        onTap: () =>
-                            _showAddItemDialog(context, ref, item: item),
+                        child: ListTile(
+                          leading: item.isGlutenFree
+                              ? const Icon(Icons.verified, color: Colors.green)
+                              : const Icon(Icons.shopping_cart_outlined),
+                          title: Text(item.name),
+                          subtitle: Text(
+                            '${item.quantity} x ${item.unitPrice.toStringAsFixed(2)} €',
+                          ),
+                          trailing: Text(
+                            '${item.subtotal.toStringAsFixed(2)} €',
+                            style: textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          onTap: () =>
+                              _showAddItemDialog(context, ref, item: item),
+                        ),
                       );
                     },
                   ),
@@ -304,7 +329,7 @@ Widget _buildActionButtons(
                   );
                 }
 
-                try {
+                /* try {
                   final productInfo = await ref.read(
                     offProductProvider(barcode).future,
                   );
@@ -326,7 +351,7 @@ Widget _buildActionButtons(
                   );
                   // Apri comunque il dialog per l'inserimento manuale
                   _showAddItemDialog(context, ref, barcode: barcode);
-                }
+                } */
               }
             },
           ),
@@ -449,10 +474,38 @@ void _showAddItemDialog(
                       MainAxisSize.min, // Occupa solo lo spazio necessario
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      isEditing ? l10n.editProduct : l10n.addItem,
-                      style: theme.textTheme.headlineMedium,
-                      textAlign: TextAlign.center,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        if (isEditing)
+                          const SizedBox(width: 48)
+                        else
+                          const Spacer(),
+                        Expanded(
+                          child: Text(
+                            isEditing ? l10n.editProduct : l10n.addItem,
+                            style: theme.textTheme.headlineMedium,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        if (isEditing)
+                          IconButton(
+                            tooltip: l10n.delete,
+                            icon: Icon(
+                              Icons.delete_outline,
+                              color: theme.colorScheme.error,
+                            ),
+                            onPressed: () {
+                              ref
+                                  .read(cartProvider.notifier)
+                                  .removeItem(item!.id);
+                              Navigator.of(ctx).pop();
+                            },
+                          )
+                        else
+                          const Spacer(),
+                      ],
                     ),
 
                     const SizedBox(height: 24),
