@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:glufri/features/budget/data/models/budget_model.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -65,9 +66,11 @@ Future<void> main() async {
   // Registra gli adapters di Hive prima di aprire le box
   Hive.registerAdapter(PurchaseModelAdapter());
   Hive.registerAdapter(PurchaseItemModelAdapter());
+  Hive.registerAdapter(BudgetModelAdapter());
 
-  // Apri la box (se è pesante puoi considerarne l'apertura asincrona più tardi)
+  // Apri le box
   await Hive.openBox<PurchaseModel>('purchases');
+  await Hive.openBox<BudgetModel>('budgets');
 
   // Controlla se l'utente ha già visto l'onboarding
   final prefs = await SharedPreferences.getInstance();
