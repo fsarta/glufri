@@ -955,6 +955,24 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'{count,plural, =0{Mai acquistato} =1{Acquistato 1 volta} other{Acquistato {count} volte}}'**
   String purchasedXTimes(int count);
+
+  /// No description provided for @settingsFavProducts.
+  ///
+  /// In it, this message translates to:
+  /// **'Prodotti Preferiti'**
+  String get settingsFavProducts;
+
+  /// No description provided for @noFavoriteProducts.
+  ///
+  /// In it, this message translates to:
+  /// **'Non hai ancora prodotti preferiti.\nSalvali da un acquisto per trovarli qui.'**
+  String get noFavoriteProducts;
+
+  /// No description provided for @deleteFavoriteConfirmationBody.
+  ///
+  /// In it, this message translates to:
+  /// **'Sei sicuro di voler eliminare \'{productName}\' dai preferiti?'**
+  String deleteFavoriteConfirmationBody(String productName);
 }
 
 class _AppLocalizationsDelegate

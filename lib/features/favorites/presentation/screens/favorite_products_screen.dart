@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/favorites/presentation/providers/favorite_providers.dart';
 
 class FavoriteProductsScreen extends ConsumerWidget {
@@ -10,24 +11,25 @@ class FavoriteProductsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final favoritesAsync = ref.watch(favoriteListProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Prodotti Preferiti'), // TODO: Localizza
+        title: Text(l10n.settingsFavProducts),
         actions: [
           // In futuro, qui potrebbe esserci un pulsante "+" per aggiungere manualmente
         ],
       ),
       body: favoritesAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, st) =>
-            Center(child: Text("Errore: $err")), // TODO: Localizza
+        error: (err, st) => Center(child: Text(l10n.genericError(err))),
         data: (favorites) {
           if (favorites.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
-                "Non hai ancora prodotti preferiti.\nSalvali da un acquisto.",
-              ), // TODO: Localizza
+                l10n.noFavoriteProducts, // <-- Usa una nuova chiave
+                textAlign: TextAlign.center,
+              ),
             );
           }
           return ListView.builder(
@@ -42,8 +44,8 @@ class FavoriteProductsScreen extends ConsumerWidget {
                 title: Text(product.name),
                 subtitle: product.defaultPrice != null
                     ? Text(
-                        "Ultimo prezzo: ${product.defaultPrice!.toStringAsFixed(2)} €",
-                      ) // TODO: Localizza
+                        "${l10n.lastPrice} ${product.defaultPrice!.toStringAsFixed(2)} €",
+                      )
                     : null,
                 trailing: IconButton(
                   icon: Icon(
@@ -51,9 +53,38 @@ class FavoriteProductsScreen extends ConsumerWidget {
                     color: Theme.of(context).colorScheme.error,
                   ),
                   onPressed: () {
-                    ref
-                        .read(favoriteActionsProvider)
-                        .removeFavorite(product.id);
+                    // Invece di cancellare subito, mostra un dialogo di conferma
+                    showDialog(
+                      context: context,
+                      builder: (dCtx) => AlertDialog(
+                        title: Text(l10n.deleteConfirmationTitle),
+                        content: Text(
+                          // Usa una nuova chiave di localizzazione
+                          l10n.deleteFavoriteConfirmationBody(product.name),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(dCtx).pop(),
+                            child: Text(l10n.cancel),
+                          ),
+                          FilledButton(
+                            style: FilledButton.styleFrom(
+                              backgroundColor: Theme.of(
+                                context,
+                              ).colorScheme.error,
+                            ),
+                            onPressed: () {
+                              // La cancellazione avviene solo dopo la conferma
+                              ref
+                                  .read(favoriteActionsProvider)
+                                  .removeFavorite(product.id);
+                              Navigator.of(dCtx).pop();
+                            },
+                            child: Text(l10n.delete),
+                          ),
+                        ],
+                      ),
+                    );
                   },
                 ),
               );

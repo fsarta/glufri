@@ -199,5 +199,16 @@
         "type": "int"
       }
     }
+  },
+
+  "settingsFavProducts": "Produits Favoris",
+  "noFavoriteProducts": "Vous n'avez pas encore de produits favoris.\nEnregistrez-les depuis un achat pour les retrouver ici.",
+  "deleteFavoriteConfirmationBody": "Êtes-vous sûr de vouloir supprimer '{productName}' de vos favoris ?",
+  "@deleteFavoriteConfirmationBody": {
+    "placeholders": {
+      "productName": {
+        "type": "String"
+      }
+    }
   }
 }

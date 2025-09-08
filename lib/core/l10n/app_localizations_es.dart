@@ -482,4 +482,16 @@ class AppLocalizationsEs extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get settingsFavProducts => 'Productos Favoritos';
+
+  @override
+  String get noFavoriteProducts =>
+      'Todavía no tienes productos favoritos.\nGuárdalos de una compra para encontrarlos aquí.';
+
+  @override
+  String deleteFavoriteConfirmationBody(String productName) {
+    return '¿Estás seguro de que quieres eliminar \'$productName\' de tus favoritos?';
+  }
 }

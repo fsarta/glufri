@@ -483,4 +483,16 @@ class AppLocalizationsDe extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get settingsFavProducts => 'Lieblingsprodukte';
+
+  @override
+  String get noFavoriteProducts =>
+      'Du hast noch keine Lieblingsprodukte.\nSpeichere sie von einem Einkauf, um sie hier zu finden.';
+
+  @override
+  String deleteFavoriteConfirmationBody(String productName) {
+    return 'Möchtest du \'$productName\' wirklich aus deinen Favoriten entfernen?';
+  }
 }
