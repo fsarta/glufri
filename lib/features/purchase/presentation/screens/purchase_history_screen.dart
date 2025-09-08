@@ -6,7 +6,10 @@ import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/backup/presentation/providers/user_provider.dart';
 import 'package:glufri/features/backup/presentation/screens/login_screen.dart';
 import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
+import 'package:glufri/features/monetization/presentation/screens/upsell_screen.dart';
 import 'package:glufri/features/monetization/presentation/widgets/ad_banner_widget.dart';
+import 'package:glufri/features/purchase/data/models/purchase_model.dart';
+import 'package:glufri/features/purchase/domain/services/pdf_export_service.dart';
 import 'package:glufri/features/purchase/presentation/models/purchase_group_models.dart';
 import 'package:glufri/features/purchase/presentation/providers/cart_provider.dart';
 import 'package:glufri/features/purchase/presentation/providers/purchase_filter_provider.dart';
@@ -19,6 +22,7 @@ import 'package:glufri/features/scanner/presentation/screens/barcode_scanner_scr
 import 'package:glufri/features/settings/presentation/screens/settings_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:printing/printing.dart';
 
 /// La schermata principale dell'app che mostra la cronologia degli acquisti.
 ///
@@ -73,6 +77,20 @@ class _PurchaseHistoryScreenState extends ConsumerState<PurchaseHistoryScreen> {
       appBar: AppBar(
         title: Text(l10n!.purchaseHistory),
         actions: [
+          IconButton(
+            tooltip: 'Esporta Report', // TODO: Localizza
+            icon: const Icon(Icons.picture_as_pdf_outlined),
+            onPressed: () {
+              // Controlla se l'utente è PRO prima di mostrare il menu
+              if (!ref.read(isProUserProvider)) {
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (_) => const UpsellScreen()));
+                return;
+              }
+              _showExportOptions(context, ref);
+            },
+          ),
           IconButton(
             tooltip: 'Filtra per data', // TODO: Localizza questa stringa
             icon: badges.Badge(
@@ -570,4 +588,116 @@ class _SearchedProductSummaryCard extends StatelessWidget {
       ),
     );
   }
+}
+
+// Funzione che mostra il BottomSheet con le opzioni
+void _showExportOptions(BuildContext context, WidgetRef ref) {
+  showModalBottomSheet(
+    context: context,
+    builder: (ctx) {
+      return SafeArea(
+        child: Wrap(
+          children: <Widget>[
+            ListTile(
+              leading: const Icon(Icons.calendar_today),
+              title: const Text('Report del Mese Corrente'), // TODO: Localizza
+              onTap: () {
+                Navigator.of(ctx).pop();
+                _exportCurrentMonthReport(context, ref);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.calendar_view_week),
+              title: const Text(
+                'Report dell\'Anno Corrente',
+              ), // TODO: Localizza
+              onTap: () {
+                Navigator.of(ctx).pop();
+                _exportCurrentYearReport(context, ref);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.select_all),
+              title: const Text('Report Completo'), // TODO: Localizza
+              onTap: () {
+                Navigator.of(ctx).pop();
+                _exportFullReport(context, ref);
+              },
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+// Funzione che raccoglie i dati e genera il PDF
+Future<void> _exportPurchases(
+  BuildContext context,
+  List<PurchaseModel> purchases,
+  String title,
+) async {
+  // Mostra un caricamento
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (ctx) => const Center(child: CircularProgressIndicator()),
+  );
+
+  try {
+    final pdfData = await PdfExportService().generatePurchaseReport(
+      title: title,
+      purchases: purchases,
+    );
+
+    // Chiudi il caricamento
+    Navigator.of(context, rootNavigator: true).pop();
+
+    // Mostra l'anteprima di stampa/condivisione
+    await Printing.layoutPdf(onLayout: (format) => pdfData);
+  } catch (e) {
+    // Chiudi il caricamento in caso di errore
+    Navigator.of(context, rootNavigator: true).pop();
+    // Mostra errore
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Errore durante la creazione del PDF."),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+}
+
+// Funzione per esportare il report del MESE corrente
+void _exportCurrentMonthReport(BuildContext context, WidgetRef ref) {
+  final now = DateTime.now();
+  final allPurchases = ref.read(purchaseListProvider).valueOrNull ?? [];
+
+  final monthPurchases = allPurchases
+      .where((p) => p.date.year == now.year && p.date.month == now.month)
+      .toList();
+
+  final title =
+      "Report Spese - ${DateFormat.yMMMM('it_IT').format(now)}"; // TODO: Usa l10n.localeName
+  _exportPurchases(context, monthPurchases, title);
+}
+
+// Funzione per esportare il report dell'ANNO corrente
+void _exportCurrentYearReport(BuildContext context, WidgetRef ref) {
+  final now = DateTime.now();
+  final allPurchases = ref.read(purchaseListProvider).valueOrNull ?? [];
+
+  final yearPurchases = allPurchases
+      .where((p) => p.date.year == now.year)
+      .toList();
+
+  final title = "Report Spese - ${now.year}";
+  _exportPurchases(context, yearPurchases, title);
+}
+
+// Funzione per esportare TUTTI gli acquisti
+void _exportFullReport(BuildContext context, WidgetRef ref) {
+  final allPurchases = ref.read(purchaseListProvider).valueOrNull ?? [];
+  final title = "Report Spese Completo";
+  _exportPurchases(context, allPurchases, title);
 }
