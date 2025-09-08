@@ -29,7 +29,7 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
 
     // Osserviamo i provider
     final budgetAsync = ref.watch(currentMonthBudgetProvider);
-    final spending = ref.watch(currentMonthSpendingProvider);
+    final spending = ref.watch(currentMonthSpendingProvider(null));
 
     // Usiamo ref.listen per aggiornare i controller una sola volta quando i dati arrivano
     ref.listen<AsyncValue<BudgetModel?>>(currentMonthBudgetProvider, (

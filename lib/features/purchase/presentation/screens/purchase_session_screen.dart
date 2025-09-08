@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
+import 'package:glufri/features/budget/presentation/providers/budget_providers.dart';
 import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
 import 'package:glufri/features/monetization/presentation/screens/upsell_screen.dart';
 import 'package:glufri/features/purchase/data/models/purchase_model.dart';
@@ -67,6 +68,9 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
   }
 
   Widget build(BuildContext context) {
+    // Riepilogo e Totale
+    _buildTotalSummary(context, ref);
+
     final cartState = ref.watch(cartProvider);
     final l10n = AppLocalizations.of(context);
     final textTheme = Theme.of(context).textTheme;
@@ -162,8 +166,7 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
                   ),
           ),
 
-          // Riepilogo e Totale
-          _buildTotalSummary(context, cartState),
+          const _TotalSummarySection(),
 
           // Pulsanti Azione
           _buildActionButtons(context, ref, l10n),
@@ -322,38 +325,46 @@ Widget _buildActionButtons(
 }
 
 // UI per il totale
-Widget _buildTotalSummary(BuildContext context, CartState cartState) {
+Widget _buildTotalSummary(BuildContext context, WidgetRef ref) {
+  // <-- Ora riceve ref
   final l10n = AppLocalizations.of(context)!;
-  // Ora calcoliamo i totali direttamente dallo stato del carrello
+  final cartState = ref.watch(cartProvider); // Osserva il carrello
+  final isPro = ref.watch(isProUserProvider); // Controlla se è Pro
+
   final double totalSg = cartState.items
       .where((i) => i.isGlutenFree)
-      .fold(0.0, (sum, i) => sum + i.subtotal);
-
-  final double totalRegular = cartState.items
-      .where((i) => !i.isGlutenFree)
       .fold(0.0, (sum, i) => sum + i.subtotal);
 
   return Container(
     padding: const EdgeInsets.all(16.0),
     decoration: BoxDecoration(
+      color: Theme.of(context).cardColor,
       border: Border(top: BorderSide(color: Theme.of(context).dividerColor)),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          spreadRadius: 0,
+          blurRadius: 8,
+          offset: const Offset(0, -4),
+        ),
+      ],
     ),
     child: Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
+        // --- NUOVO WIDGET PER IL RESIDUO DEL BUDGET ---
+        // Lo mostriamo solo se l'utente è Pro
+        if (isPro)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12.0),
+            child: _BudgetResidueView(),
+          ),
+
         if (totalSg > 0) ...[
           _TotalRow(l10n.totalGlutenFree, totalSg),
           const SizedBox(height: 8),
         ],
-        if (totalRegular > 0) ...[
-          _TotalRow(l10n.totalOther, totalRegular),
-          const SizedBox(height: 8),
-        ],
-        const Divider(),
-        _TotalRow(
-          AppLocalizations.of(context)!.total,
-          cartState.total,
-          isTotal: true,
-        ),
+        _TotalRow(l10n.total, cartState.total, isTotal: true),
       ],
     ),
   );
@@ -713,4 +724,133 @@ Future<void> _showPriceHistoryBottomSheet(
       );
     },
   );
+}
+
+class _BudgetResidueView extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final residue = ref.watch(budgetResidueProvider);
+    final theme = Theme.of(context);
+
+    // Non mostrare nulla se nessun budget è impostato
+    if (residue.residueGlutenFree == null && residue.residueTotal == null) {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(12.0),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+        ),
+      ),
+      child: Column(
+        children: [
+          Text(
+            "Residuo Budget", // TODO: Localizza
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: theme.colorScheme.primary,
+            ),
+          ),
+          const Divider(height: 12),
+
+          if (residue.residueTotal != null)
+            _ResidueRow(label: 'Totale', amount: residue.residueTotal!),
+
+          if (residue.residueGlutenFree != null && residue.residueTotal != null)
+            const SizedBox(height: 4),
+
+          if (residue.residueGlutenFree != null)
+            _ResidueRow(
+              label: 'Senza Glutine',
+              amount: residue.residueGlutenFree!,
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ResidueRow extends StatelessWidget {
+  final String label;
+  final double amount;
+  const _ResidueRow({required this.label, required this.amount});
+
+  @override
+  Widget build(BuildContext context) {
+    // Il colore diventa rosso se il budget è stato sforato
+    final color = amount < 0 ? Colors.red.shade700 : Colors.grey.shade800;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: TextStyle(color: color)), // TODO: Localizza
+        Text(
+          '${amount.toStringAsFixed(2)} €',
+          style: TextStyle(fontWeight: FontWeight.bold, color: color),
+        ),
+      ],
+    );
+  }
+}
+
+class _TotalSummarySection extends ConsumerWidget {
+  const _TotalSummarySection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final cartState = ref.watch(cartProvider);
+    final isPro = ref.watch(isProUserProvider);
+
+    final double totalSg = cartState.items
+        .where((i) => i.isGlutenFree)
+        .fold(0.0, (sum, i) => sum + i.subtotal);
+
+    final double totalOther = cartState.total - totalSg;
+
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        border: Border(top: BorderSide(color: Theme.of(context).dividerColor)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 0,
+            blurRadius: 8,
+            offset: const Offset(0, -4),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Mostriamo il residuo del budget solo se l'utente è Pro
+          if (isPro)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12.0),
+              child: _BudgetResidueView(), // Questo widget già usa Consumer
+            ),
+
+          if (totalSg > 0) ...[
+            _TotalRow(l10n.totalGlutenFree, totalSg),
+            const SizedBox(height: 8),
+          ],
+
+          // Abbiamo riaggiunto il totale "Altro" per un riepilogo completo
+          if (totalOther > 0) ...[
+            _TotalRow(l10n.totalOther, totalOther),
+            const SizedBox(height: 8),
+          ],
+
+          const Divider(),
+          _TotalRow(l10n.total, cartState.total, isTotal: true),
+        ],
+      ),
+    );
+  }
 }
