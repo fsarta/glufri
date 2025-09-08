@@ -121,9 +121,8 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
       ),
       body: Column(
         children: [
-          // Metadata dell'acquisto
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
             child: TextFormField(
               controller: _storeNameController,
               decoration: InputDecoration(
@@ -136,8 +135,6 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
               },
             ),
           ),
-
-          // Lista dei prodotti
           Expanded(
             child: cartState.items.isEmpty
                 ? Center(child: Text(l10n.addProductToStart))
@@ -165,12 +162,27 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
                     },
                   ),
           ),
-
-          const _TotalSummarySection(),
-
-          // Pulsanti Azione
-          _buildActionButtons(context, ref, l10n),
         ],
+      ),
+      // --- NUOVA PARTE: USA IL bottomNavigationBar ---
+      // Usiamo SafeArea per assicurarci che i pulsanti non finiscano sotto
+      // le barre di sistema inferiori (es. la home bar su iOS)
+      bottomNavigationBar: SafeArea(
+        child: Material(
+          elevation: 16.0,
+          child: Column(
+            mainAxisSize: MainAxisSize
+                .min, // La Colonna è alta solo quanto il suo contenuto
+            children: [
+              const _TotalSummarySection(),
+              Padding(
+                // Un po' di padding per staccare i pulsanti dal bordo
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                child: _buildActionButtons(context, ref, l10n),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
