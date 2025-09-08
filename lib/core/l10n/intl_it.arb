@@ -192,5 +192,13 @@
   "atStore": "presso", 
   "times": "volte", 
   "priceRange": "Prezzi: da {min}€ a {max}€", 
-  "continueAction": "CONTINUA"
+  "continueAction": "CONTINUA",
+  "purchasedXTimes": "{count,plural, =0{Mai acquistato} =1{Acquistato 1 volta} other{Acquistato {count} volte}}",
+  "@purchasedXTimes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -949,6 +949,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'CONTINUA'**
   String get continueAction;
+
+  /// No description provided for @purchasedXTimes.
+  ///
+  /// In it, this message translates to:
+  /// **'{count,plural, =0{Mai acquistato} =1{Acquistato 1 volta} other{Acquistato {count} volte}}'**
+  String purchasedXTimes(int count);
 }
 
 class _AppLocalizationsDelegate

@@ -191,5 +191,13 @@
   "atStore": "en",
   "times": "veces",
   "priceRange": "Precios: de {min}€ a {max}€",
-  "continueAction": "CONTINUAR"
+  "continueAction": "CONTINUAR",
+  "purchasedXTimes": "{count,plural, =0{Nunca comprado} =1{Comprado 1 vez} other{Comprado {count} veces}}",
+  "@purchasedXTimes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

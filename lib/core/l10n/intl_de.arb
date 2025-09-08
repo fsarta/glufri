@@ -191,5 +191,13 @@
   "atStore": "bei",
   "times": "mal",
   "priceRange": "Preise: von {min}€ bis {max}€",
-  "continueAction": "WEITER"
+  "continueAction": "WEITER",
+  "purchasedXTimes": "{count,plural, =0{Nie gekauft} =1{1 Mal gekauft} other{{count} Mal gekauft}}",
+  "@purchasedXTimes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

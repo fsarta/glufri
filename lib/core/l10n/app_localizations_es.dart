@@ -470,4 +470,16 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get continueAction => 'CONTINUAR';
+
+  @override
+  String purchasedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Comprado $count veces',
+      one: 'Comprado 1 vez',
+      zero: 'Nunca comprado',
+    );
+    return '$_temp0';
+  }
 }

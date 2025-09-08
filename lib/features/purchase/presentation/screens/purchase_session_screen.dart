@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
+import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
+import 'package:glufri/features/monetization/presentation/screens/upsell_screen.dart';
 import 'package:glufri/features/purchase/data/models/purchase_model.dart';
 import 'package:glufri/features/purchase/domain/entities/off_product.dart';
 import 'package:glufri/features/purchase/domain/entities/product_price_history.dart';
@@ -209,13 +211,20 @@ Widget _buildActionButtons(
                       const Center(child: CircularProgressIndicator()),
                 );
 
-                // 1. Eseguiamo in parallelo la ricerca su API esterna e sulla nostra cronologia
+                // 1. Controlla se l'utente è Pro PRIMA di fare la ricerca nella cronologia
+                final isPro = ref.read(isProUserProvider);
+
+                // Prepariamo i future, ma eseguiremo quello della cronologia solo se necessario
                 final apiResultFuture = ref.read(
                   offProductProvider(barcode).future,
                 );
-                final historyResultFuture = ref.read(
-                  productHistoryProvider(barcode).future,
-                );
+
+                // Future condizionale per la cronologia
+                final Future<ProductPriceHistory?> historyResultFuture = isPro
+                    ? ref.read(productHistoryProvider(barcode).future)
+                    : Future.value(
+                        null,
+                      ); // Se non è Pro, il risultato sarà sempre null
 
                 // Usiamo 'Future.wait<dynamic>' per evitare problemi con i tipi
                 final List<dynamic> results = await Future.wait([
@@ -236,6 +245,33 @@ Widget _buildActionButtons(
                     l10n,
                     historyResult,
                   );
+                }
+
+                // Aggiungiamo un piccolo feedback visivo per gli utenti non-Pro
+                // che scansionano un prodotto che avrebbero in cronologia (ma non possono vederla)
+                if (context.mounted && !isPro) {
+                  // Controlliamo in background (senza 'await') se ci sarebbero stati risultati
+                  ref.read(productHistoryProvider(barcode).future).then((
+                    history,
+                  ) {
+                    if (history != null && context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text(
+                            "Passa a Pro per vedere la cronologia prezzi!",
+                          ), // TODO: Localizza
+                          action: SnackBarAction(
+                            label: "SCOPRI", // TODO: Localizza
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => const UpsellScreen(),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  });
                 }
 
                 // 3. Apriamo il dialogo di aggiunta prodotto, come prima
@@ -652,7 +688,7 @@ Future<void> _showPriceHistoryBottomSheet(
             ),
             const SizedBox(height: 16),
             Text(
-              'Acquistato ${l10n.productsCount(history.totalOccurrences)}',
+              l10n.purchasedXTimes(history.totalOccurrences),
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyLarge,
             ),

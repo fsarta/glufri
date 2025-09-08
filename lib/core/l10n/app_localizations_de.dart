@@ -471,4 +471,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get continueAction => 'WEITER';
+
+  @override
+  String purchasedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Mal gekauft',
+      one: '1 Mal gekauft',
+      zero: 'Nie gekauft',
+    );
+    return '$_temp0';
+  }
 }

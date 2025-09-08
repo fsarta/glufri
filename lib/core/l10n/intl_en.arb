@@ -191,5 +191,13 @@
   "atStore": "at",
   "times": "times",
   "priceRange": "Prices: from €{min} to €{max}",
-  "continueAction": "CONTINUE"
+  "continueAction": "CONTINUE",
+  "purchasedXTimes": "{count,plural, =0{Never purchased} =1{Purchased 1 time} other{Purchased {count} times}}",
+  "@purchasedXTimes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
