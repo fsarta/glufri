@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
+import 'package:glufri/core/widgets/month_picker.dart';
 import 'package:glufri/features/backup/presentation/providers/user_provider.dart';
 import 'package:glufri/features/backup/presentation/screens/login_screen.dart';
 import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
@@ -600,20 +601,18 @@ void _showExportOptions(BuildContext context, WidgetRef ref) {
           children: <Widget>[
             ListTile(
               leading: const Icon(Icons.calendar_today),
-              title: const Text('Report del Mese Corrente'), // TODO: Localizza
+              title: const Text('Esporta Report Mensile'), // TODO: Localizza
               onTap: () {
                 Navigator.of(ctx).pop();
-                _exportCurrentMonthReport(context, ref);
+                _selectAndExportMonth(context, ref);
               },
             ),
             ListTile(
               leading: const Icon(Icons.calendar_view_week),
-              title: const Text(
-                'Report dell\'Anno Corrente',
-              ), // TODO: Localizza
+              title: const Text('Esporta Report Annuale'), // TODO: Localizza
               onTap: () {
                 Navigator.of(ctx).pop();
-                _exportCurrentYearReport(context, ref);
+                _selectAndExportYear(context, ref);
               },
             ),
             ListTile(
@@ -621,7 +620,13 @@ void _showExportOptions(BuildContext context, WidgetRef ref) {
               title: const Text('Report Completo'), // TODO: Localizza
               onTap: () {
                 Navigator.of(ctx).pop();
-                _exportFullReport(context, ref);
+                final allPurchases =
+                    ref.read(purchaseListProvider).valueOrNull ?? [];
+                _exportPurchases(
+                  context,
+                  allPurchases,
+                  "Report Spese Completo",
+                );
               },
             ),
           ],
@@ -629,6 +634,82 @@ void _showExportOptions(BuildContext context, WidgetRef ref) {
       );
     },
   );
+}
+
+// Guida l'utente nella selezione di ANNO e MESE
+Future<void> _selectAndExportMonth(BuildContext context, WidgetRef ref) async {
+  // 1. Seleziona l'anno
+  final now = DateTime.now();
+  final selectedYear = await showDialog<int>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      contentPadding: const EdgeInsets.all(0),
+      content: SizedBox(
+        height: 300,
+        width: 300,
+        child: YearPicker(
+          firstDate: DateTime(2020),
+          lastDate: now,
+          selectedDate: DateTime(now.year),
+          onChanged: (dateTime) => Navigator.of(ctx).pop(dateTime.year),
+        ),
+      ),
+    ),
+  );
+
+  if (selectedYear == null || !context.mounted) return;
+
+  // 2. Seleziona il mese, usando il nostro helper
+  final selectedMonth = await showMonthPicker(
+    context: context,
+    initialYear: selectedYear,
+  );
+
+  if (selectedMonth == null || !context.mounted) return;
+
+  // 3. Filtra i dati e avvia l'esportazione
+  final allPurchases = ref.read(purchaseListProvider).valueOrNull ?? [];
+  final monthPurchases = allPurchases
+      .where(
+        (p) => p.date.year == selectedYear && p.date.month == selectedMonth,
+      )
+      .toList();
+
+  final titleDate = DateTime(selectedYear, selectedMonth);
+  final title =
+      "Report Spese - ${DateFormat.yMMMM('it_IT').format(titleDate)}"; // TODO: Usa l10n.localeName
+
+  _exportPurchases(context, monthPurchases, title);
+}
+
+// Guida l'utente nella selezione dell'ANNO
+Future<void> _selectAndExportYear(BuildContext context, WidgetRef ref) async {
+  final now = DateTime.now();
+  final selectedYear = await showDialog<int>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      content: SizedBox(
+        height: 300,
+        width: 300,
+        child: YearPicker(
+          firstDate: DateTime(2020),
+          lastDate: now,
+          selectedDate: DateTime(now.year),
+          onChanged: (dateTime) => Navigator.of(ctx).pop(dateTime.year),
+        ),
+      ),
+    ),
+  );
+
+  if (selectedYear == null || !context.mounted) return;
+
+  final allPurchases = ref.read(purchaseListProvider).valueOrNull ?? [];
+  final yearPurchases = allPurchases
+      .where((p) => p.date.year == selectedYear)
+      .toList();
+
+  final title = "Report Spese - $selectedYear";
+  _exportPurchases(context, yearPurchases, title);
 }
 
 // Funzione che raccoglie i dati e genera il PDF
