@@ -5,6 +5,7 @@ import 'package:glufri/features/favorites/presentation/providers/favorite_provid
 import 'package:glufri/features/purchase/data/models/purchase_item_model.dart';
 import 'package:glufri/features/purchase/presentation/providers/cart_provider.dart';
 import 'package:glufri/features/purchase/presentation/screens/purchase_session_screen.dart';
+import 'package:glufri/features/shopping_list/data/models/shopping_list_item_model.dart';
 import 'package:glufri/features/shopping_list/data/models/shopping_list_model.dart';
 import 'package:glufri/features/shopping_list/presentation/providers/shopping_list_providers.dart';
 import 'package:uuid/uuid.dart';
@@ -41,37 +42,11 @@ class ShoppingListDetailScreen extends ConsumerWidget {
             itemCount: sortedItems.length,
             itemBuilder: (ctx, index) {
               final item = sortedItems[index];
-              return Dismissible(
+              return _ShoppingListItemTile(
+                // La chiave è ora sul nostro nuovo widget, come prima.
                 key: ValueKey(item.id),
-                direction: DismissDirection.endToStart,
-                onDismissed: (_) {
-                  ref
-                      .read(shoppingListActionsProvider)
-                      .deleteItemFromList(list, item);
-                },
-                background: Container(
-                  color: Colors.red,
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.only(right: 20),
-                  child: const Icon(Icons.delete, color: Colors.white),
-                ),
-                child: CheckboxListTile(
-                  value: item.isChecked,
-                  title: Text(
-                    item.name,
-                    style: TextStyle(
-                      decoration: item.isChecked
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
-                      color: item.isChecked ? Colors.grey : null,
-                    ),
-                  ),
-                  onChanged: (val) {
-                    ref
-                        .read(shoppingListActionsProvider)
-                        .toggleItemChecked(item);
-                  },
-                ),
+                item: item,
+                list: list,
               );
             },
           );
@@ -256,6 +231,56 @@ class ShoppingListDetailScreen extends ConsumerWidget {
             },
           );
         },
+      ),
+    );
+  }
+}
+
+class _ShoppingListItemTile extends ConsumerWidget {
+  const _ShoppingListItemTile({
+    super.key, // Riceve la key
+    required this.item,
+    required this.list,
+  });
+
+  final ShoppingListItemModel item;
+  final ShoppingListModel list;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Il widget si costruisce con i dati dell'item che gli vengono passati.
+
+    return Dismissible(
+      key: key!, // Usa la key passata dal costruttore
+      direction: DismissDirection.endToStart,
+      onDismissed: (_) {
+        ref.read(shoppingListActionsProvider).deleteItemFromList(list, item);
+      },
+      background: Container(
+        color: Colors.red,
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        child: const Icon(Icons.delete, color: Colors.white),
+      ),
+      child: CheckboxListTile(
+        value: item.isChecked,
+        title: Text(
+          item.name,
+          style: TextStyle(
+            decoration: item.isChecked
+                ? TextDecoration.lineThrough
+                : TextDecoration.none,
+            color: item.isChecked ? Colors.grey : null,
+          ),
+        ),
+        onChanged: (newValue) {
+          // Quando si interagisce con il checkbox, si chiama l'azione
+          // che aggiornerà lo stato in Hive. Riverpod farà ricostruire
+          // questo specifico widget con il nuovo stato `item.isChecked`.
+          ref.read(shoppingListActionsProvider).toggleItemChecked(item);
+        },
+        // Aggiungi un colore più visibile per il check attivo
+        activeColor: Theme.of(context).colorScheme.primary,
       ),
     );
   }
