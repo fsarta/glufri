@@ -9,6 +9,7 @@ import 'package:glufri/features/backup/domain/sync_service.dart';
 import 'package:glufri/features/backup/domain/user_model.dart';
 import 'package:glufri/features/backup/presentation/providers/sync_providers.dart';
 import 'package:glufri/features/backup/presentation/providers/user_provider.dart';
+import 'package:glufri/features/onboarding/presentation/providers/onboarding_provider.dart';
 import 'package:glufri/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:glufri/features/purchase/data/datasources/purchase_local_datasource.dart';
 import 'package:glufri/features/purchase/data/models/purchase_item_model.dart';
@@ -17,6 +18,27 @@ import 'package:glufri/features/purchase/presentation/providers/purchase_provide
 import 'package:glufri/features/settings/presentation/providers/settings_provider.dart';
 import 'package:glufri/features/shell/presentation/screens/main_shell_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
+class AuthWrapper extends ConsumerWidget {
+  final bool hasInitiallySeenOnboarding; // Rinominato per chiarezza
+  const AuthWrapper({super.key, required this.hasInitiallySeenOnboarding});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // 1. "Osserva" lo stato del provider, non il suo notifier.
+    final hasCompletedOnboarding = ref.watch(onboardingCompletedProvider);
+
+    // 2. Determina lo stato finale: se uno dei due è true, l'onboarding è "fatto".
+    final shouldShowMainScreen =
+        hasCompletedOnboarding || hasInitiallySeenOnboarding;
+
+    if (shouldShowMainScreen) {
+      return const MainShellScreen();
+    } else {
+      return const OnboardingScreen();
+    }
+  }
+}
 
 class GlufriApp extends ConsumerStatefulWidget {
   final bool hasSeenOnboarding;
@@ -235,10 +257,10 @@ class _GlufriAppState extends ConsumerState<GlufriApp> {
       locale: locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      // La schermata 'home' dipende da se l'utente ha già visto l'onboarding
-      home: widget.hasSeenOnboarding
-          ? const MainShellScreen()
-          : const OnboardingScreen(),
+      // La 'home' è ora sempre il nostro AuthWrapper.
+      // `Navigator.pushReplacement` dall'onboarding non distruggerà più
+      // il contesto del MaterialApp, rendendo il layout più stabile.
+      home: AuthWrapper(hasInitiallySeenOnboarding: widget.hasSeenOnboarding),
       debugShowCheckedModeBanner: false,
     );
   }
