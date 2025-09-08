@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
+import 'package:glufri/core/widgets/skeletons/shimmer_list.dart';
+import 'package:glufri/core/widgets/skeletons/skeleton_card.dart';
 import 'package:glufri/features/favorites/presentation/providers/favorite_providers.dart';
 
 class FavoriteProductsScreen extends ConsumerWidget {
@@ -21,7 +23,8 @@ class FavoriteProductsScreen extends ConsumerWidget {
         ],
       ),
       body: favoritesAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () =>
+            const ShimmerList(skeletonCard: ListTileSkeleton(), length: 7),
         error: (err, st) => Center(child: Text(l10n.genericError(err))),
         data: (favorites) {
           if (favorites.isEmpty) {

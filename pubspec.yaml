@@ -68,6 +68,8 @@ dependencies:
   google_sign_in: ^7.1.1
 
   collection: ^1.19.1
+
+  shimmer: ^3.0.0
   
   # In-App Purchases & Ads (opzionali per MVP, ma inclusi per completezza)
   # in_app_purchase: ^3.2.0

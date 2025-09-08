@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/core/widgets/month_picker.dart';
+import 'package:glufri/core/widgets/skeletons/shimmer_list.dart';
+import 'package:glufri/core/widgets/skeletons/skeleton_card.dart';
 import 'package:glufri/features/backup/presentation/providers/user_provider.dart';
 import 'package:glufri/features/backup/presentation/screens/login_screen.dart';
 import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
@@ -206,7 +208,8 @@ class _PurchaseHistoryScreenState extends ConsumerState<PurchaseHistoryScreen> {
           Expanded(
             child: purchasesAsyncValue.when(
               // STATO CARICAMENTO: mostra un indicatore di progresso.
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () =>
+                  const ShimmerList(skeletonCard: PurchaseCardSkeleton()),
               // STATO ERRORE: mostra un messaggio di errore informativo.
               error: (error, stackTrace) => Center(
                 child: Text(
