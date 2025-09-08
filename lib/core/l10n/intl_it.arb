@@ -185,5 +185,12 @@
   "restoreConfirmationBody": "Questo sovrascriverà tutti i dati locali con quelli salvati nel cloud. Continuare?", 
   "restoreInProgress": "Ripristino in corso...", 
   "restoreSuccess": "Dati ripristinati con successo!", 
-  "restoreError": "Errore durante il ripristino."
+  "restoreError": "Errore durante il ripristino.",
+
+  "productHistoryTitle": "Prodotto già acquistato!", 
+  "lastPrice": "Ultimo prezzo:", 
+  "atStore": "presso", 
+  "times": "volte", 
+  "priceRange": "Prezzi: da {min}€ a {max}€", 
+  "continueAction": "CONTINUA"
 }

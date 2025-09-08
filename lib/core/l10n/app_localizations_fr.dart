@@ -450,4 +450,24 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get restoreError => 'Erreur lors de la restauration.';
+
+  @override
+  String get productHistoryTitle => 'Produit déjà acheté !';
+
+  @override
+  String get lastPrice => 'Dernier prix :';
+
+  @override
+  String get atStore => 'chez';
+
+  @override
+  String get times => 'fois';
+
+  @override
+  String priceRange(Object max, Object min) {
+    return 'Prix : de $min€ à $max€';
+  }
+
+  @override
+  String get continueAction => 'CONTINUER';
 }

@@ -913,6 +913,42 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Errore durante il ripristino.'**
   String get restoreError;
+
+  /// No description provided for @productHistoryTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Prodotto già acquistato!'**
+  String get productHistoryTitle;
+
+  /// No description provided for @lastPrice.
+  ///
+  /// In it, this message translates to:
+  /// **'Ultimo prezzo:'**
+  String get lastPrice;
+
+  /// No description provided for @atStore.
+  ///
+  /// In it, this message translates to:
+  /// **'presso'**
+  String get atStore;
+
+  /// No description provided for @times.
+  ///
+  /// In it, this message translates to:
+  /// **'volte'**
+  String get times;
+
+  /// No description provided for @priceRange.
+  ///
+  /// In it, this message translates to:
+  /// **'Prezzi: da {min}€ a {max}€'**
+  String priceRange(Object max, Object min);
+
+  /// No description provided for @continueAction.
+  ///
+  /// In it, this message translates to:
+  /// **'CONTINUA'**
+  String get continueAction;
 }
 
 class _AppLocalizationsDelegate

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/features/backup/presentation/providers/user_provider.dart';
@@ -5,6 +7,7 @@ import 'package:glufri/features/purchase/data/datasources/purchase_local_datasou
 import 'package:glufri/features/purchase/data/models/purchase_item_model.dart';
 import 'package:glufri/features/purchase/data/models/purchase_model.dart';
 import 'package:glufri/features/purchase/data/repositories/purchase_repository_impl.dart';
+import 'package:glufri/features/purchase/domain/entities/product_price_history.dart';
 import 'package:glufri/features/purchase/domain/repositories/purchase_repository.dart';
 import 'package:glufri/features/purchase/presentation/models/purchase_group_models.dart';
 import 'package:glufri/features/purchase/presentation/providers/purchase_filter_provider.dart';
@@ -210,4 +213,55 @@ final searchedProductsSummaryProvider =
           purchaseContext: contextMap,
         );
       }).toList()..sort((a, b) => b.totalSpent.compareTo(a.totalSpent));
+    });
+
+/// Un provider che, dato un barcode, cerca in tutti gli acquisti dell'utente
+/// e restituisce un riepilogo della cronologia di quel prodotto.
+final productHistoryProvider = FutureProvider.autoDispose
+    .family<ProductPriceHistory?, String>((ref, barcode) async {
+      // 1. Ottieni la lista completa di tutti gli acquisti (indipendente dai filtri)
+      // Per fare ciò, leggiamo direttamente il repository, senza passare da filtri.
+      final repository = ref.watch(purchaseRepositoryProvider);
+      final allPurchases = await repository.getPurchases();
+
+      // Se non ci sono acquisti, non c'è cronologia
+      if (allPurchases.isEmpty) return null;
+
+      // 2. "Appiattiamo" i dati: creiamo una lista di coppie (item, acquisto-genitore)
+      // per tutti gli item che corrispondono al barcode.
+      final List<(PurchaseItemModel, PurchaseModel)> matchingEntries = [];
+      for (final purchase in allPurchases) {
+        for (final item in purchase.items) {
+          if (item.barcode == barcode) {
+            matchingEntries.add((item, purchase));
+          }
+        }
+      }
+
+      // Se non abbiamo trovato nessuna corrispondenza
+      if (matchingEntries.isEmpty) return null;
+
+      // 3. Ordina le occorrenze dalla più recente alla più vecchia
+      matchingEntries.sort((a, b) => b.$2.date.compareTo(a.$2.date));
+
+      // 4. Calcola le statistiche
+      final lastEntry = matchingEntries.first;
+      final totalOccurrences = matchingEntries.length;
+
+      // `reduce` è un modo conciso per trovare il min/max in una lista
+      final lowestPrice = matchingEntries
+          .map((e) => e.$1.unitPrice)
+          .reduce(min);
+      final highestPrice = matchingEntries
+          .map((e) => e.$1.unitPrice)
+          .reduce(max);
+
+      // 5. Costruisci e restituisci l'oggetto risultato
+      return ProductPriceHistory(
+        lastPurchaseItem: lastEntry.$1,
+        lastPurchaseContext: lastEntry.$2,
+        totalOccurrences: totalOccurrences,
+        lowestPrice: lowestPrice,
+        highestPrice: highestPrice,
+      );
     });

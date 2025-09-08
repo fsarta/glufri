@@ -184,5 +184,12 @@
   "restoreConfirmationBody": "Dies wird alle lokalen Daten mit den in der Cloud gespeicherten Daten überschreiben. Fortfahren?",
   "restoreInProgress": "Wiederherstellung läuft...",
   "restoreSuccess": "Daten erfolgreich wiederhergestellt!",
-  "restoreError": "Fehler bei der Wiederherstellung."
+  "restoreError": "Fehler bei der Wiederherstellung.",
+
+  "productHistoryTitle": "Produkt bereits gekauft!",
+  "lastPrice": "Letzter Preis:",
+  "atStore": "bei",
+  "times": "mal",
+  "priceRange": "Preise: von {min}€ bis {max}€",
+  "continueAction": "WEITER"
 }

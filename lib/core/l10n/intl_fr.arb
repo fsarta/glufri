@@ -184,5 +184,12 @@
   "restoreConfirmationBody": "Cela écrasera toutes les données locales avec les données sauvegardées dans le cloud. Continuer ?",
   "restoreInProgress": "Restauration en cours...",
   "restoreSuccess": "Données restaurées avec succès !",
-  "restoreError": "Erreur lors de la restauration."
+  "restoreError": "Erreur lors de la restauration.",
+
+  "productHistoryTitle": "Produit déjà acheté !",
+  "lastPrice": "Dernier prix :",
+  "atStore": "chez",
+  "times": "fois",
+  "priceRange": "Prix : de {min}€ à {max}€",
+  "continueAction": "CONTINUER"
 }

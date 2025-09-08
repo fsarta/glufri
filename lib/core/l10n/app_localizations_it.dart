@@ -448,4 +448,24 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get restoreError => 'Errore durante il ripristino.';
+
+  @override
+  String get productHistoryTitle => 'Prodotto già acquistato!';
+
+  @override
+  String get lastPrice => 'Ultimo prezzo:';
+
+  @override
+  String get atStore => 'presso';
+
+  @override
+  String get times => 'volte';
+
+  @override
+  String priceRange(Object max, Object min) {
+    return 'Prezzi: da $min€ a $max€';
+  }
+
+  @override
+  String get continueAction => 'CONTINUA';
 }

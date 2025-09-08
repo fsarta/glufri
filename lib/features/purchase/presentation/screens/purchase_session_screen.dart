@@ -6,11 +6,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/purchase/data/models/purchase_model.dart';
 import 'package:glufri/features/purchase/domain/entities/off_product.dart';
+import 'package:glufri/features/purchase/domain/entities/product_price_history.dart';
 import 'package:glufri/features/purchase/presentation/providers/cart_provider.dart';
 import 'package:glufri/features/purchase/data/models/purchase_item_model.dart';
 import 'package:glufri/features/purchase/presentation/providers/product_api_provider.dart';
+import 'package:glufri/features/purchase/presentation/providers/purchase_providers.dart';
 import 'package:glufri/features/scanner/presentation/screens/barcode_scanner_screen.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:uuid/uuid.dart';
@@ -206,6 +209,50 @@ Widget _buildActionButtons(
                       const Center(child: CircularProgressIndicator()),
                 );
 
+                // 1. Eseguiamo in parallelo la ricerca su API esterna e sulla nostra cronologia
+                final apiResultFuture = ref.read(
+                  offProductProvider(barcode).future,
+                );
+                final historyResultFuture = ref.read(
+                  productHistoryProvider(barcode).future,
+                );
+
+                // Usiamo 'Future.wait<dynamic>' per evitare problemi con i tipi
+                final List<dynamic> results = await Future.wait([
+                  apiResultFuture,
+                  historyResultFuture,
+                ]);
+
+                final apiResult = results[0]; // Questo è OffProduct?
+                final historyResult = results[1] as ProductPriceHistory?;
+
+                // Ora che abbiamo entrambi i risultati, chiudiamo il dialog di caricamento
+                if (context.mounted) Navigator.pop(context);
+
+                // 2. Se abbiamo trovato una cronologia, la mostriamo
+                if (context.mounted && historyResult != null) {
+                  await _showPriceHistoryBottomSheet(
+                    context,
+                    l10n,
+                    historyResult,
+                  );
+                }
+
+                // 3. Apriamo il dialogo di aggiunta prodotto, come prima
+                if (context.mounted) {
+                  // L'apiResult qui potrebbe essere un `OffProduct` o `null`
+                  final offProduct = apiResult is OffProduct ? apiResult : null;
+
+                  _showAddItemDialog(
+                    context,
+                    ref,
+                    barcode: barcode,
+                    offProduct: offProduct,
+                    // Pre-compiliamo il prezzo con l'ultimo prezzo pagato!
+                    lastPrice: historyResult?.lastPurchaseItem.unitPrice,
+                  );
+                }
+
                 try {
                   final productInfo = await ref.read(
                     offProductProvider(barcode).future,
@@ -283,6 +330,7 @@ void _showAddItemDialog(
   PurchaseItemModel? item,
   String? barcode,
   OffProduct? offProduct,
+  double? lastPrice,
 }) {
   final isEditing = item != null;
   final l10n = AppLocalizations.of(context)!;
@@ -296,7 +344,10 @@ void _showAddItemDialog(
     text: item?.name ?? offProduct?.name ?? '',
   );
   final priceController = TextEditingController(
-    text: item?.unitPrice.toString().replaceAll('.', ',') ?? '',
+    // Se c'è un `lastPrice`, usalo! Altrimenti usa il prezzo dell'item in modifica, altrimenti vuoto
+    text:
+        item?.unitPrice.toString().replaceAll('.', ',') ??
+        (lastPrice?.toString().replaceAll('.', ',') ?? ''),
   );
   final quantityController = TextEditingController(
     text: item?.quantity.toString().replaceAll('.', ',') ?? '1',
@@ -549,4 +600,81 @@ class _TotalRow extends StatelessWidget {
       ],
     );
   }
+}
+
+Future<void> _showPriceHistoryBottomSheet(
+  BuildContext context,
+  AppLocalizations l10n,
+  ProductPriceHistory history,
+) {
+  final lastPurchase = history.lastPurchaseItem;
+  final lastContext = history.lastPurchaseContext;
+
+  return showModalBottomSheet(
+    context: context,
+    builder: (ctx) {
+      final theme = Theme.of(ctx);
+      return Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              l10n.productHistoryTitle,
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                style: theme.textTheme.titleLarge,
+                children: [
+                  TextSpan(text: '${l10n.lastPrice} '),
+                  TextSpan(
+                    text: '${lastPurchase.unitPrice.toStringAsFixed(2)} €',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(
+                    text:
+                        ' ${l10n.atStore} ${lastContext.store ?? l10n.genericPurchase}',
+                  ),
+                ],
+              ),
+            ),
+            Text(
+              DateFormat.yMMMd(l10n.localeName).format(lastContext.date),
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Acquistato ${l10n.productsCount(history.totalOccurrences)}',
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyLarge,
+            ),
+            if (history.lowestPrice != history.highestPrice)
+              Text(
+                l10n.priceRange(
+                  history.lowestPrice.toStringAsFixed(2),
+                  history.highestPrice.toStringAsFixed(2),
+                ),
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodySmall,
+              ),
+
+            const SizedBox(height: 24),
+            FilledButton.icon(
+              onPressed: () => Navigator.of(ctx).pop(),
+              icon: const Icon(Icons.arrow_forward),
+              label: Text(l10n.continueAction),
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }

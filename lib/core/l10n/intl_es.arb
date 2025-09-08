@@ -184,5 +184,12 @@
   "restoreConfirmationBody": "Esto sobrescribirá todos los datos locales con los datos guardados en la nube. ¿Continuar?",
   "restoreInProgress": "Restauración en curso...",
   "restoreSuccess": "¡Datos restaurados con éxito!",
-  "restoreError": "Error durante la restauración."
+  "restoreError": "Error durante la restauración.",
+
+  "productHistoryTitle": "¡Producto ya comprado!",
+  "lastPrice": "Último precio:",
+  "atStore": "en",
+  "times": "veces",
+  "priceRange": "Precios: de {min}€ a {max}€",
+  "continueAction": "CONTINUAR"
 }

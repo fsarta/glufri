@@ -451,4 +451,24 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get restoreError => 'Fehler bei der Wiederherstellung.';
+
+  @override
+  String get productHistoryTitle => 'Produkt bereits gekauft!';
+
+  @override
+  String get lastPrice => 'Letzter Preis:';
+
+  @override
+  String get atStore => 'bei';
+
+  @override
+  String get times => 'mal';
+
+  @override
+  String priceRange(Object max, Object min) {
+    return 'Preise: von $min€ bis $max€';
+  }
+
+  @override
+  String get continueAction => 'WEITER';
 }

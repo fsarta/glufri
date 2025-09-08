@@ -184,5 +184,12 @@
   "restoreConfirmationBody": "This will overwrite all local data with the data saved in the cloud. Continue?",
   "restoreInProgress": "Restoring in progress...",
   "restoreSuccess": "Data restored successfully!",
-  "restoreError": "Error during restore."
+  "restoreError": "Error during restore.",
+  
+  "productHistoryTitle": "Product already purchased!",
+  "lastPrice": "Last price:",
+  "atStore": "at",
+  "times": "times",
+  "priceRange": "Prices: from €{min} to €{max}",
+  "continueAction": "CONTINUE"
 }
