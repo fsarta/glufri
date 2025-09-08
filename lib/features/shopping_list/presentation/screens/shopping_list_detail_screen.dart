@@ -203,35 +203,97 @@ class ShoppingListDetailScreen extends ConsumerWidget {
 
   // Dialogo che mostra i preferiti
   void _showFavoritesPickerForList(BuildContext context, WidgetRef ref) async {
-    // Leggi la lista e i preferiti PRIMA di mostrare il dialogo
     final favorites = await ref.read(favoriteListProvider.future);
     final list = ref.read(singleShoppingListProvider(listId)).value;
-
-    // Controllo di sicurezza
     if (list == null || !context.mounted) return;
+
     if (favorites.isEmpty) {
-      /* mostra snackbar */
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Non hai prodotti preferiti.")),
+      );
       return;
     }
 
     showModalBottomSheet(
       context: context,
-      builder: (_) => ListView.builder(
-        itemCount: favorites.length,
-        itemBuilder: (ctx, index) {
-          final fav = favorites[index];
-          return ListTile(
-            title: Text(fav.name),
-            onTap: () {
-              // Usa l'oggetto 'list' letto in precedenza
-              ref
-                  .read(shoppingListActionsProvider)
-                  .addFavoriteToList(list, fav);
-              Navigator.of(ctx).pop();
-            },
-          );
-        },
+      // Bordi arrotondati e altezza controllata per un look moderno
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
+      builder: (_) {
+        // Usiamo DraggableScrollableSheet per un controllo migliore sullo scroll
+        return DraggableScrollableSheet(
+          initialChildSize: 0.6, // Inizia al 60% dell'altezza
+          minChildSize: 0.3, // Può essere ridotto al 30%
+          maxChildSize: 0.9, // Può essere esteso al 90%
+          expand: false,
+          builder: (BuildContext context, ScrollController scrollController) {
+            return Column(
+              children: [
+                // "Maniglia" per indicare che il foglio è trascinabile
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 12),
+                  height: 5,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                // Titolo del BottomSheet
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: Text(
+                    "Seleziona un Preferito", // TODO: Localizza
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+                // La nostra nuova griglia
+                Expanded(
+                  child: GridView.builder(
+                    controller:
+                        scrollController, // Usa il controller del DraggableSheet
+                    padding: const EdgeInsets.all(12),
+                    // Quante colonne mostrare
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3, // 3 colonne in verticale
+                          crossAxisSpacing: 10, // Spazio orizzontale
+                          mainAxisSpacing: 10, // Spazio verticale
+                          childAspectRatio:
+                              0.9, // Rapporto larghezza/altezza delle card
+                        ),
+                    itemCount: favorites.length,
+                    itemBuilder: (ctx, index) {
+                      final fav = favorites[index];
+                      // Usiamo un widget card dedicato
+                      return _FavoriteProductCard(
+                        product: fav,
+                        onTap: () {
+                          ref
+                              .read(shoppingListActionsProvider)
+                              .addFavoriteToList(list, fav);
+                          // Aggiungiamo un feedback visivo rapido
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                "'${fav.name}' aggiunto alla lista.",
+                              ),
+                              duration: const Duration(seconds: 1),
+                            ),
+                          );
+                          // Non chiudiamo il BottomSheet, così l'utente può aggiungere più item
+                          // Navigator.of(context).pop();
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }
@@ -281,6 +343,67 @@ class _ShoppingListItemTile extends ConsumerWidget {
         },
         // Aggiungi un colore più visibile per il check attivo
         activeColor: Theme.of(context).colorScheme.primary,
+      ),
+    );
+  }
+}
+
+class _FavoriteProductCard extends StatelessWidget {
+  final FavoriteProductModel product;
+  final VoidCallback onTap;
+
+  const _FavoriteProductCard({required this.product, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      clipBehavior: Clip
+          .antiAlias, // Assicura che l'effetto InkWell rimanga dentro i bordi
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Icona che indica lo stato (es. SG)
+              Icon(
+                product.isGlutenFree ? Icons.verified : Icons.label_outline,
+                color: product.isGlutenFree
+                    ? Colors.green
+                    : theme.colorScheme.primary,
+                size: 36,
+              ),
+              const SizedBox(height: 8),
+              // Nome del prodotto, centrato e con gestione del testo a capo
+              Text(
+                product.name,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow
+                    .ellipsis, // Aggiunge "..." se il testo è troppo lungo
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              // Prezzo di default, se presente
+              if (product.defaultPrice != null &&
+                  product.defaultPrice! > 0) ...[
+                const SizedBox(height: 4),
+                Text(
+                  '${product.defaultPrice!.toStringAsFixed(2)} €',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
       ),
     );
   }
