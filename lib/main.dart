@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:glufri/features/budget/data/models/budget_model.dart';
 import 'package:glufri/features/favorites/data/models/favorite_product_model.dart';
+import 'package:glufri/features/shopping_list/data/models/shopping_list_item_model.dart';
+import 'package:glufri/features/shopping_list/data/models/shopping_list_model.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -69,11 +71,15 @@ Future<void> main() async {
   Hive.registerAdapter(PurchaseItemModelAdapter());
   Hive.registerAdapter(BudgetModelAdapter());
   Hive.registerAdapter(FavoriteProductModelAdapter());
+  Hive.registerAdapter(ShoppingListItemModelAdapter());
+  Hive.registerAdapter(ShoppingListModelAdapter());
 
   // Apri le box
   await Hive.openBox<PurchaseModel>('purchases');
   await Hive.openBox<BudgetModel>('budgets');
   await Hive.openBox<FavoriteProductModel>('favorites');
+  await Hive.openBox<ShoppingListItemModel>('shopping_list_items');
+  await Hive.openBox<ShoppingListModel>('shopping_lists');
 
   // Controlla se l'utente ha già visto l'onboarding
   final prefs = await SharedPreferences.getInstance();

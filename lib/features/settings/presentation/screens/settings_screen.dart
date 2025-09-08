@@ -13,6 +13,7 @@ import 'package:glufri/features/monetization/presentation/screens/upsell_screen.
 import 'package:glufri/features/purchase/presentation/providers/purchase_providers.dart';
 import 'package:glufri/features/settings/presentation/providers/settings_provider.dart';
 import 'package:glufri/features/settings/presentation/screens/privacy_policy_screen.dart';
+import 'package:glufri/features/shopping_list/presentation/screens/shopping_lists_screen.dart';
 import 'package:glufri/generated/l10n.dart'; // Ensure this import is present for S
 
 class SettingsScreen extends ConsumerStatefulWidget {
@@ -95,6 +96,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     try {
                       await ref.read(authRepositoryProvider).signInWithGoogle();
                     } catch (e) {
+                      if (!context.mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(l10n.settingsLoginFailed)),
                       );
@@ -264,6 +266,30 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => const FavoriteProductsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+
+                  ListTile(
+                    leading: const Icon(Icons.list_alt_outlined),
+                    title: const Text(
+                      'Liste della Spesa (Pro)',
+                    ), // TODO: Localizza
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                    onTap: () {
+                      if (!isPro) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const UpsellScreen(),
+                          ),
+                        );
+                        return;
+                      }
+                      // Naviga alla nuova schermata principale delle liste
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const ShoppingListsScreen(),
                         ),
                       );
                     },
