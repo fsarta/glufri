@@ -319,10 +319,20 @@ class _ShoppingListItemTile extends ConsumerWidget {
         ref.read(shoppingListActionsProvider).deleteItemFromList(list, item);
       },
       background: Container(
-        color: Colors.red,
+        color: Colors.red.shade700,
         alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 20),
-        child: const Icon(Icons.delete, color: Colors.white),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Elimina", // TODO: Localizza
+              style: TextStyle(color: Colors.white),
+            ),
+            SizedBox(width: 8),
+            Icon(Icons.delete_sweep, color: Colors.white),
+          ],
+        ),
       ),
       child: CheckboxListTile(
         value: item.isChecked,

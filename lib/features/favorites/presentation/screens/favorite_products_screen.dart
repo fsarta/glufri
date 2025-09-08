@@ -58,63 +58,105 @@ class FavoriteProductsScreen extends ConsumerWidget {
             );
           }
           return ListView.builder(
+            padding: const EdgeInsets.only(
+              top: 8,
+              bottom: 80,
+            ), // Padding per il FAB
             itemCount: favorites.length,
             itemBuilder: (context, index) {
               final product = favorites[index];
-              return ListTile(
-                leading: Icon(
-                  product.isGlutenFree ? Icons.verified : Icons.label,
-                  color: product.isGlutenFree ? Colors.green : Colors.grey,
-                ),
-                title: Text(product.name),
-                subtitle: product.defaultPrice != null
-                    ? Text(
-                        "${l10n.lastPrice} ${product.defaultPrice!.toStringAsFixed(2)} €",
-                      )
-                    : null,
-                trailing: IconButton(
-                  icon: Icon(
-                    Icons.delete_outline,
-                    color: Theme.of(context).colorScheme.error,
+
+              // --- WIDGET DISMISSIBLE PER LO SWIPE ---
+              return Dismissible(
+                // Chiave univoca per identificare l'elemento
+                key: ValueKey(product.id),
+                // Abilita lo swipe solo da destra verso sinistra
+                direction: DismissDirection.endToStart,
+                // Azione eseguita dopo l'animazione di swipe
+                onDismissed: (direction) {
+                  ref.read(favoriteActionsProvider).removeFavorite(product.id);
+                  // Feedback visivo immediato per l'utente
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        "'${product.name}' rimosso dai preferiti.",
+                      ), // TODO: Localizza
+                    ),
+                  );
+                },
+                // Sfondo che appare durante lo swipe
+                background: Container(
+                  color: Colors.red.shade700,
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Elimina",
+                        style: TextStyle(color: Colors.white),
+                      ), // TODO: Localizza
+                      SizedBox(width: 8),
+                      Icon(Icons.delete_sweep, color: Colors.white),
+                    ],
                   ),
-                  onPressed: () {
-                    // Invece di cancellare subito, mostra un dialogo di conferma
-                    showDialog(
-                      context: context,
-                      builder: (dCtx) => AlertDialog(
-                        title: Text(l10n.deleteConfirmationTitle),
-                        content: Text(
-                          // Usa una nuova chiave di localizzazione
-                          l10n.deleteFavoriteConfirmationBody(product.name),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(dCtx).pop(),
-                            child: Text(l10n.cancel),
+                ),
+                // Il contenuto visibile della riga è il nostro ListTile
+                child: ListTile(
+                  leading: Icon(
+                    product.isGlutenFree ? Icons.verified : Icons.label,
+                    color: product.isGlutenFree ? Colors.green : Colors.grey,
+                  ),
+                  title: Text(product.name),
+                  subtitle: product.defaultPrice != null
+                      ? Text(
+                          "${l10n.lastPrice} ${product.defaultPrice!.toStringAsFixed(2)} €",
+                        )
+                      : null,
+                  // PULSANTE DI ELIMINAZIONE ALTERNATIVO (CON CONFERMA)
+                  trailing: IconButton(
+                    icon: Icon(
+                      Icons.delete_outline,
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                    tooltip: l10n.delete,
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (dCtx) => AlertDialog(
+                          title: Text(l10n.deleteConfirmationTitle),
+                          content: Text(
+                            l10n.deleteFavoriteConfirmationBody(product.name),
                           ),
-                          FilledButton(
-                            style: FilledButton.styleFrom(
-                              backgroundColor: Theme.of(
-                                context,
-                              ).colorScheme.error,
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(dCtx).pop(),
+                              child: Text(l10n.cancel),
                             ),
-                            onPressed: () {
-                              // La cancellazione avviene solo dopo la conferma
-                              ref
-                                  .read(favoriteActionsProvider)
-                                  .removeFavorite(product.id);
-                              Navigator.of(dCtx).pop();
-                            },
-                            child: Text(l10n.delete),
-                          ),
-                        ],
-                      ),
-                    );
+                            FilledButton(
+                              style: FilledButton.styleFrom(
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.error,
+                              ),
+                              onPressed: () {
+                                ref
+                                    .read(favoriteActionsProvider)
+                                    .removeFavorite(product.id);
+                                Navigator.of(dCtx).pop();
+                              },
+                              child: Text(l10n.delete),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                  // Azione per MODIFICARE il preferito
+                  onTap: () {
+                    showAddEditFavoriteDialog(context, product: product);
                   },
                 ),
-                onTap: () {
-                  showAddEditFavoriteDialog(context, product: product);
-                },
               );
             },
           );
