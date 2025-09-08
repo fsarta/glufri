@@ -5,7 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/core/widgets/skeletons/shimmer_list.dart';
 import 'package:glufri/core/widgets/skeletons/skeleton_card.dart';
+import 'package:glufri/features/favorites/data/models/favorite_product_model.dart';
 import 'package:glufri/features/favorites/presentation/providers/favorite_providers.dart';
+import 'package:glufri/features/favorites/presentation/widgets/add_edit_favorite_dialog.dart';
+import 'package:glufri/features/scanner/presentation/screens/barcode_scanner_screen.dart';
+import 'package:uuid/uuid.dart';
 
 class FavoriteProductsScreen extends ConsumerWidget {
   const FavoriteProductsScreen({super.key});
@@ -19,7 +23,25 @@ class FavoriteProductsScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(l10n.settingsFavProducts),
         actions: [
-          // In futuro, qui potrebbe esserci un pulsante "+" per aggiungere manualmente
+          IconButton(
+            tooltip: l10n.scanBarcode,
+            icon: const Icon(Icons.qr_code_scanner),
+            onPressed: () async {
+              final barcode = await Navigator.of(context).push<String>(
+                MaterialPageRoute(builder: (_) => const BarcodeScannerScreen()),
+              );
+
+              if (barcode != null && barcode.isNotEmpty && context.mounted) {
+                // TODO: in futuro potremmo cercare il nome del prodotto online
+                final newProduct = FavoriteProductModel(
+                  id: const Uuid().v4(),
+                  name: '',
+                  barcode: barcode,
+                );
+                showAddEditFavoriteDialog(context, product: newProduct);
+              }
+            },
+          ),
         ],
       ),
       body: favoritesAsync.when(
@@ -90,9 +112,19 @@ class FavoriteProductsScreen extends ConsumerWidget {
                     );
                   },
                 ),
+                onTap: () {
+                  showAddEditFavoriteDialog(context, product: product);
+                },
               );
             },
           );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: "Aggiungi Preferito", // TODO: Localizza
+        child: const Icon(Icons.add),
+        onPressed: () {
+          showAddEditFavoriteDialog(context);
         },
       ),
     );
