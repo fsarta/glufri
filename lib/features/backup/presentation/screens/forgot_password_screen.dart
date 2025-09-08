@@ -17,7 +17,6 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   bool _isLoading = false;
   String? _successMessage;
   String? _errorMessage;
-  late final l10n = AppLocalizations.of(context)!;
 
   @override
   void dispose() {
@@ -31,55 +30,78 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       _successMessage = null;
     });
 
-    if (_formKey.currentState?.validate() ?? false) {
-      setState(() => _isLoading = true);
-      try {
-        await ref
-            .read(authRepositoryProvider)
-            .sendPasswordResetEmail(_emailController.text.trim());
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+
+    setState(() => _isLoading = true);
+    try {
+      await ref
+          .read(authRepositoryProvider)
+          .sendPasswordResetEmail(_emailController.text.trim());
+      setState(() {
+        _successMessage = AppLocalizations.of(context)!.resetEmailSuccess;
+        _emailController.clear(); // Pulisce il campo dopo l'invio
+      });
+    } catch (e) {
+      if (mounted) {
         setState(() {
-          _successMessage = l10n.resetEmailSuccess;
+          _errorMessage = AppLocalizations.of(context)!.resetEmailError;
         });
-      } catch (e) {
-        setState(() {
-          _errorMessage = l10n.resetEmailError;
-        });
-      } finally {
-        if (mounted) setState(() => _isLoading = false);
       }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.forgotPasswordScreenTitle)),
-      body: Center(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: theme.brightness == Brightness.dark
+            ? Colors.white
+            : Colors.black,
+      ),
+      body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                const SizedBox(height: 40),
+                Icon(
+                  Icons.lock_reset,
+                  size: 60,
+                  color: theme.colorScheme.primary,
+                ),
+                const SizedBox(height: 24),
                 Text(
                   l10n.forgotPasswordTitle,
-                  style: theme.textTheme.headlineMedium,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.headlineLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                const SizedBox(height: 16),
-                Text(l10n.forgotPasswordInstruction),
-                const SizedBox(height: 24),
+                const SizedBox(height: 8),
+                Text(
+                  l10n.forgotPasswordSubtitle, // Usa la nuova chiave!
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.titleMedium,
+                ),
+                const SizedBox(height: 48),
                 TextFormField(
                   controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: l10n.email,
-                    prefixIcon: const Icon(Icons.email_outlined),
-                  ),
+                  decoration: InputDecoration(labelText: l10n.email),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
-                    if (value == null || !value.contains('@')) {
+                    if (value == null ||
+                        value.trim().isEmpty ||
+                        !value.contains('@')) {
                       return l10n.invalidEmailError;
                     }
                     return null;
@@ -93,6 +115,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                     padding: const EdgeInsets.only(bottom: 16),
                     child: Text(
                       _errorMessage!,
+                      textAlign: TextAlign.center,
                       style: const TextStyle(color: Colors.red),
                     ),
                   ),
@@ -101,7 +124,11 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                     padding: const EdgeInsets.only(bottom: 16),
                     child: Text(
                       _successMessage!,
-                      style: TextStyle(color: theme.colorScheme.primary),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
 
@@ -112,6 +139,12 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                     onPressed: _sendResetEmail,
                     child: Text(l10n.sendResetEmail),
                   ),
+
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(l10n.backToLogin), // Usa la nuova chiave!
+                ),
               ],
             ),
           ),

@@ -210,5 +210,14 @@
         "type": "String"
       }
     }
-  }
+  },
+
+  "loginWelcome": "¡Bienvenido de nuevo!",
+  "loginSubtitle": "Inicia sesión en tu cuenta para continuar.",
+  "loginError": "Correo o contraseña incorrectos. Por favor, inténtalo de nuevo.",
+  "noAccountPrompt": "¿No tienes una cuenta?",
+  "signupSubtitle": "Crea una cuenta para guardar tus datos",
+  "alreadyHaveAccountPrompt": "¿Ya tienes una cuenta?",
+  "forgotPasswordSubtitle": "¡No hay problema! Introduce tu correo y te ayudaremos.",
+  "backToLogin": "Volver a Iniciar Sesión"
 }

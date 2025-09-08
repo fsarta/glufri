@@ -209,5 +209,14 @@
       "placeholders": {
           "productName": { "type": "String" }
       }
-  }
+  },
+
+  "loginWelcome": "Bentornato!",
+  "loginSubtitle": "Accedi al tuo account per continuare.",
+  "loginError": "Email o password errati. Riprova.",
+  "noAccountPrompt": "Non hai un account?",
+  "signupSubtitle": "Crea un account per salvare i tuoi dati",
+  "alreadyHaveAccountPrompt": "Hai già un account?",
+  "forgotPasswordSubtitle": "Nessun problema! Inserisci la tua email e ti aiuteremo.",
+  "backToLogin": "Torna al Login"
 }

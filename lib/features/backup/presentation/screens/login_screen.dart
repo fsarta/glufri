@@ -19,33 +19,49 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
+  String? _errorMessage;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   Future<void> _login() async {
-    if (_formKey.currentState?.validate() ?? false) {
-      setState(() => _isLoading = true);
-      try {
-        await ref
-            .read(authRepositoryProvider)
-            .signInWithEmailAndPassword(
-              _emailController.text,
-              _passwordController.text,
-            );
-        //if (mounted) Navigator.of(context).pop(); // Torna indietro dopo il login
-      } catch (e) {
-        // Mostra errore
-      } finally {
-        if (mounted) setState(() => _isLoading = false);
-      }
+    setState(() => _errorMessage = null);
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+
+    setState(() => _isLoading = true);
+    try {
+      await ref
+          .read(authRepositoryProvider)
+          .signInWithEmailAndPassword(
+            _emailController.text.trim(),
+            _passwordController.text,
+          );
+      // La logica di pop è gestita globalmente
+    } catch (e) {
+      if (mounted)
+        setState(
+          () => _errorMessage = "Email o password errati.",
+        ); // TODO: Localizza
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
   Future<void> _loginWithGoogle() async {
+    setState(() => _errorMessage = null);
     setState(() => _isLoading = true);
     try {
       await ref.read(authRepositoryProvider).signInWithGoogle();
-      // if (mounted) Navigator.of(context).pop();
+      // La logica di pop è gestita globalmente
     } catch (e) {
-      // Mostra errore
+      if (mounted)
+        setState(
+          () => _errorMessage = "Login con Google fallito. Riprova.",
+        ); // TODO: Localizza
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -54,64 +70,132 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.login)),
-      body: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(labelText: l10n.email),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(labelText: l10n.password),
-                obscureText: true /* validator */,
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const ForgotPasswordScreen(),
-                      ),
-                    );
-                  },
-                  child: Text(l10n.forgotPassword),
+      appBar: AppBar(
+        // Rimuoviamo l'ombra per un look più piatto e integrato
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: isDark ? Colors.white : Colors.black,
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // --- 1. HEADER GRAFICO ---
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 40.0),
+                  child: Icon(
+                    Icons.shopping_cart_checkout_rounded,
+                    size: 80,
+                    color: theme.colorScheme.primary,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              _isLoading
-                  ? const CircularProgressIndicator()
-                  : ElevatedButton(
-                      onPressed: _login,
-                      child: Text(l10n.loginAction),
+                Text(
+                  l10n.loginWelcome, // "Bentornato!"
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.headlineLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  l10n.loginSubtitle, // "Accedi per continuare"
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.titleMedium,
+                ),
+                const SizedBox(height: 48),
+
+                // --- 2. CAMPI DI INPUT ---
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(labelText: l10n.email),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) =>
+                      (value?.isEmpty ?? true) ? l10n.requiredField : null,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(labelText: l10n.password),
+                  obscureText: true,
+                  validator: (value) =>
+                      (value?.isEmpty ?? true) ? l10n.requiredField : null,
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const ForgotPasswordScreen(),
+                        ),
+                      );
+                    },
+                    child: Text(l10n.forgotPassword),
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // --- MOSTRA MESSAGGIO DI ERRORE ---
+                if (_errorMessage != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: Text(
+                      _errorMessage!,
+                      style: const TextStyle(color: Colors.red),
+                      textAlign: TextAlign.center,
                     ),
-              const SizedBox(height: 16),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (ctx) => const SignUpScreen()),
-                  );
-                },
-                child: Text(l10n.noAccount),
-              ),
-              // Aggiungere link per "Password dimenticata"
-              Text(l10n.or),
-              ElevatedButton.icon(
-                onPressed: _loginWithGoogle,
-                icon: const Icon(Icons.g_mobiledata),
-                label: Text(l10n.loginWithGoogle),
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(200, 48),
+                  ),
+
+                // --- 3. PULSANTI D'AZIONE ---
+                if (_isLoading)
+                  const Center(child: CircularProgressIndicator())
+                else
+                  FilledButton(
+                    onPressed: _login,
+                    child: Text(l10n.loginAction),
+                  ),
+                const SizedBox(height: 16),
+                ElevatedButton.icon(
+                  onPressed: _loginWithGoogle,
+                  icon: const Icon(
+                    Icons.g_mobiledata,
+                  ), // Dovresti usare un logo Google
+                  label: Text(l10n.loginWithGoogle),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: isDark ? Colors.white : Colors.black,
+                    foregroundColor: isDark ? Colors.black : Colors.white,
+                  ),
                 ),
-              ),
-            ],
+
+                // --- 4. FOOTER PER REGISTRAZIONE ---
+                const SizedBox(height: 32),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(l10n.noAccountPrompt), // "Non hai un account?"
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) => const SignUpScreen(),
+                          ),
+                        );
+                      },
+                      child: Text(l10n.signup),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+              ],
+            ),
           ),
         ),
       ),

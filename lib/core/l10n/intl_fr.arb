@@ -210,5 +210,14 @@
         "type": "String"
       }
     }
-  }
+  },
+
+  "loginWelcome": "Content de vous revoir !",
+  "loginSubtitle": "Connectez-vous à votre compte pour continuer.",
+  "loginError": "Email ou mot de passe invalide. Veuillez réessayer.",
+  "noAccountPrompt": "Pas de compte ?",
+  "signupSubtitle": "Créez un compte pour sauvegarder vos données",
+  "alreadyHaveAccountPrompt": "Déjà un compte ?",
+  "forgotPasswordSubtitle": "Aucun problème ! Saisissez votre e-mail et nous vous aiderons.",
+  "backToLogin": "Retour à la connexion"
 }

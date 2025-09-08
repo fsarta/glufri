@@ -210,5 +210,14 @@
         "type": "String"
       }
     }
-  }
+  },
+
+  "loginWelcome": "Willkommen zurück!",
+  "loginSubtitle": "Melde dich bei deinem Konto an, um fortzufahren.",
+  "loginError": "Ungültige E-Mail oder Passwort. Bitte versuche es erneut.",
+  "noAccountPrompt": "Kein Konto?",
+  "signupSubtitle": "Erstelle ein Konto, um deine Daten zu speichern",
+  "alreadyHaveAccountPrompt": "Hast du bereits ein Konto?",
+  "forgotPasswordSubtitle": "Kein Problem! Gib deine E-Mail ein und wir helfen dir.",
+  "backToLogin": "Zurück zur Anmeldung"
 }

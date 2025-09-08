@@ -210,5 +210,14 @@
         "type": "String" 
       }
     }
-  }
+  },
+
+  "loginWelcome": "Welcome Back!",
+  "loginSubtitle": "Login to your account to continue.",
+  "loginError": "Invalid email or password. Please try again.",
+  "noAccountPrompt": "Don't have an account?",
+  "signupSubtitle": "Create an account to save your data",
+  "alreadyHaveAccountPrompt": "Already have an account?",
+  "forgotPasswordSubtitle": "No problem! Enter your email and we'll help you out.",
+  "backToLogin": "Back to Login"
 }

@@ -494,4 +494,30 @@ class AppLocalizationsFr extends AppLocalizations {
   String deleteFavoriteConfirmationBody(String productName) {
     return 'Êtes-vous sûr de vouloir supprimer \'$productName\' de vos favoris ?';
   }
+
+  @override
+  String get loginWelcome => 'Content de vous revoir !';
+
+  @override
+  String get loginSubtitle => 'Connectez-vous à votre compte pour continuer.';
+
+  @override
+  String get loginError =>
+      'Email ou mot de passe invalide. Veuillez réessayer.';
+
+  @override
+  String get noAccountPrompt => 'Pas de compte ?';
+
+  @override
+  String get signupSubtitle => 'Créez un compte pour sauvegarder vos données';
+
+  @override
+  String get alreadyHaveAccountPrompt => 'Déjà un compte ?';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'Aucun problème ! Saisissez votre e-mail et nous vous aiderons.';
+
+  @override
+  String get backToLogin => 'Retour à la connexion';
 }

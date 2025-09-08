@@ -973,6 +973,54 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Sei sicuro di voler eliminare \'{productName}\' dai preferiti?'**
   String deleteFavoriteConfirmationBody(String productName);
+
+  /// No description provided for @loginWelcome.
+  ///
+  /// In it, this message translates to:
+  /// **'Bentornato!'**
+  String get loginWelcome;
+
+  /// No description provided for @loginSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Accedi al tuo account per continuare.'**
+  String get loginSubtitle;
+
+  /// No description provided for @loginError.
+  ///
+  /// In it, this message translates to:
+  /// **'Email o password errati. Riprova.'**
+  String get loginError;
+
+  /// No description provided for @noAccountPrompt.
+  ///
+  /// In it, this message translates to:
+  /// **'Non hai un account?'**
+  String get noAccountPrompt;
+
+  /// No description provided for @signupSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Crea un account per salvare i tuoi dati'**
+  String get signupSubtitle;
+
+  /// No description provided for @alreadyHaveAccountPrompt.
+  ///
+  /// In it, this message translates to:
+  /// **'Hai già un account?'**
+  String get alreadyHaveAccountPrompt;
+
+  /// No description provided for @forgotPasswordSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun problema! Inserisci la tua email e ti aiuteremo.'**
+  String get forgotPasswordSubtitle;
+
+  /// No description provided for @backToLogin.
+  ///
+  /// In it, this message translates to:
+  /// **'Torna al Login'**
+  String get backToLogin;
 }
 
 class _AppLocalizationsDelegate
