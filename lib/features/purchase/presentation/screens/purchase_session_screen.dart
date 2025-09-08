@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/budget/presentation/providers/budget_providers.dart';
+import 'package:glufri/features/favorites/data/models/favorite_product_model.dart';
+import 'package:glufri/features/favorites/presentation/providers/favorite_providers.dart';
 import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
 import 'package:glufri/features/monetization/presentation/screens/upsell_screen.dart';
 import 'package:glufri/features/purchase/data/models/purchase_model.dart';
@@ -219,143 +221,148 @@ Widget _buildActionButtons(
   WidgetRef ref,
   AppLocalizations l10n,
 ) {
+  final isPro = ref.watch(isProUserProvider);
+
   return Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    padding: const EdgeInsets.all(8.0),
+    child: Column(
+      // Trasformiamo in Column per avere due righe
       children: [
-        Expanded(
-          child: ElevatedButton.icon(
-            icon: const Icon(Icons.add),
-            label: Text(l10n.addItem),
-            onPressed: () => _showAddItemDialog(context, ref),
-          ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: ElevatedButton.icon(
-            icon: const Icon(Icons.qr_code_scanner),
-            label: Text(l10n.scanBarcode),
-            onPressed: () async {
-              final barcode = await Navigator.of(context).push<String>(
-                MaterialPageRoute(
-                  builder: (ctx) => const BarcodeScannerScreen(),
-                ),
-              );
-
-              if (barcode != null && context.mounted) {
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (ctx) =>
-                      const Center(child: CircularProgressIndicator()),
-                );
-
-                // 1. Controlla se l'utente è Pro PRIMA di fare la ricerca nella cronologia
-                final isPro = ref.read(isProUserProvider);
-
-                // Prepariamo i future, ma eseguiremo quello della cronologia solo se necessario
-                final apiResultFuture = ref.read(
-                  offProductProvider(barcode).future,
-                );
-
-                // Future condizionale per la cronologia
-                final Future<ProductPriceHistory?> historyResultFuture = isPro
-                    ? ref.read(productHistoryProvider(barcode).future)
-                    : Future.value(
-                        null,
-                      ); // Se non è Pro, il risultato sarà sempre null
-
-                // Usiamo 'Future.wait<dynamic>' per evitare problemi con i tipi
-                final List<dynamic> results = await Future.wait([
-                  apiResultFuture,
-                  historyResultFuture,
-                ]);
-
-                final apiResult = results[0]; // Questo è OffProduct?
-                final historyResult = results[1] as ProductPriceHistory?;
-
-                // Ora che abbiamo entrambi i risultati, chiudiamo il dialog di caricamento
-                if (context.mounted) Navigator.pop(context);
-
-                // 2. Se abbiamo trovato una cronologia, la mostriamo
-                if (context.mounted && historyResult != null) {
-                  await _showPriceHistoryBottomSheet(
-                    context,
-                    l10n,
-                    historyResult,
+        // --- Prima riga con i pulsanti principali ---
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Expanded(
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.add),
+                label: Text(l10n.addItem),
+                onPressed: () => _showAddItemDialog(context, ref),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.qr_code_scanner),
+                label: Text(l10n.scanBarcode),
+                onPressed: () async {
+                  final barcode = await Navigator.of(context).push<String>(
+                    MaterialPageRoute(
+                      builder: (ctx) => const BarcodeScannerScreen(),
+                    ),
                   );
-                }
 
-                // Aggiungiamo un piccolo feedback visivo per gli utenti non-Pro
-                // che scansionano un prodotto che avrebbero in cronologia (ma non possono vederla)
-                if (context.mounted && !isPro) {
-                  // Controlliamo in background (senza 'await') se ci sarebbero stati risultati
-                  ref.read(productHistoryProvider(barcode).future).then((
-                    history,
-                  ) {
-                    if (history != null && context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text(
-                            "Passa a Pro per vedere la cronologia prezzi!",
-                          ), // TODO: Localizza
-                          action: SnackBarAction(
-                            label: "SCOPRI", // TODO: Localizza
-                            onPressed: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => const UpsellScreen(),
-                              ),
-                            ),
-                          ),
-                        ),
+                  if (barcode != null && context.mounted) {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (ctx) =>
+                          const Center(child: CircularProgressIndicator()),
+                    );
+
+                    // 1. Controlla se l'utente è Pro PRIMA di fare la ricerca nella cronologia
+                    final isPro = ref.read(isProUserProvider);
+
+                    // Prepariamo i future, ma eseguiremo quello della cronologia solo se necessario
+                    final apiResultFuture = ref.read(
+                      offProductProvider(barcode).future,
+                    );
+
+                    // Future condizionale per la cronologia
+                    final Future<ProductPriceHistory?> historyResultFuture =
+                        isPro
+                        ? ref.read(productHistoryProvider(barcode).future)
+                        : Future.value(
+                            null,
+                          ); // Se non è Pro, il risultato sarà sempre null
+
+                    // Usiamo 'Future.wait<dynamic>' per evitare problemi con i tipi
+                    final List<dynamic> results = await Future.wait([
+                      apiResultFuture,
+                      historyResultFuture,
+                    ]);
+
+                    final apiResult = results[0]; // Questo è OffProduct?
+                    final historyResult = results[1] as ProductPriceHistory?;
+
+                    // Ora che abbiamo entrambi i risultati, chiudiamo il dialog di caricamento
+                    if (context.mounted) Navigator.pop(context);
+
+                    // 2. Se abbiamo trovato una cronologia, la mostriamo
+                    if (context.mounted && historyResult != null) {
+                      await _showPriceHistoryBottomSheet(
+                        context,
+                        l10n,
+                        historyResult,
                       );
                     }
-                  });
-                }
 
-                // 3. Apriamo il dialogo di aggiunta prodotto, come prima
-                if (context.mounted) {
-                  // L'apiResult qui potrebbe essere un `OffProduct` o `null`
-                  final offProduct = apiResult is OffProduct ? apiResult : null;
+                    // Aggiungiamo un piccolo feedback visivo per gli utenti non-Pro
+                    // che scansionano un prodotto che avrebbero in cronologia (ma non possono vederla)
+                    if (context.mounted && !isPro) {
+                      // Controlliamo in background (senza 'await') se ci sarebbero stati risultati
+                      ref.read(productHistoryProvider(barcode).future).then((
+                        history,
+                      ) {
+                        if (history != null && context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: const Text(
+                                "Passa a Pro per vedere la cronologia prezzi!",
+                              ), // TODO: Localizza
+                              action: SnackBarAction(
+                                label: "SCOPRI", // TODO: Localizza
+                                onPressed: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => const UpsellScreen(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                      });
+                    }
 
-                  _showAddItemDialog(
-                    context,
-                    ref,
-                    barcode: barcode,
-                    offProduct: offProduct,
-                    // Pre-compiliamo il prezzo con l'ultimo prezzo pagato!
-                    lastPrice: historyResult?.lastPurchaseItem.unitPrice,
-                  );
-                }
+                    // 3. Apriamo il dialogo di aggiunta prodotto, come prima
+                    if (context.mounted) {
+                      // L'apiResult qui potrebbe essere un `OffProduct` o `null`
+                      final offProduct = apiResult is OffProduct
+                          ? apiResult
+                          : null;
 
-                /* try {
-                  final productInfo = await ref.read(
-                    offProductProvider(barcode).future,
-                  );
-                  Navigator.pop(context); // Chiude il loading dialog
-
-                  // Ora apri il dialog di aggiunta prodotto, pre-popolato
-                  _showAddItemDialog(
-                    context,
-                    ref,
-                    barcode: barcode,
-                    offProduct: productInfo,
-                  );
-                } catch (e) {
-                  Navigator.pop(
-                    context,
-                  ); // Chiude il loading dialog in caso di errore
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(l10n.productNotFoundOrNetworkError)),
-                  );
-                  // Apri comunque il dialog per l'inserimento manuale
-                  _showAddItemDialog(context, ref, barcode: barcode);
-                } */
-              }
-            },
-          ),
+                      _showAddItemDialog(
+                        context,
+                        ref,
+                        barcode: barcode,
+                        offProduct: offProduct,
+                        // Pre-compiliamo il prezzo con l'ultimo prezzo pagato!
+                        lastPrice: historyResult?.lastPurchaseItem.unitPrice,
+                      );
+                    }
+                  }
+                },
+              ),
+            ),
+          ],
         ),
+
+        if (isPro) ...[
+          const SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              icon: const Icon(Icons.favorite),
+              label: const Text('Aggiungi da Preferiti'), // TODO: Localizza
+              onPressed: () async {
+                // Apriamo un nuovo BottomSheet per mostrare i preferiti
+                final favorites = await ref.read(favoriteListProvider.future);
+                if (context.mounted) {
+                  _showFavoritesPicker(context, ref, favorites);
+                }
+              },
+            ),
+          ),
+        ],
       ],
     ),
   );
@@ -447,6 +454,7 @@ void _showAddItemDialog(
   }
 
   bool isGlutenFree = item?.isGlutenFree ?? false;
+  bool saveAsFavorite = false;
 
   showModalBottomSheet(
     context: context,
@@ -619,7 +627,22 @@ void _showAddItemDialog(
                       controlAffinity: ListTileControlAffinity.leading,
                     ),
 
-                    const SizedBox(height: 24),
+                    // --- NUOVO CHECKBOX (da aggiungere PRIMA del pulsante Salva) ---
+                    // Lo mostriamo solo se l'item non è già un preferito (logica futura)
+                    // e se è un nuovo prodotto
+                    if (item == null)
+                      CheckboxListTile(
+                        title: const Text(
+                          "Aggiungi ai prodotti preferiti",
+                        ), // TODO: Localizza
+                        value: saveAsFavorite,
+                        onChanged: (val) =>
+                            setStateDialog(() => saveAsFavorite = val ?? false),
+                        controlAffinity: ListTileControlAffinity.leading,
+                      ),
+
+                    const SizedBox(height: 8),
+
                     FilledButton(
                       child: Text(isEditing ? l10n.update : l10n.addItem),
                       onPressed: () async {
@@ -664,6 +687,12 @@ void _showAddItemDialog(
                           imagePath: finalImagePath,
                           isGlutenFree: isGlutenFree,
                         );
+
+                        if (saveAsFavorite) {
+                          await ref
+                              .read(favoriteActionsProvider)
+                              .addFavoriteFromItem(newItem);
+                        }
 
                         // 5. Aggiorna lo stato del carrello
                         final notifier = ref.read(cartProvider.notifier);
@@ -918,4 +947,45 @@ class _TotalSummarySection extends ConsumerWidget {
       ),
     );
   }
+}
+
+void _showFavoritesPicker(
+  BuildContext context,
+  WidgetRef ref,
+  List<FavoriteProductModel> favorites,
+) {
+  if (favorites.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Non hai prodotti preferiti.")),
+    ); // TODO
+    return;
+  }
+
+  showModalBottomSheet(
+    context: context,
+    builder: (ctx) {
+      return ListView.builder(
+        itemCount: favorites.length,
+        itemBuilder: (context, index) {
+          final product = favorites[index];
+          return ListTile(
+            title: Text(product.name),
+            leading: Icon(product.isGlutenFree ? Icons.verified : Icons.label),
+            onTap: () {
+              final newItem = PurchaseItemModel(
+                id: const Uuid().v4(),
+                name: product.name,
+                unitPrice: product.defaultPrice ?? 0.0,
+                quantity: 1, // Di default 1, poi l'utente lo modifica
+                barcode: product.barcode,
+                isGlutenFree: product.isGlutenFree,
+              );
+              ref.read(cartProvider.notifier).addItem(newItem);
+              Navigator.of(ctx).pop();
+            },
+          );
+        },
+      );
+    },
+  );
 }

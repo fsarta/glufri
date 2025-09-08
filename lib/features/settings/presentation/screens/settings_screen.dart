@@ -7,6 +7,7 @@ import 'package:glufri/core/utils/debug_overrides.dart';
 import 'package:glufri/features/backup/domain/auth_repository.dart';
 import 'package:glufri/features/backup/domain/sync_service.dart';
 import 'package:glufri/features/budget/presentation/screens/budget_screen.dart';
+import 'package:glufri/features/favorites/presentation/screens/favorite_products_screen.dart';
 import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
 import 'package:glufri/features/monetization/presentation/screens/upsell_screen.dart';
 import 'package:glufri/features/purchase/presentation/providers/purchase_providers.dart';
@@ -242,6 +243,28 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       }
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const BudgetScreen()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.favorite_border),
+                    title: const Text(
+                      'Prodotti Preferiti (Pro)',
+                    ), // TODO: Localizza
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                    onTap: () {
+                      if (!isPro) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const UpsellScreen(),
+                          ),
+                        );
+                        return;
+                      }
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const FavoriteProductsScreen(),
+                        ),
                       );
                     },
                   ),
