@@ -219,5 +219,11 @@
   "signupSubtitle": "Erstelle ein Konto, um deine Daten zu speichern",
   "alreadyHaveAccountPrompt": "Hast du bereits ein Konto?",
   "forgotPasswordSubtitle": "Kein Problem! Gib deine E-Mail ein und wir helfen dir.",
-  "backToLogin": "Zurück zur Anmeldung"
+  "backToLogin": "Zurück zur Anmeldung",
+
+  "userGuest": "Gast-Benutzer",
+  "loginToSaveData": "Melde dich an, um deine Daten zu speichern",
+  "shoppingLists": "Einkaufslisten",
+  "monthlyBudget": "Monatliches Budget",
+  "favoriteProducts": "Lieblingsprodukte"
 }

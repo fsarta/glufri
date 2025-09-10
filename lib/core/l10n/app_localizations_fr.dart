@@ -520,4 +520,19 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get backToLogin => 'Retour à la connexion';
+
+  @override
+  String get userGuest => 'Utilisateur Invité';
+
+  @override
+  String get loginToSaveData => 'Connectez-vous pour sauvegarder vos données';
+
+  @override
+  String get shoppingLists => 'Listes de Courses';
+
+  @override
+  String get monthlyBudget => 'Budget Mensuel';
+
+  @override
+  String get favoriteProducts => 'Produits Favoris';
 }

@@ -6,15 +6,11 @@ import 'package:glufri/core/utils/debug_data_seeder.dart';
 import 'package:glufri/core/utils/debug_overrides.dart';
 import 'package:glufri/features/backup/domain/auth_repository.dart';
 import 'package:glufri/features/backup/domain/sync_service.dart';
-import 'package:glufri/features/budget/presentation/screens/budget_screen.dart';
-import 'package:glufri/features/favorites/presentation/screens/favorite_products_screen.dart';
 import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
 import 'package:glufri/features/monetization/presentation/screens/upsell_screen.dart';
 import 'package:glufri/features/purchase/presentation/providers/purchase_providers.dart';
 import 'package:glufri/features/settings/presentation/providers/settings_provider.dart';
 import 'package:glufri/features/settings/presentation/screens/privacy_policy_screen.dart';
-import 'package:glufri/features/shopping_list/presentation/screens/shopping_lists_screen.dart';
-import 'package:glufri/generated/l10n.dart'; // Ensure this import is present for S
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});

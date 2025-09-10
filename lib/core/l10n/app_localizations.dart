@@ -1021,6 +1021,36 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Torna al Login'**
   String get backToLogin;
+
+  /// No description provided for @userGuest.
+  ///
+  /// In it, this message translates to:
+  /// **'Utente Ospite'**
+  String get userGuest;
+
+  /// No description provided for @loginToSaveData.
+  ///
+  /// In it, this message translates to:
+  /// **'Accedi per salvare i tuoi dati'**
+  String get loginToSaveData;
+
+  /// No description provided for @shoppingLists.
+  ///
+  /// In it, this message translates to:
+  /// **'Liste della Spesa'**
+  String get shoppingLists;
+
+  /// No description provided for @monthlyBudget.
+  ///
+  /// In it, this message translates to:
+  /// **'Budget Mensile'**
+  String get monthlyBudget;
+
+  /// No description provided for @favoriteProducts.
+  ///
+  /// In it, this message translates to:
+  /// **'Prodotti Preferiti'**
+  String get favoriteProducts;
 }
 
 class _AppLocalizationsDelegate

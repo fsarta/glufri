@@ -516,4 +516,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backToLogin => 'Back to Login';
+
+  @override
+  String get userGuest => 'Guest User';
+
+  @override
+  String get loginToSaveData => 'Log in to save your data';
+
+  @override
+  String get shoppingLists => 'Shopping Lists';
+
+  @override
+  String get monthlyBudget => 'Monthly Budget';
+
+  @override
+  String get favoriteProducts => 'Favorite Products';
 }

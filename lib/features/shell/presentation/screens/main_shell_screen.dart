@@ -90,15 +90,15 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.list_alt_outlined),
-            label: 'Liste', // Todo: l10n.shoppingLists
+            label: l10n.shoppingLists,
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.assessment_outlined),
-            label: 'Budget', // Todo: l10n.budget
+            label: l10n.monthlyBudget,
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.favorite_border),
-            label: 'Preferiti', // Todo: l10n.favoriteProducts
+            label: l10n.favoriteProducts,
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.settings),

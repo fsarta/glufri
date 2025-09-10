@@ -520,4 +520,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get backToLogin => 'Volver a Iniciar Sesión';
+
+  @override
+  String get userGuest => 'Usuario Invitado';
+
+  @override
+  String get loginToSaveData => 'Inicia sesión para guardar tus datos';
+
+  @override
+  String get shoppingLists => 'Listas de Compra';
+
+  @override
+  String get monthlyBudget => 'Presupuesto Mensual';
+
+  @override
+  String get favoriteProducts => 'Productos Favoritos';
 }

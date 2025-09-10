@@ -219,5 +219,11 @@
   "signupSubtitle": "Créez un compte pour sauvegarder vos données",
   "alreadyHaveAccountPrompt": "Déjà un compte ?",
   "forgotPasswordSubtitle": "Aucun problème ! Saisissez votre e-mail et nous vous aiderons.",
-  "backToLogin": "Retour à la connexion"
+  "backToLogin": "Retour à la connexion",
+
+  "userGuest": "Utilisateur Invité",
+  "loginToSaveData": "Connectez-vous pour sauvegarder vos données",
+  "shoppingLists": "Listes de Courses",
+  "monthlyBudget": "Budget Mensuel",
+  "favoriteProducts": "Produits Favoris"
 }

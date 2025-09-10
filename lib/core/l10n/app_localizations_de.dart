@@ -523,4 +523,19 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get backToLogin => 'Zurück zur Anmeldung';
+
+  @override
+  String get userGuest => 'Gast-Benutzer';
+
+  @override
+  String get loginToSaveData => 'Melde dich an, um deine Daten zu speichern';
+
+  @override
+  String get shoppingLists => 'Einkaufslisten';
+
+  @override
+  String get monthlyBudget => 'Monatliches Budget';
+
+  @override
+  String get favoriteProducts => 'Lieblingsprodukte';
 }
