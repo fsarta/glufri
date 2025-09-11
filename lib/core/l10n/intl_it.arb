@@ -21,6 +21,7 @@
   "start": "Inizia",
   "store": "Negozio",
   "total": "Totale",
+  "unit": "Unità",
   "undoAction": "ANNULLA",
   "update": "Aggiorna",
 
@@ -203,6 +204,7 @@
   "totalOther": "Totale Altro",
   "totalOverall": "Totale Complessivo",
   "trackedWith": "Tracciato con Glufri App",
+  "weightVolumePieces": "Peso / Volume / Pezzi",
 
   "@--- Liste Spesa ---": {},
   "addFromFavorites": "Aggiungi da Preferiti",
@@ -351,6 +353,7 @@
   },
   "invalidValue": "Valore non valido",
   "listNotFound": "Lista non trovata o eliminata.",
+  "optionalDetails": "Dettagli opzionali",
   "pdfCreationError": "Errore durante la creazione del PDF.",
   "purchaseDeletedSuccess": "Acquisto eliminato con successo.",
   "requiredField": "Campo obbligatorio",

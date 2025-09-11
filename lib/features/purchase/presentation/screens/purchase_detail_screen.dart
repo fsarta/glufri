@@ -166,6 +166,9 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
           ...purchase.items.map((item) {
             final hasImage =
                 item.imagePath != null && item.imagePath!.isNotEmpty;
+            final priceInfo =
+                '${item.quantity} x ${NumberFormat.currency(locale: 'it_IT', symbol: '€').format(item.unitPrice)}';
+            final unitPriceInfo = item.pricePerStandardUnitDisplayString;
             return ListTile(
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
@@ -197,7 +200,9 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
                 ],
               ),
               subtitle: Text(
-                '${item.quantity} x ${item.unitPrice.toStringAsFixed(2)} €',
+                unitPriceInfo.isNotEmpty
+                    ? '$priceInfo  •  $unitPriceInfo'
+                    : priceInfo,
               ),
               trailing: Text(
                 '${item.subtotal.toStringAsFixed(2)} €',

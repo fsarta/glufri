@@ -218,6 +218,12 @@ abstract class AppLocalizations {
   /// **'Totale'**
   String get total;
 
+  /// No description provided for @unit.
+  ///
+  /// In it, this message translates to:
+  /// **'Unità'**
+  String get unit;
+
   /// No description provided for @undoAction.
   ///
   /// In it, this message translates to:
@@ -842,6 +848,12 @@ abstract class AppLocalizations {
   /// **'Tracciato con Glufri App'**
   String get trackedWith;
 
+  /// No description provided for @weightVolumePieces.
+  ///
+  /// In it, this message translates to:
+  /// **'Peso / Volume / Pezzi'**
+  String get weightVolumePieces;
+
   /// No description provided for @addFromFavorites.
   ///
   /// In it, this message translates to:
@@ -1333,6 +1345,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Lista non trovata o eliminata.'**
   String get listNotFound;
+
+  /// No description provided for @optionalDetails.
+  ///
+  /// In it, this message translates to:
+  /// **'Dettagli opzionali'**
+  String get optionalDetails;
 
   /// No description provided for @pdfCreationError.
   ///

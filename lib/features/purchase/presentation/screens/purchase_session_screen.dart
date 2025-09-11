@@ -13,6 +13,7 @@ import 'package:glufri/features/monetization/presentation/screens/upsell_screen.
 import 'package:glufri/features/purchase/data/models/purchase_model.dart';
 import 'package:glufri/features/purchase/domain/entities/off_product.dart';
 import 'package:glufri/features/purchase/domain/entities/product_price_history.dart';
+import 'package:glufri/features/purchase/domain/entities/unit_of_measure.dart';
 import 'package:glufri/features/purchase/presentation/providers/cart_provider.dart';
 import 'package:glufri/features/purchase/data/models/purchase_item_model.dart';
 import 'package:glufri/features/purchase/presentation/providers/product_api_provider.dart';
@@ -142,6 +143,25 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
                     itemCount: cartState.items.length,
                     itemBuilder: (context, index) {
                       final item = cartState.items[index];
+                      if (index == 0) {
+                        // Stampiamo solo per il primo item per non intasare la console
+                        debugPrint('--- [DEBUG 3: VISUALIZZAZIONE UI] ---');
+                        debugPrint('Visualizzando item: ${item.name}');
+                        debugPrint(
+                          'Item dal provider ha unitValue: ${item.unitValue}',
+                        );
+                        debugPrint(
+                          'Item dal provider ha unitOfMeasure: ${item.unitOfMeasure}',
+                        );
+                        debugPrint(
+                          'Risultato del calcolo: ${item.pricePerStandardUnitDisplayString}',
+                        );
+                        debugPrint('------------------------------------');
+                      }
+                      final priceInfo =
+                          '${item.quantity} x ${NumberFormat.currency(locale: 'it_IT', symbol: '€').format(item.unitPrice)}';
+                      final unitPriceInfo =
+                          item.pricePerStandardUnitDisplayString;
                       return Slidable(
                         key: ValueKey(item.id),
                         endActionPane: ActionPane(
@@ -169,7 +189,9 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
                               : const Icon(Icons.shopping_cart_outlined),
                           title: Text(item.name),
                           subtitle: Text(
-                            '${item.quantity} x ${item.unitPrice.toStringAsFixed(2)} €',
+                            unitPriceInfo.isNotEmpty
+                                ? '$priceInfo  •  $unitPriceInfo' // Se c'è prezzo/kg, lo mostriamo
+                                : priceInfo, // Altrimenti solo il normale sottotitolo
                           ),
                           trailing: Text(
                             '${item.subtotal.toStringAsFixed(2)} €',
@@ -449,6 +471,11 @@ void _showAddItemDialog(
   bool isGlutenFree = item?.isGlutenFree ?? false;
   bool saveAsFavorite = false;
 
+  final unitValueController = TextEditingController(
+    text: item?.unitValue?.toString().replaceAll('.', ',') ?? '',
+  );
+  String? selectedUnit = item?.unitOfMeasure;
+
   showModalBottomSheet(
     context: context,
     isScrollControlled: true, // Fondamentale per far spazio alla tastiera
@@ -604,6 +631,54 @@ void _showAddItemDialog(
                     ),
 
                     const SizedBox(height: 16), // Spazio prima del checkbox
+
+                    ExpansionTile(
+                      title: Text(l10n.optionalDetails),
+                      tilePadding: EdgeInsets.zero,
+                      initiallyExpanded: item?.unitValue != null,
+                      children: [
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: unitValueController,
+                                decoration: InputDecoration(
+                                  labelText: l10n.weightVolumePieces,
+                                ),
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
+                                      decimal: true,
+                                    ),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: DropdownButtonFormField<String>(
+                                value: selectedUnit,
+                                hint: Text(l10n.unit),
+                                items: UnitOfMeasure.values
+                                    .map(
+                                      (unit) => DropdownMenuItem(
+                                        value: unit.name,
+                                        child: Text(
+                                          unit.name,
+                                        ), // Potresti localizzare anche questi
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (value) {
+                                  setStateDialog(() {
+                                    selectedUnit = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+
                     CheckboxListTile(
                       title: Text(l10n.glutenFreeProduct),
                       value: isGlutenFree,
@@ -644,6 +719,8 @@ void _showAddItemDialog(
                         }
 
                         // 2. Converte i valori in modo sicuro (gestendo virgola/punto)
+                        final unitValueText = unitValueController.text
+                            .replaceAll(',', '.');
                         final priceText = priceController.text.replaceAll(
                           ',',
                           '.',
@@ -652,6 +729,15 @@ void _showAddItemDialog(
                           ',',
                           '.',
                         );
+
+                        debugPrint('--- [DEBUG 1: CATTURA UI] ---');
+                        debugPrint(
+                          'Valore del peso/volume (stringa): "${unitValueController.text}"',
+                        );
+                        debugPrint(
+                          'Unità di misura selezionata: $selectedUnit',
+                        );
+                        debugPrint('----------------------------------');
 
                         final price = double.parse(priceText);
                         final quantity = double.parse(quantityText);
@@ -677,7 +763,23 @@ void _showAddItemDialog(
                           barcode: barcode ?? item?.barcode,
                           imagePath: finalImagePath,
                           isGlutenFree: isGlutenFree,
+                          unitValue: unitValueText.isEmpty
+                              ? null
+                              : double.tryParse(unitValueText),
+                          unitOfMeasure: selectedUnit,
                         );
+
+                        debugPrint('--- [DEBUG 2: CREAZIONE MODELLO] ---');
+                        debugPrint(
+                          'Oggetto newItem.unitValue: ${newItem.unitValue}',
+                        );
+                        debugPrint(
+                          'Oggetto newItem.unitOfMeasure: ${newItem.unitOfMeasure}',
+                        );
+                        debugPrint(
+                          'Calcolo prezzo/unità: ${newItem.pricePerStandardUnitDisplayString}',
+                        );
+                        debugPrint('----------------------------------');
 
                         if (saveAsFavorite) {
                           await ref

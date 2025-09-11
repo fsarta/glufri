@@ -66,6 +66,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get total => 'Gesamt';
 
   @override
+  String get unit => 'Einheit';
+
+  @override
   String get undoAction => 'RÜCKGÄNGIG';
 
   @override
@@ -429,6 +432,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get trackedWith => 'Verfolgt mit Glufri App';
 
   @override
+  String get weightVolumePieces => 'Gewicht / Volumen / Stück';
+
+  @override
   String get addFromFavorites => 'Aus Favoriten hinzufügen';
 
   @override
@@ -699,6 +705,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get listNotFound => 'Liste nicht gefunden oder gelöscht.';
+
+  @override
+  String get optionalDetails => 'Optionale Details';
 
   @override
   String get pdfCreationError => 'Fehler beim Erstellen der PDF-Datei.';

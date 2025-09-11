@@ -24,13 +24,15 @@ class PurchaseItemModelAdapter extends TypeAdapter<PurchaseItemModel> {
       barcode: fields[4] as String?,
       imagePath: fields[5] as String?,
       isGlutenFree: fields[6] as bool,
+      unitValue: fields[7] as double?,
+      unitOfMeasure: fields[8] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, PurchaseItemModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -44,7 +46,11 @@ class PurchaseItemModelAdapter extends TypeAdapter<PurchaseItemModel> {
       ..writeByte(5)
       ..write(obj.imagePath)
       ..writeByte(6)
-      ..write(obj.isGlutenFree);
+      ..write(obj.isGlutenFree)
+      ..writeByte(7)
+      ..write(obj.unitValue)
+      ..writeByte(8)
+      ..write(obj.unitOfMeasure);
   }
 
   @override

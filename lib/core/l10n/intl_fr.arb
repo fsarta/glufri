@@ -21,6 +21,7 @@
   "start": "Commencer",
   "store": "Magasin",
   "total": "Total",
+  "unit": "Unité",
   "undoAction": "ANNULER",
   "update": "Mettre à jour",
 
@@ -203,6 +204,7 @@
   "totalOther": "Total Autre",
   "totalOverall": "Total Global",
   "trackedWith": "Suivi avec l'App Glufri",
+  "weightVolumePieces": "Poids / Volume / Pièces",
 
   "@--- Shopping Lists ---": {},
   "addFromFavorites": "Ajouter des Favoris",
@@ -290,9 +292,6 @@
   "privacyPolicyBody": "Votre vie privée est importante...\n[INSÉRER ICI LE TEXTO COMPLET DE LA POLITIQUE DE CONFIDENTIALITÉ]\n\nDonnées Collectées : L'application sauvegarde les données d'achat exclusivement sur votre appareil. Si vous choisissez d'utiliser la fonction de sauvegarde cloud (fonctionnalité Pro), vos données seront cryptées et sauvegardées sur les serveurs sécurisés de Google Firebase.\n\nPartage de Données : Aucune donnée personnelle ou d'achat n'est partagée avec des tiers.\n...",
   "privacyPolicyTitle": "Politique de Confidentialité",
   "settingsAccountAndBackup": "Compte et Sauvegarde (Pro)",
-  "settingsLanguageFrench": "Français",
-  "settingsLanguageGerman": "Allemand",
-  "settingsLanguageSpanish": "Espagnol",
   "settingsLanguageSystem": "Système",
   "settingsLoginForBackup": "Connectez-vous avec Google pour activer la sauvegarde",
   "settingsLoginFailed": "Échec de la connexion. Veuillez réessayer.",
@@ -341,7 +340,6 @@
   "settingsRestoreFromCloud": "Restaurer depuis le Cloud",
 
   "@--- Dialogs, Messages & Errors ---": {},
-  "budgetSaved": "Budget enregistré !",
   "deleteConfirmationMessage": "Êtes-vous sûr de vouloir supprimer cet achat ? Cette action est irréversible.",
   "deleteConfirmationTitle": "Confirmation de Suppression",
   "exportError": "Erreur d'exportation.",
@@ -355,6 +353,7 @@
   },
   "invalidValue": "Valeur non valide",
   "listNotFound": "Liste non trouvée ou supprimée.",
+  "optionalDetails": "Détails optionnels",
   "pdfCreationError": "Erreur lors de la création du PDF.",
   "purchaseDeletedSuccess": "Achat supprimé avec succès.",
   "requiredField": "Champ obligatoire",

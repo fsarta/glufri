@@ -21,6 +21,7 @@
   "start": "Start",
   "store": "Store",
   "total": "Total",
+  "unit": "Unit",
   "undoAction": "UNDO",
   "update": "Update",
 
@@ -203,6 +204,7 @@
   "totalOther": "Other Total",
   "totalOverall": "Overall Total",
   "trackedWith": "Tracked with Glufri App",
+  "weightVolumePieces": "Weight / Volume / Pieces",
 
   "@--- Shopping Lists ---": {},
   "addFromFavorites": "Add from Favorites",
@@ -351,6 +353,7 @@
   },
   "invalidValue": "Invalid value",
   "listNotFound": "List not found or deleted.",
+  "optionalDetails": "Optional details",
   "pdfCreationError": "Error creating the PDF.",
   "purchaseDeletedSuccess": "Purchase deleted successfully.",
   "requiredField": "Required field",

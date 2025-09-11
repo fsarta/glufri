@@ -21,6 +21,7 @@
   "start": "Empezar",
   "store": "Tienda",
   "total": "Total",
+  "unit": "Unidad",
   "undoAction": "DESHACER",
   "update": "Actualizar",
 
@@ -203,6 +204,7 @@
   "totalOther": "Total Otros",
   "totalOverall": "Total General",
   "trackedWith": "Seguimiento con la App Glufri",
+  "weightVolumePieces": "Peso / Volumen / Piezas",
 
   "@--- Shopping Lists ---": {},
   "addFromFavorites": "Añadir de Favoritos",
@@ -290,9 +292,6 @@
   "privacyPolicyBody": "Tu privacidad es importante...\n[INSERTAR AQUÍ EL TEXTO COMPLETO DE LA POLÍTICA DE PRIVACIDAD]\n\nDatos Recopilados: La app guarda los datos de las compras exclusivamente en tu dispositivo. Si eliges usar la función de copia de seguridad en la nube (funcionalidad Pro), tus datos se encriptarán y se guardarán en los servidores seguros de Google Firebase.\n\nCompartición de Datos: No se comparten datos personales o de compra con terceros.\n...",
   "privacyPolicyTitle": "Política de Privacidad",
   "settingsAccountAndBackup": "Cuenta y Copia de Seguridad (Pro)",
-  "settingsLanguageFrench": "Francés",
-  "settingsLanguageGerman": "Alemán",
-  "settingsLanguageSpanish": "Español",
   "settingsLanguageSystem": "Sistema",
   "settingsLoginForBackup": "Inicia sesión con Google para habilitar la copia de seguridad",
   "settingsLoginFailed": "Error al iniciar sesión. Inténtalo de nuevo.",
@@ -341,7 +340,6 @@
   "settingsRestoreFromCloud": "Restaurar desde la Nube",
 
   "@--- Dialogs, Messages & Errors ---": {},
-  "budgetSaved": "¡Presupuesto guardado!",
   "deleteConfirmationMessage": "¿Estás seguro de que quieres eliminar esta compra? La acción es irreversible.",
   "deleteConfirmationTitle": "Confirmar Eliminación",
   "exportError": "Error de exportación.",
@@ -355,6 +353,7 @@
   },
   "invalidValue": "Valor no válido",
   "listNotFound": "Lista no encontrada o eliminada.",
+  "optionalDetails": "Detalles opcionales",
   "pdfCreationError": "Error al crear el PDF.",
   "purchaseDeletedSuccess": "Compra eliminada con éxito.",
   "requiredField": "Campo obligatorio",

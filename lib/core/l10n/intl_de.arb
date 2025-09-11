@@ -21,6 +21,7 @@
   "start": "Starten",
   "store": "Geschäft",
   "total": "Gesamt",
+  "unit": "Einheit",
   "undoAction": "RÜCKGÄNGIG",
   "update": "Aktualisieren",
 
@@ -203,6 +204,7 @@
   "totalOther": "Anderes Gesamt",
   "totalOverall": "Gesamtsumme",
   "trackedWith": "Verfolgt mit Glufri App",
+  "weightVolumePieces": "Gewicht / Volumen / Stück",
 
   "@--- Shopping Lists ---": {},
   "addFromFavorites": "Aus Favoriten hinzufügen",
@@ -290,9 +292,6 @@
   "privacyPolicyBody": "Deine Privatsphäre ist uns wichtig...\n[VOLLSTÄNDIGER TEXT DER DATENSCHUTZERKLÄRUNG HIER EINFÜGEN]\n\nGesammelte Daten: Die App speichert Einkaufsdaten ausschließlich auf deinem Gerät. Wenn du die Cloud-Backup-Funktion (Pro-Funktion) nutzt, werden deine Daten verschlüsselt und auf den sicheren Servern von Google Firebase gespeichert.\n\nDatenweitergabe: Es werden keine persönlichen oder Einkaufsdaten an Dritte weitergegeben.\n...",
   "privacyPolicyTitle": "Datenschutzerklärung",
   "settingsAccountAndBackup": "Konto und Backup (Pro)",
-  "settingsLanguageFrench": "Französisch",
-  "settingsLanguageGerman": "Deutsch",
-  "settingsLanguageSpanish": "Spanisch",
   "settingsLanguageSystem": "System",
   "settingsLoginForBackup": "Mit Google anmelden, um das Backup zu aktivieren",
   "settingsLoginFailed": "Anmeldung fehlgeschlagen. Bitte versuche es erneut.",
@@ -341,7 +340,6 @@
   "settingsRestoreFromCloud": "Aus der Cloud wiederherstellen",
 
   "@--- Dialogs, Messages & Errors ---": {},
-  "budgetSaved": "Budget gespeichert!",
   "deleteConfirmationMessage": "Möchtest du diesen Einkauf wirklich löschen? Die Aktion ist irreversibel.",
   "deleteConfirmationTitle": "Löschbestätigung",
   "exportError": "Exportfehler.",
@@ -355,6 +353,7 @@
   },
   "invalidValue": "Ungültiger Wert",
   "listNotFound": "Liste nicht gefunden oder gelöscht.",
+  "optionalDetails": "Optionale Details",
   "pdfCreationError": "Fehler beim Erstellen der PDF-Datei.",
   "purchaseDeletedSuccess": "Einkauf erfolgreich gelöscht.",
   "requiredField": "Pflichtfeld",
