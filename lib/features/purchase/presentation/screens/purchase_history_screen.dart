@@ -6,6 +6,8 @@ import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/core/widgets/month_picker.dart';
 import 'package:glufri/core/widgets/skeletons/shimmer_list.dart';
 import 'package:glufri/core/widgets/skeletons/skeleton_card.dart';
+import 'package:glufri/features/backup/domain/sync_service.dart';
+import 'package:glufri/features/backup/presentation/providers/sync_providers.dart';
 import 'package:glufri/features/backup/presentation/providers/user_provider.dart';
 import 'package:glufri/features/backup/presentation/screens/login_screen.dart';
 import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
@@ -230,16 +232,44 @@ class _PurchaseHistoryScreenState extends ConsumerState<PurchaseHistoryScreen> {
 
                 // Avvolgiamo la nostra logica della lista nel RefreshIndicator
                 return RefreshIndicator(
-                  // La funzione onRefresh deve essere un Future.
-                  // invalidare un provider è un'operazione sincrona, ma
-                  // il refresh completo dei dati avverrà in modo asincrono.
                   onRefresh: () async {
-                    // Questa singola riga dice a Riverpod di ricaricare i dati.
-                    ref.invalidate(purchaseListProvider);
+                    // 1. Leggi i provider necessari per la logica
+                    final user = ref.read(userProvider);
+                    final isPro = ref.read(isProUserProvider);
+                    final l10n = AppLocalizations.of(context)!;
 
-                    // Attendiamo che il nuovo stato del Future sia disponibile.
-                    // Questo assicura che l'indicatore di caricamento
-                    // rimanga visibile fino alla fine del fetch dei dati.
+                    // 2. Esegui la sincronizzazione solo se l'utente è loggato e Pro
+                    if (user != null && isPro) {
+                      // 3. Mostra l'indicatore di caricamento globale
+                      ref.read(syncInProgressProvider.notifier).state = true;
+                      try {
+                        // 4. Chiama il servizio di sync per scaricare i dati dal cloud
+                        await ref
+                            .read(syncServiceProvider)
+                            .restoreFromCloud(isSilent: true);
+                      } catch (e) {
+                        // In caso di errore (es. offline), mostra un messaggio
+                        debugPrint('Errore di sincronizzazione manuale: $e');
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(l10n.syncError),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      } finally {
+                        // 5. In ogni caso, nascondi l'indicatore di caricamento
+                        if (mounted) {
+                          ref.read(syncInProgressProvider.notifier).state =
+                              false;
+                        }
+                      }
+                    }
+
+                    // 6. ALLA FINE, invalida il provider locale. La UI si aggiornerà
+                    //    con i dati appena scaricati (o con quelli vecchi se la sync fallisce).
+                    ref.invalidate(purchaseListProvider);
                     await ref.read(purchaseListProvider.future);
                   },
                   child: listContent,
