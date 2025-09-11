@@ -351,13 +351,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.add_box, color: Colors.green),
-              title: const Text('Aggiungi 50 Acquisti Finti'),
-              subtitle: const Text('Popola la cronologia con dati casuali.'),
+              title: const Text("Aggiungi 50 Acquisti Finti"),
+              subtitle: const Text("Popola la cronologia con dati casuali."),
               onTap: () async {
                 // Mostra un caricamento
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Generazione dati in corso...'),
+                    content: Text("Generazione dati in corso..."),
                     duration: Duration(seconds: 2),
                   ),
                 );
@@ -369,7 +369,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Dati generati con successo!'),
+                      content: Text("Dati generati con successo!"),
                       backgroundColor: Colors.green,
                     ),
                   );
@@ -378,9 +378,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
             ListTile(
               leading: const Icon(Icons.delete_forever, color: Colors.red),
-              title: const Text('Cancella TUTTI gli Acquisti Locali'),
+              title: const Text("Cancella TUTTI gli Acquisti Locali"),
               subtitle: const Text(
-                'Azione irreversibile. Utile per ripartire da zero.',
+                "Azione irreversibile. Utile per ripartire da zero.",
               ),
               onTap: () async {
                 await DebugDataSeeder.clearLocalPurchases();
@@ -391,7 +391,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Dati locali cancellati.'),
+                      content: Text("Dati locali cancellati."),
                       backgroundColor: Colors.red,
                     ),
                   );

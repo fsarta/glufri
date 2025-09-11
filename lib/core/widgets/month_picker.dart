@@ -23,7 +23,7 @@ Future<int?> showMonthPicker({
     builder: (BuildContext context) {
       final l10n = AppLocalizations.of(context)!;
       return SimpleDialog(
-        title: Text("Seleziona un Mese del $initialYear"), // TODO: Localizza
+        title: Text(l10n.selectMonthOfYear(initialYear.toString())),
         children: months.map((monthName) {
           final monthNumber = months.indexOf(monthName) + 1;
           return SimpleDialogOption(

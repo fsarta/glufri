@@ -24,14 +24,12 @@ class ShoppingListDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          listAsync.value?.name ?? "Caricamento...",
-        ), // Titolo dinamico
+        title: Text(listAsync.value?.name ?? l10n.loading), // Titolo dinamico
       ),
       body: listAsync.when(
         data: (list) {
           if (list == null) {
-            return const Center(child: Text("Lista non trovata o eliminata."));
+            return Center(child: Text(l10n.listNotFound));
           }
           // Ordina gli item: prima quelli non spuntati, poi quelli spuntati
           final sortedItems = List.from(list.items);
@@ -55,10 +53,11 @@ class ShoppingListDetailScreen extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, st) => const Center(child: Text("Errore")),
+        error: (err, st) => Center(child: Text(l10n.shoppingListError)),
       ),
       floatingActionButton: FloatingActionButton(
-        tooltip: "Aggiungi item", // TODO: Localizza
+        heroTag: 'shopping_list_detail_fab',
+        tooltip: l10n.addItemTooltip,
         child: const Icon(Icons.add),
         onPressed: () => _showAddItemSourceDialog(context, ref),
       ),
@@ -191,7 +190,7 @@ class ShoppingListDetailScreen extends ConsumerWidget {
                   Navigator.of(dCtx).pop();
                 }
               },
-              child: const Text("Aggiungi"),
+              child: Text(l10n.add),
             ),
           ],
         ),
@@ -276,9 +275,7 @@ class ShoppingListDetailScreen extends ConsumerWidget {
                           // Aggiungiamo un feedback visivo rapido
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text(
-                                "'${fav.name}' aggiunto alla lista.",
-                              ),
+                              content: Text(l10n.itemAddedToList(fav.name)),
                               duration: const Duration(seconds: 1),
                             ),
                           );

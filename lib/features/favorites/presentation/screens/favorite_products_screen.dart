@@ -129,7 +129,8 @@ class FavoriteProductsScreen extends ConsumerWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        tooltip: l10n.addFavoriteProduct, // TODO: Localizza
+        heroTag: 'favorite_products_fab',
+        tooltip: l10n.addFavoriteProduct,
         child: const Icon(Icons.add),
         onPressed: () {
           showAddEditFavoriteDialog(context);

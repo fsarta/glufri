@@ -1,14 +1,17 @@
 {
   "@@locale": "it",
 
-  "@--- Generale_e_Comuni ---": {},
+  "@--- Generale e Comuni ---": {},
+  "add": "Aggiungi",
   "appName": "Glufri",
   "cancel": "Annulla",
   "close": "Chiudi",
   "continueAction": "CONTINUA",
+  "create": "Crea",
   "delete": "Elimina",
   "duplicate": "Duplica",
   "edit": "Modifica",
+  "loading": "Caricamento...",
   "or": "oppure",
   "price": "Prezzo",
   "productName": "Nome Prodotto",
@@ -48,8 +51,9 @@
   "email": "Email",
   "forgotPassword": "Password dimenticata?",
   "forgotPasswordInstruction": "Inserisci l'email associata al tuo account. Ti invieremo un link per reimpostare la tua password.",
-  "forgotPasswordScreenSubtitle": "Nessun problema! Inserisci la tua email e ti aiuteremo.",
+  "forgotPasswordSubtitle": "Nessun problema! Inserisci la tua email e ti aiuteremo.",
   "forgotPasswordTitle": "Password Dimenticata?",
+  "googleLoginFailed": "Login con Google fallito. Riprova.",
   "invalidEmailError": "Inserisci un'email valida.",
   "loggedInAs": "Loggato come {email}",
   "@loggedInAs": {
@@ -62,7 +66,7 @@
   "login": "Accedi",
   "loginAction": "ACCEDI",
   "loginError": "Email o password errati. Riprova.",
-  "loginInToSaveData": "Accedi per salvare i tuoi dati",
+  "loginToSaveData": "Accedi per salvare i tuoi dati",
   "loginSubtitle": "Accedi al tuo account per continuare.",
   "loginSuccess": "Benvenuto/a!",
   "loginWelcome": "Bentornato!",
@@ -73,6 +77,8 @@
   "password": "Password",
   "passwordLengthError": "La password deve essere di almeno 6 caratteri.",
   "passwordsDoNotMatchError": "Le password non coincidono.",
+  "resetEmailError": "Errore durante l'invio dell'email. L'indirizzo potrebbe non essere valido.",
+  "resetEmailSuccess": "Email di recupero inviata con successo! Controlla la tua casella di posta.",
   "sendResetEmail": "INVIA EMAIL DI RECUPERO",
   "signup": "Registrati",
   "signupAction": "REGISTRATI",
@@ -83,8 +89,8 @@
   "userGuest": "Utente Ospite",
 
   "@--- Acquisti ---": {},
-  "addProductToStart": "Aggiungi un prodotto per iniziare.",
   "addItem": "Aggiungi Prodotto",
+  "addProductToStart": "Aggiungi un prodotto per iniziare.",
   "andMoreProducts": "... e altri {count} prodotti.",
   "@andMoreProducts": {
     "placeholders": {
@@ -122,6 +128,23 @@
   "noPurchases": "Nessun acquisto registrato.\nPremi \"+\" per iniziare!",
   "noStoreSpecified": "Nessun negozio specificato",
   "other": "Altro",
+  "pdfReportTitleAnnual": "Report Spese - {year}",
+  "@pdfReportTitleAnnual": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfReportTitleComplete": "Report Spese Completo",
+  "pdfReportTitleMonthly": "Report Spese - {date}",
+  "@pdfReportTitleMonthly": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "priceRange": "Prezzi: da {min}€ a {max}€",
   "@priceRange": {
     "placeholders": {
@@ -164,6 +187,14 @@
   "savePurchase": "Salva Acquisto",
   "scanBarcode": "Scansiona Codice",
   "searchPlaceholder": "Cerca per negozio o prodotto...",
+  "selectMonthOfYear": "Seleziona un Mese del {year}",
+  "@selectMonthOfYear": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
   "shareSummary": "Condividi Riepilogo",
   "shareText": "Ecco il mio ultimo acquisto senza glutine tracciato con l'app Glufri! 🛒",
   "storeHint": "Es. Supermercato Rossi",
@@ -176,13 +207,39 @@
   "@--- Liste Spesa ---": {},
   "addFromFavorites": "Aggiungi da Preferiti",
   "addItemToShoppingList": "Aggiungi Prodotto",
+  "addItemTooltip": "Aggiungi item",
   "addManual": "Aggiungi manualmente",
   "checkedItems": "{checked}/{total} completati",
-  "create": "Crea",
+  "@checkedItems": {
+    "placeholders": {
+      "checked": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "createNewListTooltip": "Nuova Lista",
   "createListDialogTitle": "Crea Nuova Lista",
   "deleteListConfirmationBody": "Sei sicuro di voler eliminare la lista '{listName}'?",
+  "@deleteListConfirmationBody": {
+    "placeholders": {
+      "listName": {
+        "type": "String"
+      }
+    }
+  },
   "deleteListConfirmationTitle": "Conferma Eliminazione",
   "emptyShoppingList": "Nessuna lista della spesa.\nPremi '+' per crearne una.",
+  "itemAddedToList": "'{itemName}' aggiunto alla lista.",
+  "@itemAddedToList": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
   "listName": "Nome della lista",
   "listNameEmptyError": "Il nome non può essere vuoto.",
   "noItemsInShoppingList": "Aggiungi o de-seleziona almeno un item per iniziare.",
@@ -210,12 +267,15 @@
   "settingsFavProducts": "Prodotti Preferiti",
 
   "@--- Budget ---": {},
+  "budgetSaved": "Budget salvato!",
   "budgetSetGlutenFree": "Budget Senza Glutine",
   "budgetSetTotal": "Budget Totale",
   "budgetTitle": "Budget di {monthYear}",
   "@budgetTitle": {
     "placeholders": {
-      "monthYear": {}
+      "monthYear": {
+        "type": "String"
+      }
     }
   },
   "budgetTrend": "Andamento Spesa",
@@ -230,8 +290,6 @@
   "privacyPolicyBody": "La tua privacy è importante...\n[INSERIRE QUI IL TESTO COMPLETO DELLA PRIVACY POLICY]\n\nDati Raccolti: L'app salva i dati degli acquisti esclusivamente sul tuo dispositivo. Se scegli di utilizzare la funzione di backup cloud (funzionalità Pro), i tuoi dati verranno criptati e salvati sui server sicuri di Google Firebase.\n\nCondivisione Dati: Nessun dato personale o di acquisto viene condiviso con terze parti.\n...",
   "privacyPolicyTitle": "Informativa Privacy",
   "settingsAccountAndBackup": "Account e Backup (Pro)",
-  "settingsLanguageEnglish": "English",
-  "settingsLanguageItalian": "Italiano",
   "settingsLanguageSystem": "Sistema",
   "settingsLoginForBackup": "Accedi con Google per abilitare il backup",
   "settingsLoginFailed": "Login fallito. Riprova.",
@@ -269,8 +327,6 @@
   },
   "migrationDialogTitle": "Acquisti Locali Rilevati",
   "migrationSuccess": "Acquisti locali uniti al tuo account!",
-  "resetEmailError": "Errore durante l'invio dell'email. L'indirizzo potrebbe non essere valido.",
-  "resetEmailSuccess": "Email di recupero inviata con successo! Controlla la tua casella di posta.",
   "restoreConfirmationBody": "Questo sovrascriverà tutti i dati locali con quelli salvati nel cloud. Continuare?",
   "restoreConfirmationTitle": "Conferma Ripristino",
   "restoreError": "Errore durante il ripristino.",
@@ -282,11 +338,9 @@
   "settingsRestoreFromCloud": "Ripristina da Cloud",
 
   "@--- Dialoghi, Messaggi e Errori ---": {},
-  "budgetSaved": "Budget salvato!",
   "deleteConfirmationMessage": "Sei sicuro di voler eliminare questo acquisto? L'azione è irreversibile.",
   "deleteConfirmationTitle": "Conferma Eliminazione",
   "exportError": "Errore durante l'esportazione.",
-  "pdfCreationError": "Errore durante la creazione del PDF.",
   "genericError": "Si è verificato un errore:\n{error}",
   "@genericError": {
     "placeholders": {
@@ -296,8 +350,11 @@
     }
   },
   "invalidValue": "Valore non valido",
+  "listNotFound": "Lista non trovata o eliminata.",
+  "pdfCreationError": "Errore durante la creazione del PDF.",
   "purchaseDeletedSuccess": "Acquisto eliminato con successo.",
   "requiredField": "Campo obbligatorio",
   "shareError": "Errore durante la condivisione.",
+  "shoppingListError": "Errore nel caricamento delle liste.",
   "syncError": "Errore di sincronizzazione."
 }

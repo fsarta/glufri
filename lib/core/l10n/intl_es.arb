@@ -2,13 +2,16 @@
   "@@locale": "es",
 
   "@--- General & Common ---": {},
+  "add": "Añadir",
   "appName": "Glufri",
   "cancel": "Cancelar",
   "close": "Cerrar",
   "continueAction": "CONTINUAR",
+  "create": "Crear",
   "delete": "Eliminar",
   "duplicate": "Duplicar",
   "edit": "Editar",
+  "loading": "Cargando...",
   "or": "o",
   "price": "Precio",
   "productName": "Nombre del Producto",
@@ -48,8 +51,9 @@
   "email": "Correo electrónico",
   "forgotPassword": "¿Olvidaste tu contraseña?",
   "forgotPasswordInstruction": "Introduce el correo electrónico asociado a tu cuenta. Te enviaremos un enlace para restablecer tu contraseña.",
-  "forgotPasswordScreenSubtitle": "¡No hay problema! Introduce tu correo electrónico y te ayudaremos.",
+  "forgotPasswordSubtitle": "¡No hay problema! Introduce tu correo electrónico y te ayudaremos.",
   "forgotPasswordTitle": "¿Contraseña Olvidada?",
+  "googleLoginFailed": "Error al iniciar sesión con Google. Inténtalo de nuevo.",
   "invalidEmailError": "Introduce un correo electrónico válido.",
   "loggedInAs": "Sesión iniciada como {email}",
   "@loggedInAs": {
@@ -62,7 +66,7 @@
   "login": "Iniciar sesión",
   "loginAction": "INICIAR SESIÓN",
   "loginError": "Correo electrónico o contraseña no válidos. Inténtalo de nuevo.",
-  "loginInToSaveData": "Inicia sesión para guardar tus datos",
+  "loginToSaveData": "Inicia sesión para guardar tus datos",
   "loginSubtitle": "Inicia sesión en tu cuenta para continuar.",
   "loginSuccess": "¡Bienvenido/a!",
   "loginWelcome": "¡Bienvenido de Nuevo!",
@@ -73,6 +77,8 @@
   "password": "Contraseña",
   "passwordLengthError": "La contraseña debe tener al menos 6 caracteres.",
   "passwordsDoNotMatchError": "Las contraseñas no coinciden.",
+  "resetEmailError": "Error al enviar el correo. La dirección podría no ser válida.",
+  "resetEmailSuccess": "Correo de recuperación enviado con éxito. Revisa tu bandeja de entrada.",
   "sendResetEmail": "ENVIAR CORREO DE RECUPERACIÓN",
   "signup": "Registrarse",
   "signupAction": "REGISTRARSE",
@@ -83,8 +89,8 @@
   "userGuest": "Usuario Invitado",
 
   "@--- Purchases ---": {},
-  "addProductToStart": "Añade un producto para empezar.",
   "addItem": "Añadir Producto",
+  "addProductToStart": "Añade un producto para empezar.",
   "andMoreProducts": "... y {count} productos más.",
   "@andMoreProducts": {
     "placeholders": {
@@ -122,6 +128,23 @@
   "noPurchases": "No se registraron compras.\n¡Pulsa \"+\" para empezar!",
   "noStoreSpecified": "No se especificó la tienda",
   "other": "Otros",
+  "pdfReportTitleAnnual": "Informe de Gastos - {year}",
+  "@pdfReportTitleAnnual": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfReportTitleComplete": "Informe de Gastos Completo",
+  "pdfReportTitleMonthly": "Informe de Gastos - {date}",
+  "@pdfReportTitleMonthly": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "priceRange": "Precios: de {min}€ a {max}€",
   "@priceRange": {
     "placeholders": {
@@ -164,6 +187,14 @@
   "savePurchase": "Guardar Compra",
   "scanBarcode": "Escanear Código",
   "searchPlaceholder": "Buscar por tienda o producto...",
+  "selectMonthOfYear": "Selecciona un Mes de {year}",
+  "@selectMonthOfYear": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
   "shareSummary": "Compartir Resumen",
   "shareText": "¡Aquí está mi última compra sin gluten registrada con la app Glufri! 🛒",
   "storeHint": "Ej. Supermercado Rossi",
@@ -176,13 +207,39 @@
   "@--- Shopping Lists ---": {},
   "addFromFavorites": "Añadir de Favoritos",
   "addItemToShoppingList": "Añadir Producto",
+  "addItemTooltip": "Añadir elemento",
   "addManual": "Añadir manualmente",
   "checkedItems": "{checked}/{total} completados",
-  "create": "Crear",
+  "@checkedItems": {
+    "placeholders": {
+      "checked": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "createNewListTooltip": "Nueva Lista",
   "createListDialogTitle": "Crear Nueva Lista",
   "deleteListConfirmationBody": "¿Estás seguro de que quieres eliminar la lista '{listName}'?",
+  "@deleteListConfirmationBody": {
+    "placeholders": {
+      "listName": {
+        "type": "String"
+      }
+    }
+  },
   "deleteListConfirmationTitle": "Confirmar Eliminación",
   "emptyShoppingList": "No se encontraron listas de compra.\nPulsa '+' para crear una.",
+  "itemAddedToList": "Se ha añadido '{itemName}' a la lista.",
+  "@itemAddedToList": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
   "listName": "Nombre de la lista",
   "listNameEmptyError": "El nombre no puede estar vacío.",
   "noItemsInShoppingList": "Añade o desmarca al menos un producto para empezar.",
@@ -210,12 +267,15 @@
   "settingsFavProducts": "Productos Favoritos",
 
   "@--- Budget ---": {},
+  "budgetSaved": "¡Presupuesto guardado!",
   "budgetSetGlutenFree": "Presupuesto Sin Gluten",
   "budgetSetTotal": "Presupuesto Total",
   "budgetTitle": "Presupuesto para {monthYear}",
   "@budgetTitle": {
     "placeholders": {
-      "monthYear": {}
+      "monthYear": {
+        "type": "String"
+      }
     }
   },
   "budgetTrend": "Tendencia de Gasto",
@@ -230,8 +290,9 @@
   "privacyPolicyBody": "Tu privacidad es importante...\n[INSERTAR AQUÍ EL TEXTO COMPLETO DE LA POLÍTICA DE PRIVACIDAD]\n\nDatos Recopilados: La app guarda los datos de las compras exclusivamente en tu dispositivo. Si eliges usar la función de copia de seguridad en la nube (funcionalidad Pro), tus datos se encriptarán y se guardarán en los servidores seguros de Google Firebase.\n\nCompartición de Datos: No se comparten datos personales o de compra con terceros.\n...",
   "privacyPolicyTitle": "Política de Privacidad",
   "settingsAccountAndBackup": "Cuenta y Copia de Seguridad (Pro)",
-  "settingsLanguageEnglish": "Inglés",
-  "settingsLanguageItalian": "Italiano",
+  "settingsLanguageFrench": "Francés",
+  "settingsLanguageGerman": "Alemán",
+  "settingsLanguageSpanish": "Español",
   "settingsLanguageSystem": "Sistema",
   "settingsLoginForBackup": "Inicia sesión con Google para habilitar la copia de seguridad",
   "settingsLoginFailed": "Error al iniciar sesión. Inténtalo de nuevo.",
@@ -269,8 +330,6 @@
   },
   "migrationDialogTitle": "Compras Locales Detectadas",
   "migrationSuccess": "¡Compras locales fusionadas con tu cuenta!",
-  "resetEmailError": "Error al enviar el correo. La dirección podría no ser válida.",
-  "resetEmailSuccess": "Correo de recuperación enviado con éxito. Revisa tu bandeja de entrada.",
   "restoreConfirmationBody": "Esto sobrescribirá todos los datos locales con los datos guardados en la nube. ¿Continuar?",
   "restoreConfirmationTitle": "Confirmar Restauración",
   "restoreError": "Error durante la restauración.",
@@ -286,7 +345,6 @@
   "deleteConfirmationMessage": "¿Estás seguro de que quieres eliminar esta compra? La acción es irreversible.",
   "deleteConfirmationTitle": "Confirmar Eliminación",
   "exportError": "Error de exportación.",
-  "pdfCreationError": "Error al crear el PDF.",
   "genericError": "Ocurrió un error:\n{error}",
   "@genericError": {
     "placeholders": {
@@ -296,8 +354,11 @@
     }
   },
   "invalidValue": "Valor no válido",
+  "listNotFound": "Lista no encontrada o eliminada.",
+  "pdfCreationError": "Error al crear el PDF.",
   "purchaseDeletedSuccess": "Compra eliminada con éxito.",
   "requiredField": "Campo obligatorio",
   "shareError": "Error al compartir.",
+  "shoppingListError": "Error al cargar las listas.",
   "syncError": "Error de sincronización."
 }

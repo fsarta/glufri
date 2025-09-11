@@ -89,7 +89,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  l10n.forgotPasswordScreenSubtitle, // Usa la nuova chiave!
+                  l10n.forgotPasswordSubtitle,
                   textAlign: TextAlign.center,
                   style: theme.textTheme.titleMedium,
                 ),

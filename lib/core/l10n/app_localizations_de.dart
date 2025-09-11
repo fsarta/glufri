@@ -9,6 +9,9 @@ class AppLocalizationsDe extends AppLocalizations {
   AppLocalizationsDe([String locale = 'de']) : super(locale);
 
   @override
+  String get add => 'Hinzufügen';
+
+  @override
   String get appName => 'Glufri';
 
   @override
@@ -21,6 +24,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get continueAction => 'WEITER';
 
   @override
+  String get create => 'Erstellen';
+
+  @override
   String get delete => 'Löschen';
 
   @override
@@ -28,6 +34,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get edit => 'Bearbeiten';
+
+  @override
+  String get loading => 'Lädt...';
 
   @override
   String get or => 'oder';
@@ -133,11 +142,15 @@ class AppLocalizationsDe extends AppLocalizations {
       'Gib die mit deinem Konto verknüpfte E-Mail-Adresse ein. Wir senden dir einen Link zum Zurücksetzen deines Passworts.';
 
   @override
-  String get forgotPasswordScreenSubtitle =>
+  String get forgotPasswordSubtitle =>
       'Kein Problem! Gib deine E-Mail-Adresse ein und wir helfen dir weiter.';
 
   @override
   String get forgotPasswordTitle => 'Passwort vergessen?';
+
+  @override
+  String get googleLoginFailed =>
+      'Google-Login fehlgeschlagen. Bitte versuche es erneut.';
 
   @override
   String get invalidEmailError => 'Bitte gib eine gültige E-Mail-Adresse ein.';
@@ -158,7 +171,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Ungültige E-Mail oder ungültiges Passwort. Bitte versuche es erneut.';
 
   @override
-  String get loginInToSaveData => 'Melde dich an, um deine Daten zu speichern';
+  String get loginToSaveData => 'Melde dich an, um deine Daten zu speichern';
 
   @override
   String get loginSubtitle =>
@@ -194,6 +207,14 @@ class AppLocalizationsDe extends AppLocalizations {
       'Die Passwörter stimmen nicht überein.';
 
   @override
+  String get resetEmailError =>
+      'Fehler beim Senden der E-Mail. Die Adresse ist möglicherweise ungültig.';
+
+  @override
+  String get resetEmailSuccess =>
+      'Wiederherstellungs-E-Mail erfolgreich gesendet! Überprüfe deinen Posteingang.';
+
+  @override
   String get sendResetEmail => 'WIEDERHERSTELLUNGS-E-MAIL SENDEN';
 
   @override
@@ -220,10 +241,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get userGuest => 'Gast-Benutzer';
 
   @override
-  String get addProductToStart => 'Füge ein Produkt hinzu, um zu beginnen.';
+  String get addItem => 'Produkt hinzufügen';
 
   @override
-  String get addItem => 'Produkt hinzufügen';
+  String get addProductToStart => 'Füge ein Produkt hinzu, um zu beginnen.';
 
   @override
   String andMoreProducts(int count) {
@@ -300,6 +321,19 @@ class AppLocalizationsDe extends AppLocalizations {
   String get other => 'Anderes';
 
   @override
+  String pdfReportTitleAnnual(String year) {
+    return 'Ausgabenbericht - $year';
+  }
+
+  @override
+  String get pdfReportTitleComplete => 'Vollständiger Ausgabenbericht';
+
+  @override
+  String pdfReportTitleMonthly(String date) {
+    return 'Ausgabenbericht - $date';
+  }
+
+  @override
   String priceRange(Object max, Object min) {
     return 'Preise: von $min€ bis $max€';
   }
@@ -365,6 +399,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get searchPlaceholder => 'Nach Geschäft oder Produkt suchen...';
 
   @override
+  String selectMonthOfYear(String year) {
+    return 'Wähle einen Monat des $year';
+  }
+
+  @override
   String get shareSummary => 'Zusammenfassung teilen';
 
   @override
@@ -396,21 +435,24 @@ class AppLocalizationsDe extends AppLocalizations {
   String get addItemToShoppingList => 'Artikel hinzufügen';
 
   @override
+  String get addItemTooltip => 'Artikel hinzufügen';
+
+  @override
   String get addManual => 'Manuell hinzufügen';
 
   @override
-  String checkedItems(Object checked, Object total) {
+  String checkedItems(String checked, String total) {
     return '$checked/$total erledigt';
   }
 
   @override
-  String get create => 'Erstellen';
+  String get createNewListTooltip => 'Neue Liste';
 
   @override
   String get createListDialogTitle => 'Neue Liste erstellen';
 
   @override
-  String deleteListConfirmationBody(Object listName) {
+  String deleteListConfirmationBody(String listName) {
     return 'Möchtest du die Liste \'$listName\' wirklich löschen?';
   }
 
@@ -420,6 +462,11 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get emptyShoppingList =>
       'Keine Einkaufslisten gefunden.\nDrücke \'+\' um eine zu erstellen.';
+
+  @override
+  String itemAddedToList(String itemName) {
+    return '\'$itemName\' wurde zur Liste hinzugefügt.';
+  }
 
   @override
   String get listName => 'Listenname';
@@ -476,13 +523,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsFavProducts => 'Lieblingsprodukte';
 
   @override
+  String get budgetSaved => 'Budget gespeichert!';
+
+  @override
   String get budgetSetGlutenFree => 'Budget für Glutenfreies';
 
   @override
   String get budgetSetTotal => 'Gesamtbudget';
 
   @override
-  String budgetTitle(Object monthYear) {
+  String budgetTitle(String monthYear) {
     return 'Budget für $monthYear';
   }
 
@@ -516,12 +566,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get settingsAccountAndBackup => 'Konto und Backup (Pro)';
-
-  @override
-  String get settingsLanguageEnglish => 'Englisch';
-
-  @override
-  String get settingsLanguageItalian => 'Italienisch';
 
   @override
   String get settingsLanguageSystem => 'System';
@@ -608,14 +652,6 @@ class AppLocalizationsDe extends AppLocalizations {
       'Lokale Einkäufe erfolgreich mit deinem Konto zusammengeführt!';
 
   @override
-  String get resetEmailError =>
-      'Fehler beim Senden der E-Mail. Die Adresse ist möglicherweise ungültig.';
-
-  @override
-  String get resetEmailSuccess =>
-      'Wiederherstellungs-E-Mail erfolgreich gesendet! Überprüfe deinen Posteingang.';
-
-  @override
   String get restoreConfirmationBody =>
       'Dies wird alle lokalen Daten mit den in der Cloud gespeicherten Daten überschreiben. Fortfahren?';
 
@@ -644,9 +680,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsRestoreFromCloud => 'Aus der Cloud wiederherstellen';
 
   @override
-  String get budgetSaved => 'Budget gespeichert!';
-
-  @override
   String get deleteConfirmationMessage =>
       'Möchtest du diesen Einkauf wirklich löschen? Die Aktion ist irreversibel.';
 
@@ -657,15 +690,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get exportError => 'Exportfehler.';
 
   @override
-  String get pdfCreationError => 'Fehler beim Erstellen der PDF-Datei.';
-
-  @override
   String genericError(Object error) {
     return 'Es ist ein Fehler aufgetreten:\n$error';
   }
 
   @override
   String get invalidValue => 'Ungültiger Wert';
+
+  @override
+  String get listNotFound => 'Liste nicht gefunden oder gelöscht.';
+
+  @override
+  String get pdfCreationError => 'Fehler beim Erstellen der PDF-Datei.';
 
   @override
   String get purchaseDeletedSuccess => 'Einkauf erfolgreich gelöscht.';
@@ -675,6 +711,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get shareError => 'Fehler beim Teilen.';
+
+  @override
+  String get shoppingListError => 'Fehler beim Laden der Listen.';
 
   @override
   String get syncError => 'Synchronisierungsfehler.';

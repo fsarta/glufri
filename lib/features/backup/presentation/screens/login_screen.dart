@@ -53,16 +53,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _loginWithGoogle() async {
+    final l10n = AppLocalizations.of(context)!;
+
     setState(() => _errorMessage = null);
     setState(() => _isLoading = true);
     try {
       await ref.read(authRepositoryProvider).signInWithGoogle();
       // La logica di pop è gestita globalmente
     } catch (e) {
-      if (mounted)
-        setState(
-          () => _errorMessage = "Login con Google fallito. Riprova.",
-        ); // TODO: Localizza
+      if (mounted) setState(() => _errorMessage = l10n.googleLoginFailed);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }

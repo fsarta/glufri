@@ -9,6 +9,9 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get add => 'Add';
+
+  @override
   String get appName => 'Glufri';
 
   @override
@@ -21,6 +24,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get continueAction => 'CONTINUE';
 
   @override
+  String get create => 'Create';
+
+  @override
   String get delete => 'Delete';
 
   @override
@@ -28,6 +34,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get edit => 'Edit';
+
+  @override
+  String get loading => 'Loading...';
 
   @override
   String get or => 'or';
@@ -133,11 +142,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Enter the email associated with your account. We\'ll send you a link to reset your password.';
 
   @override
-  String get forgotPasswordScreenSubtitle =>
+  String get forgotPasswordSubtitle =>
       'No problem! Enter your email and we\'ll help you out.';
 
   @override
   String get forgotPasswordTitle => 'Forgot Password?';
+
+  @override
+  String get googleLoginFailed => 'Google login failed. Please try again.';
 
   @override
   String get invalidEmailError => 'Please enter a valid email.';
@@ -157,7 +169,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginError => 'Invalid email or password. Please try again.';
 
   @override
-  String get loginInToSaveData => 'Log in to save your data';
+  String get loginToSaveData => 'Log in to save your data';
 
   @override
   String get loginSubtitle => 'Login to your account to continue.';
@@ -191,6 +203,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordsDoNotMatchError => 'Passwords do not match.';
 
   @override
+  String get resetEmailError =>
+      'Error sending the email. The address may not be valid.';
+
+  @override
+  String get resetEmailSuccess =>
+      'Recovery email sent successfully! Check your inbox.';
+
+  @override
   String get sendResetEmail => 'SEND RESET EMAIL';
 
   @override
@@ -216,10 +236,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get userGuest => 'Guest User';
 
   @override
-  String get addProductToStart => 'Add a product to get started.';
+  String get addItem => 'Add Item';
 
   @override
-  String get addItem => 'Add Item';
+  String get addProductToStart => 'Add a product to get started.';
 
   @override
   String andMoreProducts(int count) {
@@ -296,6 +316,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get other => 'Other';
 
   @override
+  String pdfReportTitleAnnual(String year) {
+    return 'Spending Report - $year';
+  }
+
+  @override
+  String get pdfReportTitleComplete => 'Complete Spending Report';
+
+  @override
+  String pdfReportTitleMonthly(String date) {
+    return 'Spending Report - $date';
+  }
+
+  @override
   String priceRange(Object max, Object min) {
     return 'Prices: from €$min to €$max';
   }
@@ -361,6 +394,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchPlaceholder => 'Search by store or product...';
 
   @override
+  String selectMonthOfYear(String year) {
+    return 'Select a Month of $year';
+  }
+
+  @override
   String get shareSummary => 'Share Summary';
 
   @override
@@ -392,21 +430,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addItemToShoppingList => 'Add Item';
 
   @override
+  String get addItemTooltip => 'Add item';
+
+  @override
   String get addManual => 'Add manually';
 
   @override
-  String checkedItems(Object checked, Object total) {
+  String checkedItems(String checked, String total) {
     return '$checked/$total completed';
   }
 
   @override
-  String get create => 'Create';
+  String get createNewListTooltip => 'New List';
 
   @override
   String get createListDialogTitle => 'Create New List';
 
   @override
-  String deleteListConfirmationBody(Object listName) {
+  String deleteListConfirmationBody(String listName) {
     return 'Are you sure you want to delete the list \'$listName\'?';
   }
 
@@ -416,6 +457,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get emptyShoppingList =>
       'No shopping lists found.\nPress \'+\' to create one.';
+
+  @override
+  String itemAddedToList(String itemName) {
+    return '\'$itemName\' added to list.';
+  }
 
   @override
   String get listName => 'List name';
@@ -472,13 +518,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsFavProducts => 'Favorite Products';
 
   @override
+  String get budgetSaved => 'Budget saved!';
+
+  @override
   String get budgetSetGlutenFree => 'Gluten-Free Budget';
 
   @override
   String get budgetSetTotal => 'Total Budget';
 
   @override
-  String budgetTitle(Object monthYear) {
+  String budgetTitle(String monthYear) {
     return 'Budget for $monthYear';
   }
 
@@ -512,12 +561,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsAccountAndBackup => 'Account and Backup (Pro)';
-
-  @override
-  String get settingsLanguageEnglish => 'English';
-
-  @override
-  String get settingsLanguageItalian => 'Italian';
 
   @override
   String get settingsLanguageSystem => 'System';
@@ -600,14 +643,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get migrationSuccess => 'Local purchases merged with your account!';
 
   @override
-  String get resetEmailError =>
-      'Error sending the email. The address may not be valid.';
-
-  @override
-  String get resetEmailSuccess =>
-      'Recovery email sent successfully! Check your inbox.';
-
-  @override
   String get restoreConfirmationBody =>
       'This will overwrite all local data with the data saved in the cloud. Continue?';
 
@@ -636,9 +671,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsRestoreFromCloud => 'Restore from Cloud';
 
   @override
-  String get budgetSaved => 'Budget saved!';
-
-  @override
   String get deleteConfirmationMessage =>
       'Are you sure you want to delete this purchase? This action is irreversible.';
 
@@ -649,15 +681,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportError => 'Export error.';
 
   @override
-  String get pdfCreationError => 'Error creating the PDF.';
-
-  @override
   String genericError(Object error) {
     return 'An error occurred:\n$error';
   }
 
   @override
   String get invalidValue => 'Invalid value';
+
+  @override
+  String get listNotFound => 'List not found or deleted.';
+
+  @override
+  String get pdfCreationError => 'Error creating the PDF.';
 
   @override
   String get purchaseDeletedSuccess => 'Purchase deleted successfully.';
@@ -667,6 +702,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shareError => 'Sharing error.';
+
+  @override
+  String get shoppingListError => 'Error loading lists.';
 
   @override
   String get syncError => 'Synchronization error.';

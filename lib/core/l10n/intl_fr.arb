@@ -2,13 +2,16 @@
   "@@locale": "fr",
 
   "@--- General & Common ---": {},
+  "add": "Ajouter",
   "appName": "Glufri",
   "cancel": "Annuler",
   "close": "Fermer",
   "continueAction": "CONTINUER",
+  "create": "Créer",
   "delete": "Supprimer",
   "duplicate": "Dupliquer",
   "edit": "Modifier",
+  "loading": "Chargement...",
   "or": "ou",
   "price": "Prix",
   "productName": "Nom du Produit",
@@ -48,8 +51,9 @@
   "email": "E-mail",
   "forgotPassword": "Mot de passe oublié ?",
   "forgotPasswordInstruction": "Entrez l'e-mail associé à votre compte. Nous vous enverrons un lien pour réinitialiser votre mot de passe.",
-  "forgotPasswordScreenSubtitle": "Pas de problème ! Entrez votre e-mail et nous vous aiderons.",
+  "forgotPasswordSubtitle": "Pas de problème ! Entrez votre e-mail et nous vous aiderons.",
   "forgotPasswordTitle": "Mot de Passe Oublié ?",
+  "googleLoginFailed": "Échec de la connexion avec Google. Veuillez réessayer.",
   "invalidEmailError": "Veuillez entrer une adresse e-mail valide.",
   "loggedInAs": "Connecté en tant que {email}",
   "@loggedInAs": {
@@ -62,7 +66,7 @@
   "login": "Se connecter",
   "loginAction": "SE CONNECTER",
   "loginError": "E-mail ou mot de passe invalide. Veuillez réessayer.",
-  "loginInToSaveData": "Connectez-vous pour sauvegarder vos données",
+  "loginToSaveData": "Connectez-vous pour sauvegarder vos données",
   "loginSubtitle": "Connectez-vous à votre compte pour continuer.",
   "loginSuccess": "Bienvenue !",
   "loginWelcome": "Bienvenue de nouveau !",
@@ -73,6 +77,8 @@
   "password": "Mot de passe",
   "passwordLengthError": "Le mot de passe doit contenir au moins 6 caractères.",
   "passwordsDoNotMatchError": "Les mots de passe ne correspondent pas.",
+  "resetEmailError": "Erreur lors de l'envoi de l'e-mail. L'adresse pourrait ne pas être valide.",
+  "resetEmailSuccess": "E-mail de récupération envoyé avec succès ! Vérifiez votre boîte de réception.",
   "sendResetEmail": "ENVOYER L'E-MAIL DE RÉINITIALISATION",
   "signup": "S'inscrire",
   "signupAction": "S'INSCRIRE",
@@ -83,8 +89,8 @@
   "userGuest": "Utilisateur Invité",
 
   "@--- Purchases ---": {},
-  "addProductToStart": "Ajoutez un produit pour commencer.",
   "addItem": "Ajouter un Produit",
+  "addProductToStart": "Ajoutez un produit pour commencer.",
   "andMoreProducts": "... et {count} autres produits.",
   "@andMoreProducts": {
     "placeholders": {
@@ -122,6 +128,23 @@
   "noPurchases": "Aucun achat enregistré.\nAppuyez sur \"+\" pour commencer !",
   "noStoreSpecified": "Aucun magasin spécifié",
   "other": "Autre",
+  "pdfReportTitleAnnual": "Rapport de Dépenses - {year}",
+  "@pdfReportTitleAnnual": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfReportTitleComplete": "Rapport de Dépenses Complet",
+  "pdfReportTitleMonthly": "Rapport de Dépenses - {date}",
+  "@pdfReportTitleMonthly": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "priceRange": "Prix : de {min}€ à {max}€",
   "@priceRange": {
     "placeholders": {
@@ -164,6 +187,14 @@
   "savePurchase": "Enregistrer l'Achat",
   "scanBarcode": "Scanner le Code-barres",
   "searchPlaceholder": "Rechercher par magasin ou produit...",
+  "selectMonthOfYear": "Sélectionnez un Mois de {year}",
+  "@selectMonthOfYear": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
   "shareSummary": "Partager le Résumé",
   "shareText": "Voici mon dernier achat sans gluten suivi avec l'app Glufri ! 🛒",
   "storeHint": "Ex. Supermarché Rossi",
@@ -176,13 +207,39 @@
   "@--- Shopping Lists ---": {},
   "addFromFavorites": "Ajouter des Favoris",
   "addItemToShoppingList": "Ajouter un Produit",
+  "addItemTooltip": "Ajouter un élément",
   "addManual": "Ajouter manuellement",
   "checkedItems": "{checked}/{total} terminés",
-  "create": "Créer",
+  "@checkedItems": {
+    "placeholders": {
+      "checked": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "createNewListTooltip": "Nouvelle Liste",
   "createListDialogTitle": "Créer une Nouvelle Liste",
   "deleteListConfirmationBody": "Êtes-vous sûr de vouloir supprimer la liste '{listName}' ?",
-  "deleteListConfirmationTitle": "Confirmer la Suppression",
+  "@deleteListConfirmationBody": {
+    "placeholders": {
+      "listName": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteListConfirmationTitle": "Confirmation de Suppression",
   "emptyShoppingList": "Aucune liste de courses trouvée.\nAppuyez sur '+' pour en créer une.",
+  "itemAddedToList": "'{itemName}' a été ajouté à la liste.",
+  "@itemAddedToList": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
   "listName": "Nom de la liste",
   "listNameEmptyError": "Le nom ne peut pas être vide.",
   "noItemsInShoppingList": "Ajoutez ou décochez au moins un article pour commencer.",
@@ -204,18 +261,21 @@
     }
   },
   "favoriteProductRemoved": "'{productName}' a été retiré des favoris.",
-  "noFavoriteProducts": "Vous n'avez pas encore de produits favoris.\nEnregistrez-les depuis un achat pour les retrouver ici.",
+  "noFavoriteProducts": "Vous n'avez pas encore de produits favoris.\nEnregistrez-les depuis un achat per les retrouver ici.",
   "noFavoritesAvailable": "Vous n'avez aucun produit favori.",
   "selectFavorite": "Sélectionner un Favori",
   "settingsFavProducts": "Produits Favoris",
 
   "@--- Budget ---": {},
+  "budgetSaved": "Budget enregistré !",
   "budgetSetGlutenFree": "Budget Sans Gluten",
   "budgetSetTotal": "Budget Total",
   "budgetTitle": "Budget pour {monthYear}",
   "@budgetTitle": {
     "placeholders": {
-      "monthYear": {}
+      "monthYear": {
+        "type": "String"
+      }
     }
   },
   "budgetTrend": "Tendance des Dépenses",
@@ -227,11 +287,12 @@
   "dark": "Sombre",
   "language": "Langue",
   "light": "Clair",
-  "privacyPolicyBody": "Votre vie privée est importante...\n[INSÉRER ICI LE TEXTE COMPLET DE LA POLITIQUE DE CONFIDENTIALITÉ]\n\nDonnées Collectées : L'application sauvegarde les données d'achat exclusivement sur votre appareil. Si vous choisissez d'utiliser la fonction de sauvegarde cloud (fonctionnalité Pro), vos données seront cryptées et sauvegardées sur les serveurs sécurisés de Google Firebase.\n\nPartage de Données : Aucune donnée personnelle ou d'achat n'est partagée avec des tiers.\n...",
+  "privacyPolicyBody": "Votre vie privée est importante...\n[INSÉRER ICI LE TEXTO COMPLET DE LA POLITIQUE DE CONFIDENTIALITÉ]\n\nDonnées Collectées : L'application sauvegarde les données d'achat exclusivement sur votre appareil. Si vous choisissez d'utiliser la fonction de sauvegarde cloud (fonctionnalité Pro), vos données seront cryptées et sauvegardées sur les serveurs sécurisés de Google Firebase.\n\nPartage de Données : Aucune donnée personnelle ou d'achat n'est partagée avec des tiers.\n...",
   "privacyPolicyTitle": "Politique de Confidentialité",
   "settingsAccountAndBackup": "Compte et Sauvegarde (Pro)",
-  "settingsLanguageEnglish": "Anglais",
-  "settingsLanguageItalian": "Italien",
+  "settingsLanguageFrench": "Français",
+  "settingsLanguageGerman": "Allemand",
+  "settingsLanguageSpanish": "Espagnol",
   "settingsLanguageSystem": "Système",
   "settingsLoginForBackup": "Connectez-vous avec Google pour activer la sauvegarde",
   "settingsLoginFailed": "Échec de la connexion. Veuillez réessayer.",
@@ -269,8 +330,6 @@
   },
   "migrationDialogTitle": "Achats Locaux Détectés",
   "migrationSuccess": "Achats locaux fusionnés avec votre compte !",
-  "resetEmailError": "Erreur lors de l'envoi de l'e-mail. L'adresse pourrait ne pas être valide.",
-  "resetEmailSuccess": "E-mail de récupération envoyé avec succès ! Vérifiez votre boîte de réception.",
   "restoreConfirmationBody": "Cela écrasera toutes les données locales avec les données sauvegardées dans le cloud. Continuer ?",
   "restoreConfirmationTitle": "Confirmation de Restauration",
   "restoreError": "Erreur lors de la restauration.",
@@ -286,7 +345,6 @@
   "deleteConfirmationMessage": "Êtes-vous sûr de vouloir supprimer cet achat ? Cette action est irréversible.",
   "deleteConfirmationTitle": "Confirmation de Suppression",
   "exportError": "Erreur d'exportation.",
-  "pdfCreationError": "Erreur lors de la création du PDF.",
   "genericError": "Une erreur est survenue :\n{error}",
   "@genericError": {
     "placeholders": {
@@ -296,8 +354,11 @@
     }
   },
   "invalidValue": "Valeur non valide",
+  "listNotFound": "Liste non trouvée ou supprimée.",
+  "pdfCreationError": "Erreur lors de la création du PDF.",
   "purchaseDeletedSuccess": "Achat supprimé avec succès.",
   "requiredField": "Champ obligatoire",
   "shareError": "Erreur de partage.",
+  "shoppingListError": "Erreur lors du chargement des listes.",
   "syncError": "Erreur de synchronisation."
 }

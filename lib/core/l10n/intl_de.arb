@@ -2,13 +2,16 @@
   "@@locale": "de",
 
   "@--- General & Common ---": {},
+  "add": "Hinzufügen",
   "appName": "Glufri",
   "cancel": "Abbrechen",
   "close": "Schließen",
   "continueAction": "WEITER",
+  "create": "Erstellen",
   "delete": "Löschen",
   "duplicate": "Duplizieren",
   "edit": "Bearbeiten",
+  "loading": "Lädt...",
   "or": "oder",
   "price": "Preis",
   "productName": "Produktname",
@@ -48,8 +51,9 @@
   "email": "E-Mail",
   "forgotPassword": "Passwort vergessen?",
   "forgotPasswordInstruction": "Gib die mit deinem Konto verknüpfte E-Mail-Adresse ein. Wir senden dir einen Link zum Zurücksetzen deines Passworts.",
-  "forgotPasswordScreenSubtitle": "Kein Problem! Gib deine E-Mail-Adresse ein und wir helfen dir weiter.",
+  "forgotPasswordSubtitle": "Kein Problem! Gib deine E-Mail-Adresse ein und wir helfen dir weiter.",
   "forgotPasswordTitle": "Passwort vergessen?",
+  "googleLoginFailed": "Google-Login fehlgeschlagen. Bitte versuche es erneut.",
   "invalidEmailError": "Bitte gib eine gültige E-Mail-Adresse ein.",
   "loggedInAs": "Angemeldet als {email}",
   "@loggedInAs": {
@@ -62,7 +66,7 @@
   "login": "Anmelden",
   "loginAction": "ANMELDEN",
   "loginError": "Ungültige E-Mail oder ungültiges Passwort. Bitte versuche es erneut.",
-  "loginInToSaveData": "Melde dich an, um deine Daten zu speichern",
+  "loginToSaveData": "Melde dich an, um deine Daten zu speichern",
   "loginSubtitle": "Melde dich bei deinem Konto an, um fortzufahren.",
   "loginSuccess": "Willkommen!",
   "loginWelcome": "Willkommen zurück!",
@@ -73,6 +77,8 @@
   "password": "Passwort",
   "passwordLengthError": "Das Passwort muss mindestens 6 Zeichen lang sein.",
   "passwordsDoNotMatchError": "Die Passwörter stimmen nicht überein.",
+  "resetEmailError": "Fehler beim Senden der E-Mail. Die Adresse ist möglicherweise ungültig.",
+  "resetEmailSuccess": "Wiederherstellungs-E-Mail erfolgreich gesendet! Überprüfe deinen Posteingang.",
   "sendResetEmail": "WIEDERHERSTELLUNGS-E-MAIL SENDEN",
   "signup": "Registrieren",
   "signupAction": "REGISTRIEREN",
@@ -83,8 +89,8 @@
   "userGuest": "Gast-Benutzer",
 
   "@--- Purchases ---": {},
-  "addProductToStart": "Füge ein Produkt hinzu, um zu beginnen.",
   "addItem": "Produkt hinzufügen",
+  "addProductToStart": "Füge ein Produkt hinzu, um zu beginnen.",
   "andMoreProducts": "... und {count} weitere Produkte.",
   "@andMoreProducts": {
     "placeholders": {
@@ -122,6 +128,23 @@
   "noPurchases": "Keine Einkäufe aufgezeichnet.\nDrücke \"+\", um zu beginnen!",
   "noStoreSpecified": "Kein Geschäft angegeben",
   "other": "Anderes",
+  "pdfReportTitleAnnual": "Ausgabenbericht - {year}",
+  "@pdfReportTitleAnnual": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfReportTitleComplete": "Vollständiger Ausgabenbericht",
+  "pdfReportTitleMonthly": "Ausgabenbericht - {date}",
+  "@pdfReportTitleMonthly": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "priceRange": "Preise: von {min}€ bis {max}€",
   "@priceRange": {
     "placeholders": {
@@ -164,6 +187,14 @@
   "savePurchase": "Einkauf speichern",
   "scanBarcode": "Barcode scannen",
   "searchPlaceholder": "Nach Geschäft oder Produkt suchen...",
+  "selectMonthOfYear": "Wähle einen Monat des {year}",
+  "@selectMonthOfYear": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
   "shareSummary": "Zusammenfassung teilen",
   "shareText": "Hier ist mein letzter glutenfreier Einkauf, verfolgt mit der Glufri App! 🛒",
   "storeHint": "z.B. Supermarkt Rossi",
@@ -176,13 +207,39 @@
   "@--- Shopping Lists ---": {},
   "addFromFavorites": "Aus Favoriten hinzufügen",
   "addItemToShoppingList": "Artikel hinzufügen",
+  "addItemTooltip": "Artikel hinzufügen",
   "addManual": "Manuell hinzufügen",
   "checkedItems": "{checked}/{total} erledigt",
-  "create": "Erstellen",
+  "@checkedItems": {
+    "placeholders": {
+      "checked": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "createNewListTooltip": "Neue Liste",
   "createListDialogTitle": "Neue Liste erstellen",
   "deleteListConfirmationBody": "Möchtest du die Liste '{listName}' wirklich löschen?",
+  "@deleteListConfirmationBody": {
+    "placeholders": {
+      "listName": {
+        "type": "String"
+      }
+    }
+  },
   "deleteListConfirmationTitle": "Löschbestätigung",
   "emptyShoppingList": "Keine Einkaufslisten gefunden.\nDrücke '+' um eine zu erstellen.",
+  "itemAddedToList": "'{itemName}' wurde zur Liste hinzugefügt.",
+  "@itemAddedToList": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
   "listName": "Listenname",
   "listNameEmptyError": "Der Name darf nicht leer sein.",
   "noItemsInShoppingList": "Füge oder entferne mindestens einen Artikel, um zu beginnen.",
@@ -210,12 +267,15 @@
   "settingsFavProducts": "Lieblingsprodukte",
 
   "@--- Budget ---": {},
+  "budgetSaved": "Budget gespeichert!",
   "budgetSetGlutenFree": "Budget für Glutenfreies",
   "budgetSetTotal": "Gesamtbudget",
   "budgetTitle": "Budget für {monthYear}",
   "@budgetTitle": {
     "placeholders": {
-      "monthYear": {}
+      "monthYear": {
+        "type": "String"
+      }
     }
   },
   "budgetTrend": "Ausgabentrend",
@@ -230,8 +290,9 @@
   "privacyPolicyBody": "Deine Privatsphäre ist uns wichtig...\n[VOLLSTÄNDIGER TEXT DER DATENSCHUTZERKLÄRUNG HIER EINFÜGEN]\n\nGesammelte Daten: Die App speichert Einkaufsdaten ausschließlich auf deinem Gerät. Wenn du die Cloud-Backup-Funktion (Pro-Funktion) nutzt, werden deine Daten verschlüsselt und auf den sicheren Servern von Google Firebase gespeichert.\n\nDatenweitergabe: Es werden keine persönlichen oder Einkaufsdaten an Dritte weitergegeben.\n...",
   "privacyPolicyTitle": "Datenschutzerklärung",
   "settingsAccountAndBackup": "Konto und Backup (Pro)",
-  "settingsLanguageEnglish": "Englisch",
-  "settingsLanguageItalian": "Italienisch",
+  "settingsLanguageFrench": "Französisch",
+  "settingsLanguageGerman": "Deutsch",
+  "settingsLanguageSpanish": "Spanisch",
   "settingsLanguageSystem": "System",
   "settingsLoginForBackup": "Mit Google anmelden, um das Backup zu aktivieren",
   "settingsLoginFailed": "Anmeldung fehlgeschlagen. Bitte versuche es erneut.",
@@ -269,8 +330,6 @@
   },
   "migrationDialogTitle": "Lokale Einkäufe erkannt",
   "migrationSuccess": "Lokale Einkäufe erfolgreich mit deinem Konto zusammengeführt!",
-  "resetEmailError": "Fehler beim Senden der E-Mail. Die Adresse ist möglicherweise ungültig.",
-  "resetEmailSuccess": "Wiederherstellungs-E-Mail erfolgreich gesendet! Überprüfe deinen Posteingang.",
   "restoreConfirmationBody": "Dies wird alle lokalen Daten mit den in der Cloud gespeicherten Daten überschreiben. Fortfahren?",
   "restoreConfirmationTitle": "Wiederherstellung bestätigen",
   "restoreError": "Fehler bei der Wiederherstellung.",
@@ -286,7 +345,6 @@
   "deleteConfirmationMessage": "Möchtest du diesen Einkauf wirklich löschen? Die Aktion ist irreversibel.",
   "deleteConfirmationTitle": "Löschbestätigung",
   "exportError": "Exportfehler.",
-  "pdfCreationError": "Fehler beim Erstellen der PDF-Datei.",
   "genericError": "Es ist ein Fehler aufgetreten:\n{error}",
   "@genericError": {
     "placeholders": {
@@ -296,8 +354,11 @@
     }
   },
   "invalidValue": "Ungültiger Wert",
+  "listNotFound": "Liste nicht gefunden oder gelöscht.",
+  "pdfCreationError": "Fehler beim Erstellen der PDF-Datei.",
   "purchaseDeletedSuccess": "Einkauf erfolgreich gelöscht.",
   "requiredField": "Pflichtfeld",
   "shareError": "Fehler beim Teilen.",
+  "shoppingListError": "Fehler beim Laden der Listen.",
   "syncError": "Synchronisierungsfehler."
 }

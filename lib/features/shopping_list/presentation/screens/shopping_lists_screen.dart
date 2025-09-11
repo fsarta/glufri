@@ -91,12 +91,12 @@ class ShoppingListsScreen extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, st) =>
-            const Center(child: Text("Errore nel caricamento delle liste.")),
+        error: (err, st) => Center(child: Text(l10n.shoppingListError)),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: 'shopping_lists_fab',
         icon: const Icon(Icons.add),
-        label: const Text("Nuova Lista"),
+        label: Text(l10n.createNewListTooltip),
         onPressed: () => _showCreateListDialog(context, ref),
       ),
     );

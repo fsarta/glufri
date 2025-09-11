@@ -251,6 +251,7 @@ class _PurchaseHistoryScreenState extends ConsumerState<PurchaseHistoryScreen> {
       ),
       // Pulsante per creare una nuova sessione d'acquisto.
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: 'purchase_history_fab',
         onPressed: () {
           // Fondamentale: resetta lo stato del carrello per iniziare una sessione pulita.
           ref.read(cartProvider.notifier).reset();
@@ -596,6 +597,8 @@ class _SearchedProductSummaryCard extends StatelessWidget {
 
 // Funzione che mostra il BottomSheet con le opzioni
 void _showExportOptions(BuildContext context, WidgetRef ref) {
+  final l10n = AppLocalizations.of(context)!;
+
   showModalBottomSheet(
     context: context,
     builder: (ctx) {
@@ -628,7 +631,7 @@ void _showExportOptions(BuildContext context, WidgetRef ref) {
                 _exportPurchases(
                   context,
                   allPurchases,
-                  "Report Spese Completo",
+                  l10n.pdfReportTitleComplete,
                 );
               },
             ),
@@ -687,6 +690,8 @@ Future<void> _selectAndExportMonth(BuildContext context, WidgetRef ref) async {
 
 // Guida l'utente nella selezione dell'ANNO
 Future<void> _selectAndExportYear(BuildContext context, WidgetRef ref) async {
+  final l10n = AppLocalizations.of(context)!;
+
   final now = DateTime.now();
   final selectedYear = await showDialog<int>(
     context: context,
@@ -711,7 +716,7 @@ Future<void> _selectAndExportYear(BuildContext context, WidgetRef ref) async {
       .where((p) => p.date.year == selectedYear)
       .toList();
 
-  final title = "Report Spese - $selectedYear";
+  final title = l10n.pdfReportTitleAnnual(selectedYear.toString());
   _exportPurchases(context, yearPurchases, title);
 }
 
@@ -770,6 +775,8 @@ void _exportCurrentMonthReport(BuildContext context, WidgetRef ref) {
 
 // Funzione per esportare il report dell'ANNO corrente
 void _exportCurrentYearReport(BuildContext context, WidgetRef ref) {
+  final l10n = AppLocalizations.of(context)!;
+
   final now = DateTime.now();
   final allPurchases = ref.read(purchaseListProvider).valueOrNull ?? [];
 
@@ -777,13 +784,15 @@ void _exportCurrentYearReport(BuildContext context, WidgetRef ref) {
       .where((p) => p.date.year == now.year)
       .toList();
 
-  final title = "Report Spese - ${now.year}";
+  final title = l10n.pdfReportTitleAnnual(now.year.toString());
   _exportPurchases(context, yearPurchases, title);
 }
 
 // Funzione per esportare TUTTI gli acquisti
 void _exportFullReport(BuildContext context, WidgetRef ref) {
+  final l10n = AppLocalizations.of(context)!;
+
   final allPurchases = ref.read(purchaseListProvider).valueOrNull ?? [];
-  final title = "Report Spese Completo";
+  final title = l10n.pdfReportTitleComplete;
   _exportPurchases(context, allPurchases, title);
 }

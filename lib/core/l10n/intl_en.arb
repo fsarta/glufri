@@ -2,13 +2,16 @@
   "@@locale": "en",
 
   "@--- General & Common ---": {},
+  "add": "Add",
   "appName": "Glufri",
   "cancel": "Cancel",
   "close": "Close",
   "continueAction": "CONTINUE",
+  "create": "Create",
   "delete": "Delete",
   "duplicate": "Duplicate",
   "edit": "Edit",
+  "loading": "Loading...",
   "or": "or",
   "price": "Price",
   "productName": "Product Name",
@@ -48,8 +51,9 @@
   "email": "Email",
   "forgotPassword": "Forgot password?",
   "forgotPasswordInstruction": "Enter the email associated with your account. We'll send you a link to reset your password.",
-  "forgotPasswordScreenSubtitle": "No problem! Enter your email and we'll help you out.",
+  "forgotPasswordSubtitle": "No problem! Enter your email and we'll help you out.",
   "forgotPasswordTitle": "Forgot Password?",
+  "googleLoginFailed": "Google login failed. Please try again.",
   "invalidEmailError": "Please enter a valid email.",
   "loggedInAs": "Logged in as {email}",
   "@loggedInAs": {
@@ -62,7 +66,7 @@
   "login": "Login",
   "loginAction": "LOGIN",
   "loginError": "Invalid email or password. Please try again.",
-  "loginInToSaveData": "Log in to save your data",
+  "loginToSaveData": "Log in to save your data",
   "loginSubtitle": "Login to your account to continue.",
   "loginSuccess": "Welcome!",
   "loginWelcome": "Welcome Back!",
@@ -73,6 +77,8 @@
   "password": "Password",
   "passwordLengthError": "The password must be at least 6 characters long.",
   "passwordsDoNotMatchError": "Passwords do not match.",
+  "resetEmailError": "Error sending the email. The address may not be valid.",
+  "resetEmailSuccess": "Recovery email sent successfully! Check your inbox.",
   "sendResetEmail": "SEND RESET EMAIL",
   "signup": "Sign up",
   "signupAction": "SIGN UP",
@@ -83,8 +89,8 @@
   "userGuest": "Guest User",
 
   "@--- Purchases ---": {},
-  "addProductToStart": "Add a product to get started.",
   "addItem": "Add Item",
+  "addProductToStart": "Add a product to get started.",
   "andMoreProducts": "... and {count} more products.",
   "@andMoreProducts": {
     "placeholders": {
@@ -122,6 +128,23 @@
   "noPurchases": "No purchases recorded.\nPress \"+\" to get started!",
   "noStoreSpecified": "No store specified",
   "other": "Other",
+  "pdfReportTitleAnnual": "Spending Report - {year}",
+  "@pdfReportTitleAnnual": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfReportTitleComplete": "Complete Spending Report",
+  "pdfReportTitleMonthly": "Spending Report - {date}",
+  "@pdfReportTitleMonthly": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "priceRange": "Prices: from €{min} to €{max}",
   "@priceRange": {
     "placeholders": {
@@ -164,6 +187,14 @@
   "savePurchase": "Save Purchase",
   "scanBarcode": "Scan Barcode",
   "searchPlaceholder": "Search by store or product...",
+  "selectMonthOfYear": "Select a Month of {year}",
+  "@selectMonthOfYear": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
   "shareSummary": "Share Summary",
   "shareText": "Here's my latest gluten-free purchase tracked with the Glufri app! 🛒",
   "storeHint": "e.g., Rossi Supermarket",
@@ -176,13 +207,39 @@
   "@--- Shopping Lists ---": {},
   "addFromFavorites": "Add from Favorites",
   "addItemToShoppingList": "Add Item",
+  "addItemTooltip": "Add item",
   "addManual": "Add manually",
   "checkedItems": "{checked}/{total} completed",
-  "create": "Create",
+  "@checkedItems": {
+    "placeholders": {
+      "checked": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "createNewListTooltip": "New List",
   "createListDialogTitle": "Create New List",
   "deleteListConfirmationBody": "Are you sure you want to delete the list '{listName}'?",
+  "@deleteListConfirmationBody": {
+    "placeholders": {
+      "listName": {
+        "type": "String"
+      }
+    }
+  },
   "deleteListConfirmationTitle": "Confirm Deletion",
   "emptyShoppingList": "No shopping lists found.\nPress '+' to create one.",
+  "itemAddedToList": "'{itemName}' added to list.",
+  "@itemAddedToList": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
   "listName": "List name",
   "listNameEmptyError": "Name cannot be empty.",
   "noItemsInShoppingList": "Add or un-check at least one item to start.",
@@ -210,12 +267,15 @@
   "settingsFavProducts": "Favorite Products",
 
   "@--- Budget ---": {},
+  "budgetSaved": "Budget saved!",
   "budgetSetGlutenFree": "Gluten-Free Budget",
   "budgetSetTotal": "Total Budget",
   "budgetTitle": "Budget for {monthYear}",
   "@budgetTitle": {
     "placeholders": {
-      "monthYear": {}
+      "monthYear": {
+        "type": "String"
+      }
     }
   },
   "budgetTrend": "Spending Trend",
@@ -230,8 +290,6 @@
   "privacyPolicyBody": "Your privacy is important...\n[INSERT FULL PRIVACY POLICY TEXT HERE]\n\nData Collected: The app saves purchase data exclusively on your device. If you choose to use the cloud backup feature (Pro feature), your data will be encrypted and saved on Google Firebase's secure servers.\n\nData Sharing: No personal or purchase data is shared with third parties.\n...",
   "privacyPolicyTitle": "Privacy Policy",
   "settingsAccountAndBackup": "Account and Backup (Pro)",
-  "settingsLanguageEnglish": "English",
-  "settingsLanguageItalian": "Italian",
   "settingsLanguageSystem": "System",
   "settingsLoginForBackup": "Log in with Google to enable backup",
   "settingsLoginFailed": "Login failed. Please try again.",
@@ -269,8 +327,6 @@
   },
   "migrationDialogTitle": "Local Purchases Detected",
   "migrationSuccess": "Local purchases merged with your account!",
-  "resetEmailError": "Error sending the email. The address may not be valid.",
-  "resetEmailSuccess": "Recovery email sent successfully! Check your inbox.",
   "restoreConfirmationBody": "This will overwrite all local data with the data saved in the cloud. Continue?",
   "restoreConfirmationTitle": "Restore Confirmation",
   "restoreError": "Error during restore.",
@@ -282,11 +338,9 @@
   "settingsRestoreFromCloud": "Restore from Cloud",
 
   "@--- Dialogs, Messages & Errors ---": {},
-  "budgetSaved": "Budget saved!",
   "deleteConfirmationMessage": "Are you sure you want to delete this purchase? This action is irreversible.",
   "deleteConfirmationTitle": "Delete Confirmation",
   "exportError": "Export error.",
-  "pdfCreationError": "Error creating the PDF.",
   "genericError": "An error occurred:\n{error}",
   "@genericError": {
     "placeholders": {
@@ -296,8 +350,11 @@
     }
   },
   "invalidValue": "Invalid value",
+  "listNotFound": "List not found or deleted.",
+  "pdfCreationError": "Error creating the PDF.",
   "purchaseDeletedSuccess": "Purchase deleted successfully.",
   "requiredField": "Required field",
   "shareError": "Sharing error.",
+  "shoppingListError": "Error loading lists.",
   "syncError": "Synchronization error."
 }

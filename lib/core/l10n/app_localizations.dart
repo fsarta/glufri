@@ -104,6 +104,12 @@ abstract class AppLocalizations {
     Locale('it'),
   ];
 
+  /// No description provided for @add.
+  ///
+  /// In it, this message translates to:
+  /// **'Aggiungi'**
+  String get add;
+
   /// No description provided for @appName.
   ///
   /// In it, this message translates to:
@@ -128,6 +134,12 @@ abstract class AppLocalizations {
   /// **'CONTINUA'**
   String get continueAction;
 
+  /// No description provided for @create.
+  ///
+  /// In it, this message translates to:
+  /// **'Crea'**
+  String get create;
+
   /// No description provided for @delete.
   ///
   /// In it, this message translates to:
@@ -145,6 +157,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Modifica'**
   String get edit;
+
+  /// No description provided for @loading.
+  ///
+  /// In it, this message translates to:
+  /// **'Caricamento...'**
+  String get loading;
 
   /// No description provided for @or.
   ///
@@ -344,17 +362,23 @@ abstract class AppLocalizations {
   /// **'Inserisci l\'email associata al tuo account. Ti invieremo un link per reimpostare la tua password.'**
   String get forgotPasswordInstruction;
 
-  /// No description provided for @forgotPasswordScreenSubtitle.
+  /// No description provided for @forgotPasswordSubtitle.
   ///
   /// In it, this message translates to:
   /// **'Nessun problema! Inserisci la tua email e ti aiuteremo.'**
-  String get forgotPasswordScreenSubtitle;
+  String get forgotPasswordSubtitle;
 
   /// No description provided for @forgotPasswordTitle.
   ///
   /// In it, this message translates to:
   /// **'Password Dimenticata?'**
   String get forgotPasswordTitle;
+
+  /// No description provided for @googleLoginFailed.
+  ///
+  /// In it, this message translates to:
+  /// **'Login con Google fallito. Riprova.'**
+  String get googleLoginFailed;
 
   /// No description provided for @invalidEmailError.
   ///
@@ -386,11 +410,11 @@ abstract class AppLocalizations {
   /// **'Email o password errati. Riprova.'**
   String get loginError;
 
-  /// No description provided for @loginInToSaveData.
+  /// No description provided for @loginToSaveData.
   ///
   /// In it, this message translates to:
   /// **'Accedi per salvare i tuoi dati'**
-  String get loginInToSaveData;
+  String get loginToSaveData;
 
   /// No description provided for @loginSubtitle.
   ///
@@ -452,6 +476,18 @@ abstract class AppLocalizations {
   /// **'Le password non coincidono.'**
   String get passwordsDoNotMatchError;
 
+  /// No description provided for @resetEmailError.
+  ///
+  /// In it, this message translates to:
+  /// **'Errore durante l\'invio dell\'email. L\'indirizzo potrebbe non essere valido.'**
+  String get resetEmailError;
+
+  /// No description provided for @resetEmailSuccess.
+  ///
+  /// In it, this message translates to:
+  /// **'Email di recupero inviata con successo! Controlla la tua casella di posta.'**
+  String get resetEmailSuccess;
+
   /// No description provided for @sendResetEmail.
   ///
   /// In it, this message translates to:
@@ -500,17 +536,17 @@ abstract class AppLocalizations {
   /// **'Utente Ospite'**
   String get userGuest;
 
-  /// No description provided for @addProductToStart.
-  ///
-  /// In it, this message translates to:
-  /// **'Aggiungi un prodotto per iniziare.'**
-  String get addProductToStart;
-
   /// No description provided for @addItem.
   ///
   /// In it, this message translates to:
   /// **'Aggiungi Prodotto'**
   String get addItem;
+
+  /// No description provided for @addProductToStart.
+  ///
+  /// In it, this message translates to:
+  /// **'Aggiungi un prodotto per iniziare.'**
+  String get addProductToStart;
 
   /// No description provided for @andMoreProducts.
   ///
@@ -650,6 +686,24 @@ abstract class AppLocalizations {
   /// **'Altro'**
   String get other;
 
+  /// No description provided for @pdfReportTitleAnnual.
+  ///
+  /// In it, this message translates to:
+  /// **'Report Spese - {year}'**
+  String pdfReportTitleAnnual(String year);
+
+  /// No description provided for @pdfReportTitleComplete.
+  ///
+  /// In it, this message translates to:
+  /// **'Report Spese Completo'**
+  String get pdfReportTitleComplete;
+
+  /// No description provided for @pdfReportTitleMonthly.
+  ///
+  /// In it, this message translates to:
+  /// **'Report Spese - {date}'**
+  String pdfReportTitleMonthly(String date);
+
   /// No description provided for @priceRange.
   ///
   /// In it, this message translates to:
@@ -734,6 +788,12 @@ abstract class AppLocalizations {
   /// **'Cerca per negozio o prodotto...'**
   String get searchPlaceholder;
 
+  /// No description provided for @selectMonthOfYear.
+  ///
+  /// In it, this message translates to:
+  /// **'Seleziona un Mese del {year}'**
+  String selectMonthOfYear(String year);
+
   /// No description provided for @shareSummary.
   ///
   /// In it, this message translates to:
@@ -794,6 +854,12 @@ abstract class AppLocalizations {
   /// **'Aggiungi Prodotto'**
   String get addItemToShoppingList;
 
+  /// No description provided for @addItemTooltip.
+  ///
+  /// In it, this message translates to:
+  /// **'Aggiungi item'**
+  String get addItemTooltip;
+
   /// No description provided for @addManual.
   ///
   /// In it, this message translates to:
@@ -804,13 +870,13 @@ abstract class AppLocalizations {
   ///
   /// In it, this message translates to:
   /// **'{checked}/{total} completati'**
-  String checkedItems(Object checked, Object total);
+  String checkedItems(String checked, String total);
 
-  /// No description provided for @create.
+  /// No description provided for @createNewListTooltip.
   ///
   /// In it, this message translates to:
-  /// **'Crea'**
-  String get create;
+  /// **'Nuova Lista'**
+  String get createNewListTooltip;
 
   /// No description provided for @createListDialogTitle.
   ///
@@ -822,7 +888,7 @@ abstract class AppLocalizations {
   ///
   /// In it, this message translates to:
   /// **'Sei sicuro di voler eliminare la lista \'{listName}\'?'**
-  String deleteListConfirmationBody(Object listName);
+  String deleteListConfirmationBody(String listName);
 
   /// No description provided for @deleteListConfirmationTitle.
   ///
@@ -835,6 +901,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Nessuna lista della spesa.\nPremi \'+\' per crearne una.'**
   String get emptyShoppingList;
+
+  /// No description provided for @itemAddedToList.
+  ///
+  /// In it, this message translates to:
+  /// **'\'{itemName}\' aggiunto alla lista.'**
+  String itemAddedToList(String itemName);
 
   /// No description provided for @listName.
   ///
@@ -932,6 +1004,12 @@ abstract class AppLocalizations {
   /// **'Prodotti Preferiti'**
   String get settingsFavProducts;
 
+  /// No description provided for @budgetSaved.
+  ///
+  /// In it, this message translates to:
+  /// **'Budget salvato!'**
+  String get budgetSaved;
+
   /// No description provided for @budgetSetGlutenFree.
   ///
   /// In it, this message translates to:
@@ -948,7 +1026,7 @@ abstract class AppLocalizations {
   ///
   /// In it, this message translates to:
   /// **'Budget di {monthYear}'**
-  String budgetTitle(Object monthYear);
+  String budgetTitle(String monthYear);
 
   /// No description provided for @budgetTrend.
   ///
@@ -1009,18 +1087,6 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Account e Backup (Pro)'**
   String get settingsAccountAndBackup;
-
-  /// No description provided for @settingsLanguageEnglish.
-  ///
-  /// In it, this message translates to:
-  /// **'English'**
-  String get settingsLanguageEnglish;
-
-  /// No description provided for @settingsLanguageItalian.
-  ///
-  /// In it, this message translates to:
-  /// **'Italiano'**
-  String get settingsLanguageItalian;
 
   /// No description provided for @settingsLanguageSystem.
   ///
@@ -1178,18 +1244,6 @@ abstract class AppLocalizations {
   /// **'Acquisti locali uniti al tuo account!'**
   String get migrationSuccess;
 
-  /// No description provided for @resetEmailError.
-  ///
-  /// In it, this message translates to:
-  /// **'Errore durante l\'invio dell\'email. L\'indirizzo potrebbe non essere valido.'**
-  String get resetEmailError;
-
-  /// No description provided for @resetEmailSuccess.
-  ///
-  /// In it, this message translates to:
-  /// **'Email di recupero inviata con successo! Controlla la tua casella di posta.'**
-  String get resetEmailSuccess;
-
   /// No description provided for @restoreConfirmationBody.
   ///
   /// In it, this message translates to:
@@ -1244,12 +1298,6 @@ abstract class AppLocalizations {
   /// **'Ripristina da Cloud'**
   String get settingsRestoreFromCloud;
 
-  /// No description provided for @budgetSaved.
-  ///
-  /// In it, this message translates to:
-  /// **'Budget salvato!'**
-  String get budgetSaved;
-
   /// No description provided for @deleteConfirmationMessage.
   ///
   /// In it, this message translates to:
@@ -1268,12 +1316,6 @@ abstract class AppLocalizations {
   /// **'Errore durante l\'esportazione.'**
   String get exportError;
 
-  /// No description provided for @pdfCreationError.
-  ///
-  /// In it, this message translates to:
-  /// **'Errore durante la creazione del PDF.'**
-  String get pdfCreationError;
-
   /// No description provided for @genericError.
   ///
   /// In it, this message translates to:
@@ -1285,6 +1327,18 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Valore non valido'**
   String get invalidValue;
+
+  /// No description provided for @listNotFound.
+  ///
+  /// In it, this message translates to:
+  /// **'Lista non trovata o eliminata.'**
+  String get listNotFound;
+
+  /// No description provided for @pdfCreationError.
+  ///
+  /// In it, this message translates to:
+  /// **'Errore durante la creazione del PDF.'**
+  String get pdfCreationError;
 
   /// No description provided for @purchaseDeletedSuccess.
   ///
@@ -1303,6 +1357,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Errore durante la condivisione.'**
   String get shareError;
+
+  /// No description provided for @shoppingListError.
+  ///
+  /// In it, this message translates to:
+  /// **'Errore nel caricamento delle liste.'**
+  String get shoppingListError;
 
   /// No description provided for @syncError.
   ///
