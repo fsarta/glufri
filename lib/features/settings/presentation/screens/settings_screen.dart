@@ -115,6 +115,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     subtitle: Text(user.email ?? ''),
                   ),
                   // Pulsante Backup
+                  // Todo - da rimuovere
                   ListTile(
                     enabled: !_isBackupLoading && !_isRestoreLoading,
                     leading: _isBackupLoading

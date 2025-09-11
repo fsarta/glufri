@@ -2,8 +2,10 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:glufri/features/backup/domain/sync_service.dart';
 import 'package:glufri/features/backup/presentation/providers/user_provider.dart';
 import 'package:glufri/features/purchase/data/datasources/purchase_local_datasource.dart';
+import 'package:glufri/features/purchase/data/datasources/purchase_remote_datasource.dart';
 import 'package:glufri/features/purchase/data/models/purchase_item_model.dart';
 import 'package:glufri/features/purchase/data/models/purchase_model.dart';
 import 'package:glufri/features/purchase/data/repositories/purchase_repository_impl.dart';
@@ -25,10 +27,19 @@ final purchaseLocalDataSourceProvider = Provider<PurchaseLocalDataSource>((
   return PurchaseLocalDataSourceImpl(userId: userId);
 });
 
-// 2. Provider per il Repository (dipende dal datasource)
+final purchaseRemoteDataSourceProvider = Provider<PurchaseRemoteDataSource>((
+  ref,
+) {
+  final firestore = ref.watch(firestoreProvider); // Da sync_service.dart
+  final auth = ref.watch(authProvider); // Da sync_service.dart
+  return PurchaseFirestoreDataSource(firestore, auth);
+});
+
+// Provider per il Repository (dipende dal datasource)
 final purchaseRepositoryProvider = Provider<PurchaseRepository>((ref) {
   final localDataSource = ref.watch(purchaseLocalDataSourceProvider);
-  return PurchaseRepositoryImpl(localDataSource);
+  final remoteDataSource = ref.watch(purchaseRemoteDataSourceProvider);
+  return PurchaseRepositoryImpl(localDataSource, remoteDataSource);
 });
 
 // 3. Provider della lista di acquisti  FILTRATA
