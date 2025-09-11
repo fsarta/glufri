@@ -86,7 +86,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   ),
                 ),
                 Text(
-                  "Crea un account per salvare i tuoi dati", // TODO: Localizza
+                  l10n.signupSubtitle, // Crea un account per salvare i tuoi dati
                   textAlign: TextAlign.center,
                   style: theme.textTheme.titleMedium,
                 ),
@@ -179,7 +179,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Hai già un account?"), // TODO: Localizza
+                    Text(l10n.alreadyHaveAccountPrompt), // Hai già un account?
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),
                       child: Text(l10n.login),

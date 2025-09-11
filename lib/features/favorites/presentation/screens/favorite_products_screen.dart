@@ -83,12 +83,12 @@ class FavoriteProductsScreen extends ConsumerWidget {
                         ref
                             .read(favoriteActionsProvider)
                             .removeFavorite(product.id);
-                        // Mostra una SnackBar per conferma (e futuro "Annulla")
+                        // Mostra una SnackBar per conferma (e futuro 'Annulla')
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
-                              "'${product.name}' rimosso dai preferiti.",
-                            ), // TODO: Localizza
+                              l10n.favoriteProductRemoved(product.name),
+                            ),
                           ),
                         );
                       },
@@ -103,7 +103,7 @@ class FavoriteProductsScreen extends ConsumerWidget {
                   ],
                 ),
 
-                // --- 3. IL NOSTRO LISTTILE È ORA IL "child" DI SLIDABLE ---
+                // --- 3. IL NOSTRO LISTTILE È ORA IL 'child' DI SLIDABLE ---
                 child: ListTile(
                   leading: Icon(
                     product.isGlutenFree ? Icons.verified : Icons.label,
@@ -129,7 +129,7 @@ class FavoriteProductsScreen extends ConsumerWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        tooltip: "Aggiungi Preferito", // TODO: Localizza
+        tooltip: l10n.addFavoriteProduct, // TODO: Localizza
         child: const Icon(Icons.add),
         onPressed: () {
           showAddEditFavoriteDialog(context);

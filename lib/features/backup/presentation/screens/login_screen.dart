@@ -45,8 +45,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     } catch (e) {
       if (mounted)
         setState(
-          () => _errorMessage = "Email o password errati.",
-        ); // TODO: Localizza
+          () => _errorMessage = AppLocalizations.of(context)!.loginError,
+        );
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -99,7 +99,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                 ),
                 Text(
-                  l10n.loginWelcome, // "Bentornato!"
+                  l10n.loginWelcome, // Bentornato!
                   textAlign: TextAlign.center,
                   style: theme.textTheme.headlineLarge?.copyWith(
                     fontWeight: FontWeight.bold,
@@ -107,7 +107,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  l10n.loginSubtitle, // "Accedi per continuare"
+                  l10n.loginSubtitle, // Accedi per continuare
                   textAlign: TextAlign.center,
                   style: theme.textTheme.titleMedium,
                 ),
@@ -199,7 +199,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(l10n.noAccountPrompt), // "Non hai un account?"
+                    Text(l10n.noAccountPrompt), // Non hai un account?
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).push(

@@ -47,7 +47,7 @@ class SearchedProductSummary {
   final double totalSpent;
   final double totalQuantity;
   final int purchaseCount;
-  // Manteniamo una lista delle "istanze" di acquisto per poter mostrare i dettagli
+  // Manteniamo una lista delle 'istanze' di acquisto per poter mostrare i dettagli
   final List<PurchaseItemModel> items;
   // E una mappa per risalire all'acquisto originale (per data e negozio)
   final Map<String, PurchaseModel> purchaseContext;

@@ -18,8 +18,9 @@ class ShoppingListDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Usiamo il provider corretto, non quello "autoDispose"
+    // Usiamo il provider corretto, non quello 'autoDispose'
     final listAsync = ref.watch(singleShoppingListProvider(listId));
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
@@ -61,7 +62,7 @@ class ShoppingListDetailScreen extends ConsumerWidget {
         child: const Icon(Icons.add),
         onPressed: () => _showAddItemSourceDialog(context, ref),
       ),
-      // Usa persistentFooterButtons per il pulsante "Inizia Acquisto"
+      // Usa persistentFooterButtons per il pulsante 'Inizia Acquisto'
       persistentFooterButtons: [
         SafeArea(
           child: Container(
@@ -69,20 +70,14 @@ class ShoppingListDetailScreen extends ConsumerWidget {
             width: double.infinity,
             child: FilledButton.icon(
               icon: const Icon(Icons.shopping_cart_checkout),
-              label: const Text(
-                "Inizia Acquisto dalla Lista",
-              ), // TODO: Localizza
+              label: Text(l10n.startPurchaseFromList),
               onPressed: () {
                 final list = ref.read(singleShoppingListProvider(listId)).value;
                 if (list == null ||
                     list.items.where((i) => !i.isChecked).isEmpty) {
                   // Mostra un messaggio se la lista è vuota o tutti gli item sono spuntati
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        "Aggiungi o de-seleziona almeno un item per iniziare.",
-                      ),
-                    ),
+                    SnackBar(content: Text(l10n.noItemsInShoppingList)),
                   );
                   return;
                 }
@@ -152,6 +147,7 @@ class ShoppingListDetailScreen extends ConsumerWidget {
     WidgetRef ref,
     ShoppingListModel list,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController();
     bool isGlutenFree = false;
 
@@ -160,16 +156,16 @@ class ShoppingListDetailScreen extends ConsumerWidget {
       builder: (ctx) => StatefulBuilder(
         // Serve per il checkbox
         builder: (dCtx, setState) => AlertDialog(
-          title: const Text("Aggiungi Prodotto"), // TODO:
+          title: Text(l10n.addItemToShoppingList),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: controller,
-                decoration: InputDecoration(labelText: "Nome prodotto"),
+                decoration: InputDecoration(labelText: l10n.productName),
               ),
               CheckboxListTile(
-                title: Text("Senza Glutine"),
+                title: Text(l10n.glutenFree),
                 value: isGlutenFree,
                 onChanged: (val) => setState(() => isGlutenFree = val ?? false),
               ),
@@ -178,7 +174,7 @@ class ShoppingListDetailScreen extends ConsumerWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dCtx).pop(),
-              child: Text("Annulla"),
+              child: Text(l10n.cancel),
             ),
             FilledButton(
               onPressed: () {
@@ -207,12 +203,14 @@ class ShoppingListDetailScreen extends ConsumerWidget {
   void _showFavoritesPickerForList(BuildContext context, WidgetRef ref) async {
     final favorites = await ref.read(favoriteListProvider.future);
     final list = ref.read(singleShoppingListProvider(listId)).value;
+    final l10n = AppLocalizations.of(context)!;
+
     if (list == null || !context.mounted) return;
 
     if (favorites.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Non hai prodotti preferiti.")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.noFavoritesAvailable)));
       return;
     }
 
@@ -232,7 +230,7 @@ class ShoppingListDetailScreen extends ConsumerWidget {
           builder: (BuildContext context, ScrollController scrollController) {
             return Column(
               children: [
-                // "Maniglia" per indicare che il foglio è trascinabile
+                // 'Maniglia' per indicare che il foglio è trascinabile
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 12),
                   height: 5,
@@ -246,7 +244,7 @@ class ShoppingListDetailScreen extends ConsumerWidget {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16.0),
                   child: Text(
-                    "Seleziona un Preferito", // TODO: Localizza
+                    l10n.selectFavorite,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
@@ -392,7 +390,7 @@ class _FavoriteProductCard extends StatelessWidget {
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow
-                    .ellipsis, // Aggiunge "..." se il testo è troppo lungo
+                    .ellipsis, // Aggiunge '...' se il testo è troppo lungo
                 style: theme.textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),

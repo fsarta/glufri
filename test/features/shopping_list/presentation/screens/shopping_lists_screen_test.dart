@@ -60,7 +60,7 @@ void main() {
         'Spesa di Natale',
       );
 
-      // Clicca il pulsante "Crea"
+      // Clicca il pulsante 'Crea'
       await tester.tap(find.text('Crea'));
       await tester.pumpAndSettle(); // Attendi che il dialogo si chiuda
 

@@ -56,7 +56,7 @@ class LocaleNotifier extends StateNotifier<Locale?> {
 
     if (locale.languageCode == 'system') {
       await prefs.remove('languageCode');
-      state = null; // null significa "usa la lingua di sistema"
+      state = null; // null significa 'usa la lingua di sistema'
       // Ripristina il default locale a quello di sistema
       Intl.defaultLocale = WidgetsBinding.instance.platformDispatcher.locale
           .toLanguageTag();

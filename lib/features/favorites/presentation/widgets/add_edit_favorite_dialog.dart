@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/favorites/data/models/favorite_product_model.dart';
 import 'package:glufri/features/favorites/presentation/providers/favorite_providers.dart';
 import 'package:uuid/uuid.dart';
@@ -74,10 +75,13 @@ class _AddEditFavoriteDialogContentState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AlertDialog(
       title: Text(
-        widget.product != null ? "Modifica Preferito" : "Aggiungi Preferito",
-      ), //TODO: l10n
+        widget.product != null
+            ? l10n.addEditFavoriteDialogEdit
+            : l10n.addEditFavoriteDialogAdd,
+      ),
       content: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -86,33 +90,31 @@ class _AddEditFavoriteDialogContentState
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: "Nome Prodotto",
+                decoration: InputDecoration(
+                  labelText: l10n.productName,
                 ), // TODO:
                 validator: (val) =>
-                    (val?.trim().isEmpty ?? true) ? "Campo obbligatorio" : null,
+                    (val?.trim().isEmpty ?? true) ? l10n.requiredField : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _barcodeController,
-                decoration: const InputDecoration(
-                  labelText: "Codice a Barre (Opzionale)",
-                ), // TODO:
+                decoration: InputDecoration(labelText: l10n.barcodeOptional),
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _priceController,
-                decoration: const InputDecoration(
-                  labelText: "Prezzo di Default (Opzionale)",
+                decoration: InputDecoration(
+                  labelText: l10n.defaultPrice,
                   suffixText: "€",
-                ), // TODO:
+                ),
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
               ),
               const SizedBox(height: 16),
               CheckboxListTile(
-                title: const Text("Prodotto Senza Glutine"), //TODO
+                title: Text(l10n.glutenFreeProduct),
                 value: _isGlutenFree,
                 onChanged: (val) =>
                     setState(() => _isGlutenFree = val ?? false),
@@ -124,9 +126,9 @@ class _AddEditFavoriteDialogContentState
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text("Annulla"),
+          child: Text(l10n.cancel),
         ),
-        FilledButton(onPressed: _saveFavorite, child: const Text("Salva")),
+        FilledButton(onPressed: _saveFavorite, child: Text(l10n.save)),
       ],
     );
   }

@@ -91,7 +91,7 @@ final monetizationProvider =
 
 // Provider semplice per sapere se l'utente è PRO
 final isProUserProvider = Provider<bool>((ref) {
-  // Ora "osserviamo" il nostro nuovo provider di debug
+  // Ora 'osserviamo' il nostro nuovo provider di debug
   final isDebugOverrideActive = ref.watch(debugProVersionOverrideProvider);
 
   // La logica rimane la stessa, ma ora è REATTIVA

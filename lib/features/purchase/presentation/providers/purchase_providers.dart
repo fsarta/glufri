@@ -227,7 +227,7 @@ final productHistoryProvider = FutureProvider.autoDispose
       // Se non ci sono acquisti, non c'è cronologia
       if (allPurchases.isEmpty) return null;
 
-      // 2. "Appiattiamo" i dati: creiamo una lista di coppie (item, acquisto-genitore)
+      // 2. 'Appiattiamo' i dati: creiamo una lista di coppie (item, acquisto-genitore)
       // per tutti gli item che corrispondono al barcode.
       final List<(PurchaseItemModel, PurchaseModel)> matchingEntries = [];
       for (final purchase in allPurchases) {

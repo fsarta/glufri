@@ -721,6 +721,8 @@ Future<void> _exportPurchases(
   List<PurchaseModel> purchases,
   String title,
 ) async {
+  final l10n = AppLocalizations.of(context)!;
+
   // Mostra un caricamento
   showDialog(
     context: context,
@@ -744,8 +746,8 @@ Future<void> _exportPurchases(
     Navigator.of(context, rootNavigator: true).pop();
     // Mostra errore
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Errore durante la creazione del PDF."),
+      SnackBar(
+        content: Text(l10n.pdfCreationError),
         backgroundColor: Colors.red,
       ),
     );

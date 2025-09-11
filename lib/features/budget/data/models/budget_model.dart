@@ -4,7 +4,7 @@ part 'budget_model.g.dart';
 
 @HiveType(typeId: 2) // <-- Nuovo typeId, assicurati sia univoco
 class BudgetModel extends HiveObject {
-  // Usiamo un ID composto "anno-mese" es. "2025-09" per una facile ricerca
+  // Usiamo un ID composto 'anno-mese' es. '2025-09' per una facile ricerca
   @HiveField(0)
   late String id;
 

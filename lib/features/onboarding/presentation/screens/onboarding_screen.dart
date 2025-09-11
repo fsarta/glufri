@@ -42,7 +42,7 @@ class OnboardingScreen extends ConsumerWidget {
           image: const Center(child: Icon(Icons.receipt_long, size: 100)),
         ),
       ],
-      onDone: () => _onIntroEnd(context, ref), // Quando si preme "Done"
+      onDone: () => _onIntroEnd(context, ref), // Quando si preme 'Done'
       onSkip: () => _onIntroEnd(context, ref), // Permette di saltare
       showSkipButton: true,
       skip: Text(l10n.skip),

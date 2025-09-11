@@ -21,7 +21,7 @@ class Skeleton extends StatelessWidget {
   }
 }
 
-/// La versione "scheletro" della `PurchaseCard` usata nella cronologia.
+/// La versione 'scheletro' della `PurchaseCard` usata nella cronologia.
 class PurchaseCardSkeleton extends StatelessWidget {
   const PurchaseCardSkeleton({super.key});
 
@@ -68,7 +68,7 @@ class PurchaseCardSkeleton extends StatelessWidget {
   }
 }
 
-/// La versione "scheletro" di un ListTile semplice
+/// La versione 'scheletro' di un ListTile semplice
 class ListTileSkeleton extends StatelessWidget {
   const ListTileSkeleton({super.key});
 

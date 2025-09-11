@@ -69,7 +69,7 @@ class SyncService {
     debugPrint('Trovati ${cloudPurchases.length} acquisti nel cloud.');
 
     final box = await Hive.openBox<PurchaseModel>('purchases_${user.uid}');
-    // Svuota la box locale prima di popolarla (strategia "sostituisci")
+    // Svuota la box locale prima di popolarla (strategia 'sostituisci')
     await box.clear();
 
     // Inserisci tutti i dati scaricati in un'unica operazione

@@ -5,7 +5,7 @@ import 'package:shimmer/shimmer.dart';
 
 /// Un widget che mostra una lista di scheletri con un effetto shimmer.
 class ShimmerList extends StatelessWidget {
-  /// Il widget "scheletro" da mostrare ripetutamente.
+  /// Il widget 'scheletro' da mostrare ripetutamente.
   final Widget skeletonCard;
 
   /// Quanti scheletri mostrare.

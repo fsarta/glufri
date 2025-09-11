@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/shopping_list/presentation/providers/shopping_list_providers.dart';
 import 'package:glufri/features/shopping_list/presentation/screens/shopping_list_detail_screen.dart';
 
@@ -9,19 +10,15 @@ class ShoppingListsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final listsAsync = ref.watch(shoppingListsProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Liste della Spesa"), // TODO: Localizza
-      ),
+      appBar: AppBar(title: Text(l10n.shoppingListsScreenTitle)),
       body: listsAsync.when(
         data: (lists) {
           if (lists.isEmpty) {
-            return const Center(
-              child: Text(
-                "Nessuna lista della spesa.\nPremi '+' per crearne una.", // TODO: Localizza
-                textAlign: TextAlign.center,
-              ),
+            return Center(
+              child: Text(l10n.emptyShoppingList, textAlign: TextAlign.center),
             );
           }
           return ListView.builder(
@@ -55,16 +52,14 @@ class ShoppingListsScreen extends ConsumerWidget {
                       showDialog(
                         context: context,
                         builder: (dCtx) => AlertDialog(
-                          title: const Text(
-                            "Conferma Eliminazione",
-                          ), //TODO: Localizza
+                          title: Text(l10n.deleteListConfirmationTitle),
                           content: Text(
-                            "Sei sicuro di voler eliminare la lista '${list.name}'?",
+                            l10n.deleteListConfirmationBody(list.name),
                           ),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.of(dCtx).pop(),
-                              child: const Text("Annulla"),
+                              child: Text(l10n.cancel),
                             ),
                             FilledButton(
                               style: FilledButton.styleFrom(
@@ -78,7 +73,7 @@ class ShoppingListsScreen extends ConsumerWidget {
                                     .deleteList(list);
                                 Navigator.of(dCtx).pop();
                               },
-                              child: const Text("Elimina"),
+                              child: Text(l10n.delete),
                             ),
                           ],
                         ),
@@ -108,6 +103,7 @@ class ShoppingListsScreen extends ConsumerWidget {
   }
 
   void _showCreateListDialog(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController();
     final formKey = GlobalKey<FormState>();
 
@@ -115,15 +111,15 @@ class ShoppingListsScreen extends ConsumerWidget {
       context: context,
       builder: (ctx) {
         return AlertDialog(
-          title: const Text("Crea Nuova Lista"),
+          title: Text(l10n.createListDialogTitle),
           content: Form(
             key: formKey,
             child: TextFormField(
               controller: controller,
-              decoration: const InputDecoration(labelText: "Nome della lista"),
+              decoration: InputDecoration(labelText: l10n.listName),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return "Il nome non può essere vuoto.";
+                  return l10n.listNameEmptyError;
                 }
                 return null;
               },
@@ -132,7 +128,7 @@ class ShoppingListsScreen extends ConsumerWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text("Annulla"),
+              child: Text(l10n.cancel),
             ),
             FilledButton(
               onPressed: () async {
@@ -143,7 +139,7 @@ class ShoppingListsScreen extends ConsumerWidget {
                   Navigator.of(ctx).pop();
                 }
               },
-              child: const Text("Crea"),
+              child: Text(l10n.create),
             ),
           ],
         );

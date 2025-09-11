@@ -25,10 +25,10 @@ class AuthWrapper extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 1. "Osserva" lo stato del provider, non il suo notifier.
+    // 1. 'Osserva' lo stato del provider, non il suo notifier.
     final hasCompletedOnboarding = ref.watch(onboardingCompletedProvider);
 
-    // 2. Determina lo stato finale: se uno dei due è true, l'onboarding è "fatto".
+    // 2. Determina lo stato finale: se uno dei due è true, l'onboarding è 'fatto'.
     final shouldShowMainScreen =
         hasCompletedOnboarding || hasInitiallySeenOnboarding;
 
@@ -101,6 +101,8 @@ class _GlufriAppState extends ConsumerState<GlufriApp> {
 
   /// Orchestra le operazioni da eseguire dopo un login (ripristino/migrazione).
   Future<void> _handlePostLoginFlow(BuildContext context, String userId) async {
+    final l10n = AppLocalizations.of(context)!;
+
     // 1. IMPOSTA LO STATO GLOBALE DI CARICAMENTO SU 'TRUE'
     // `.notifier` ci dà accesso al controller, `.state` lo modifica
     ref.read(syncInProgressProvider.notifier).state = true;
@@ -133,10 +135,7 @@ class _GlufriAppState extends ConsumerState<GlufriApp> {
       debugPrint('[PostLoginFlow] *** ERRORE CATTURATO: $e ***');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Errore di sincronizzazione."),
-            backgroundColor: Colors.red,
-          ),
+          SnackBar(content: Text(l10n.syncError), backgroundColor: Colors.red),
         );
       }
     } finally {
@@ -184,7 +183,7 @@ class _GlufriAppState extends ConsumerState<GlufriApp> {
         );
 
         if (choice == 'merge') {
-          // Logica di "deep copy" per evitare errori di Hive
+          // Logica di 'deep copy' per evitare errori di Hive
           final userBox = await Hive.openBox<PurchaseModel>(
             'purchases_$newUserId',
           );

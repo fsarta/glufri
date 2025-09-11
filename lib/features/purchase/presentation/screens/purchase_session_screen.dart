@@ -49,7 +49,7 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
     // Esegui la logica di caricamento qui.
     // Usiamo `Future.microtask` per assicurarci che la build iniziale sia completata
     // prima di tentare di modificare lo stato di un provider.
-    // Questo previene potenziali errori di "modifying a provider during build".
+    // Questo previene potenziali errori di 'modifying a provider during build'.
     Future.microtask(() {
       final purchase = widget.purchaseToEdit;
       if (purchase != null) {
@@ -301,11 +301,9 @@ Widget _buildActionButtons(
                         if (history != null && context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: const Text(
-                                "Passa a Pro per vedere la cronologia prezzi!",
-                              ), // TODO: Localizza
+                              content: Text(l10n.proRequiredForHistory),
                               action: SnackBarAction(
-                                label: "SCOPRI", // TODO: Localizza
+                                label: l10n.unlockPro,
                                 onPressed: () => Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (_) => const UpsellScreen(),
@@ -627,9 +625,7 @@ void _showAddItemDialog(
                     // e se è un nuovo prodotto
                     if (item == null)
                       CheckboxListTile(
-                        title: const Text(
-                          "Aggiungi ai prodotti preferiti",
-                        ), // TODO: Localizza
+                        title: Text(l10n.addToFavorites),
                         value: saveAsFavorite,
                         onChanged: (val) =>
                             setStateDialog(() => saveAsFavorite = val ?? false),
@@ -820,6 +816,7 @@ class _BudgetResidueView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final residue = ref.watch(budgetResidueProvider);
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     // Non mostrare nulla se nessun budget è impostato
     if (residue.residueGlutenFree == null && residue.residueTotal == null) {
@@ -838,7 +835,7 @@ class _BudgetResidueView extends ConsumerWidget {
       child: Column(
         children: [
           Text(
-            "Residuo Budget", // TODO: Localizza
+            l10n.remainingBudget,
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
               color: theme.colorScheme.primary,
@@ -930,7 +927,7 @@ class _TotalSummarySection extends ConsumerWidget {
             const SizedBox(height: 8),
           ],
 
-          // Abbiamo riaggiunto il totale "Altro" per un riepilogo completo
+          // Abbiamo riaggiunto il totale 'Altro' per un riepilogo completo
           if (totalOther > 0) ...[
             _TotalRow(l10n.totalOther, totalOther),
             const SizedBox(height: 8),
@@ -949,10 +946,12 @@ void _showFavoritesPicker(
   WidgetRef ref,
   List<FavoriteProductModel> favorites,
 ) {
+  final l10n = AppLocalizations.of(context)!;
+
   if (favorites.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Non hai prodotti preferiti.")),
-    ); // TODO
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(l10n.noFavoritesAvailable))); // TODO
     return;
   }
 

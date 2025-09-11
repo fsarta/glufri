@@ -1,46 +1,56 @@
 {
   "@@locale": "it",
+
+  "@--- Generale_e_Comuni ---": {},
   "appName": "Glufri",
-  "newPurchase": "Nuovo Acquisto",
-  "purchaseHistory": "Cronologia Acquisti",
-  "settings": "Impostazioni",
-  "addItem": "Aggiungi Prodotto",
-  "scanBarcode": "Scansiona Codice",
-  "savePurchase": "Salva Acquisto",
-  "store": "Negozio",
-  "productName": "Nome Prodotto",
-  "price": "Prezzo",
-  "quantity": "Quantità",
-  "total": "Totale",
-  "theme": "Tema",
-  "language": "Lingua",
-  "light": "Chiaro",
-  "dark": "Scuro",
-  "system": "Sistema",
-  "login": "Accedi",
-  "loginAction": "ACCEDI",
-  "password": "Password",
-  "forgotPassword": "Password dimenticata?",
-  "forgotPasswordScreenTitle": "Recupera Password",
-  "forgotPasswordTitle": "Password Dimenticata?",
-  "forgotPasswordInstruction": "Inserisci l'email associata al tuo account. Ti invieremo un link per reimpostare la tua password.",
-  "sendResetEmail": "INVIA EMAIL DI RECUPERO",
-  "resetEmailSuccess": "Email di recupero inviata con successo! Controlla la tua casella di posta.",
-  "resetEmailError": "Errore durante l'invio dell'email. L'indirizzo potrebbe non essere valido.",
-  "noAccount": "Non hai un account? Registrati",
-  "alreadyHaveAccount": "Hai già un account? Accedi",
+  "cancel": "Annulla",
+  "close": "Chiudi",
+  "continueAction": "CONTINUA",
+  "delete": "Elimina",
+  "duplicate": "Duplica",
+  "edit": "Modifica",
   "or": "oppure",
-  "loginWithGoogle": "Accedi con Google",
-  "signup": "Registrati",
-  "signupAction": "REGISTRATI",
-  "signupTitle": "Crea il tuo account",
-  "email": "Email",
-  "confirmPassword": "Conferma Password",
-  "invalidEmailError": "Inserisci un'email valida.",
-  "passwordLengthError": "La password deve essere di almeno 6 caratteri.",
-  "passwordsDoNotMatchError": "Le password non coincidono.",
-  "signupError": "Errore durante la registrazione. Riprova. (es. l'email potrebbe essere già in uso)",
+  "price": "Prezzo",
+  "productName": "Nome Prodotto",
+  "quantity": "Quantità",
+  "save": "Salva",
+  "skip": "Salta",
+  "start": "Inizia",
+  "store": "Negozio",
+  "total": "Totale",
+  "undoAction": "ANNULLA",
+  "update": "Aggiorna",
+
+  "@--- Navigazione e Titoli Schermate ---": {},
+  "favoriteProducts": "Prodotti Preferiti",
+  "forgotPasswordScreenTitle": "Recupera Password",
+  "monthlyBudget": "Budget Mensile",
+  "purchaseHistory": "Cronologia Acquisti",
+  "scanBarcodeTitle": "Scansiona EAN-13",
+  "settings": "Impostazioni",
+  "shoppingLists": "Liste della Spesa",
+  "shoppingListsScreenTitle": "Liste della Spesa",
+
+  "@--- Onboarding ---": {},
+  "onboardingScanBody": "Usa la fotocamera per scansionare il codice a barre dei prodotti e aggiungerli al tuo carrello.",
+  "onboardingScanTitle": "Scansiona e Aggiungi",
+  "onboardingTrackBody": "Salva i tuoi acquisti e consulta la cronologia per analizzare le tue spese.",
+  "onboardingTrackTitle": "Tieni Tutto Sotto Controllo",
+  "onboardingWelcomeBody": "La tua app per tracciare gli acquisti senza glutine in modo semplice e veloce.",
+  "onboardingWelcomeTitle": "Benvenuto in Glufri!",
+
+  "@--- Autenticazione ---": {},
   "account": "Account",
+  "alreadyHaveAccount": "Hai già un account? Accedi",
+  "alreadyHaveAccountPrompt": "Hai già un account?",
+  "backToLogin": "Torna al Login",
+  "confirmPassword": "Conferma Password",
+  "email": "Email",
+  "forgotPassword": "Password dimenticata?",
+  "forgotPasswordInstruction": "Inserisci l'email associata al tuo account. Ti invieremo un link per reimpostare la tua password.",
+  "forgotPasswordScreenSubtitle": "Nessun problema! Inserisci la tua email e ti aiuteremo.",
+  "forgotPasswordTitle": "Password Dimenticata?",
+  "invalidEmailError": "Inserisci un'email valida.",
   "loggedInAs": "Loggato come {email}",
   "@loggedInAs": {
     "placeholders": {
@@ -49,7 +59,58 @@
       }
     }
   },
-  "searchPlaceholder": "Cerca per negozio o prodotto...",
+  "login": "Accedi",
+  "loginAction": "ACCEDI",
+  "loginError": "Email o password errati. Riprova.",
+  "loginInToSaveData": "Accedi per salvare i tuoi dati",
+  "loginSubtitle": "Accedi al tuo account per continuare.",
+  "loginSuccess": "Benvenuto/a!",
+  "loginWelcome": "Bentornato!",
+  "loginWithGoogle": "Accedi con Google",
+  "logoutSuccess": "Logout effettuato con successo.",
+  "noAccount": "Non hai un account? Registrati",
+  "noAccountPrompt": "Non hai un account?",
+  "password": "Password",
+  "passwordLengthError": "La password deve essere di almeno 6 caratteri.",
+  "passwordsDoNotMatchError": "Le password non coincidono.",
+  "sendResetEmail": "INVIA EMAIL DI RECUPERO",
+  "signup": "Registrati",
+  "signupAction": "REGISTRATI",
+  "signupError": "Errore durante la registrazione. Riprova. (es. l'email potrebbe essere già in uso)",
+  "signupSubtitle": "Crea un account per salvare i tuoi dati",
+  "signupTitle": "Crea il tuo account",
+  "user": "Utente",
+  "userGuest": "Utente Ospite",
+
+  "@--- Acquisti ---": {},
+  "addProductToStart": "Aggiungi un prodotto per iniziare.",
+  "addItem": "Aggiungi Prodotto",
+  "andMoreProducts": "... e altri {count} prodotti.",
+  "@andMoreProducts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "atStore": "presso",
+  "barcodeOptional": "Codice a Barre (Opzionale)",
+  "editProduct": "Modifica Prodotto",
+  "editPurchase": "Modifica Acquisto",
+  "exportCsvPro": "Esporta CSV (Pro)",
+  "exportPdfAnnualReport": "Esporta Report Annuale",
+  "exportPdfCompleteReport": "Report Completo",
+  "exportPdfMonthlyReport": "Esporta Report Mensile",
+  "exportPdfReportTooltip": "Esporta Report",
+  "filterByDateTooltip": "Filtra per data",
+  "foundProducts": "Prodotti trovati:",
+  "genericPurchase": "Acquisto generico",
+  "glutenFree": "Senza Glutine",
+  "glutenFreeProduct": "Prodotto Senza Glutine",
+  "lastPrice": "Ultimo prezzo:",
+  "mainProducts": "Prodotti principali:",
+  "mustBeGreaterThanZero": "Deve essere > 0",
+  "newPurchase": "Nuovo Acquisto",
   "noProductsFoundFor": "Nessun prodotto trovato per \"{query}\"",
   "@noProductsFoundFor": {
     "placeholders": {
@@ -59,13 +120,18 @@
     }
   },
   "noPurchases": "Nessun acquisto registrato.\nPremi \"+\" per iniziare!",
-  "purchaseDetail": "Dettaglio Acquisto",
-  "shareSummary": "Condividi Riepilogo",
-  "edit": "Modifica",
-  "duplicate": "Duplica",
-  "exportCsvPro": "Esporta CSV (Pro)",
-  "delete": "Elimina",
   "noStoreSpecified": "Nessun negozio specificato",
+  "other": "Altro",
+  "priceRange": "Prezzi: da {min}€ a {max}€",
+  "@priceRange": {
+    "placeholders": {
+      "max": {},
+      "min": {}
+    }
+  },
+  "productHistoryTitle": "Prodotto già acquistato!",
+  "productNameCannotBeEmpty": "Il nome non può essere vuoto",
+  "productNotFoundOrNetworkError": "Prodotto non trovato o errore di rete.",
   "productsCount": "{count,plural, =0{Nessun prodotto} =1{1 prodotto} other{{count} prodotti}}",
   "@productsCount": {
     "description": "Numero di prodotti in un acquisto",
@@ -75,95 +141,7 @@
       }
     }
   },
-  "exportError": "Errore durante l'esportazione.",
-  "shareError": "Errore durante la condivisione.",
-  "deleteConfirmationTitle": "Conferma Eliminazione",
-  "deleteConfirmationMessage": "Sei sicuro di voler eliminare questo acquisto? L'azione è irreversibile.",
-  "cancel": "Annulla",
-  "purchaseDeletedSuccess": "Acquisto eliminato con successo.",
-  "editPurchase": "Modifica Acquisto",
-  "purchaseSavedSuccess": "Acquisto salvato con successo!",
-  "addProductToStart": "Aggiungi un prodotto per iniziare.",
-  "productNotFoundOrNetworkError": "Prodotto non trovato o errore di rete.",
-  "editProduct": "Modifica Prodotto",
-  "productNameCannotBeEmpty": "Il nome non può essere vuoto",
-  "requiredField": "Obbligatorio",
-  "invalidValue": "Valore non valido",
-  "mustBeGreaterThanZero": "Deve essere > 0",
-  "barcodeOptional": "Codice a Barre (Opzionale)",
-  "update": "Aggiorna",
-  "glutenFreeProduct": "Prodotto Senza Glutine",
-  "totalGlutenFree": "Totale Senza Glutine",
-  "totalOther": "Totale Altro",
-  "totalOverall": "Totale Complessivo",
-  "foundProducts": "Prodotti trovati:",
-  "glutenFree": "Senza Glutine",
-  "other": "Altro",
-  "scanBarcodeTitle": "Scansiona EAN-13",
-  "onboardingWelcomeTitle": "Benvenuto in Glufri!",
-  "onboardingWelcomeBody": "La tua app per tracciare gli acquisti senza glutine in modo semplice e veloce.",
-  "onboardingScanTitle": "Scansiona e Aggiungi",
-  "onboardingScanBody": "Usa la fotocamera per scansionare il codice a barre dei prodotti e aggiungerli al tuo carrello.",
-  "onboardingTrackTitle": "Tieni Tutto Sotto Controllo",
-  "onboardingTrackBody": "Salva i tuoi acquisti e consulta la cronologia per analizzare le tue spese.",
-  "skip": "Salta",
-  "start": "Inizia",
-  "settingsLanguageSystem": "Sistema",
-  "settingsLanguageItalian": "Italiano",
-  "settingsLanguageEnglish": "English",
-  "settingsAccountAndBackup": "Account e Backup (Pro)",
-  "settingsLoginForBackup": "Accedi con Google per abilitare il backup",
-  "settingsLoginFailed": "Login fallito. Riprova.",
-  "user": "Utente",
-  "settingsBackupNow": "Esegui Backup",
-  "settingsRestoreFromCloud": "Ripristina da Cloud",
-  "settingsLogout": "Logout",
-  "settingsAuthError": "Errore di autenticazione",
-  "settingsPrivacyPolicy": "Informativa Privacy",
-  "upsellTitle": "Passa a Glufri Pro",
-  "upsellHeadline": "Sblocca Funzionalità Potenti!",
-  "upsellFeature1": "Backup e Sync Multi-dispositivo",
-  "upsellFeature2": "Esportazioni illimitate in CSV",
-  "upsellFeature3": "Esperienza senza pubblicità",
-  "upsellFeature4": "Supporto Prioritario",
-  "upsellAction": "Abbonati Ora (Prezzo Annuo)",
-  "upsellRestore": "Ripristina Acquisti",
-  "migrationDialogTitle": "Acquisti Locali Rilevati",
-  "migrationDialogBody": "Hai {count} acquisti salvati su questo dispositivo. Cosa vuoi fare?",
-  "@migrationDialogBody": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "migrationDialogActionDelete": "ELIMINA",
-  "migrationDialogActionIgnore": "NO, LASCIA",
-  "migrationDialogActionMerge": "SÌ, UNISCI",
-  "migrationSuccess": "Acquisti locali uniti al tuo account!",
-  "migrationDeleted": "Dati locali eliminati con successo.",
-  "privacyPolicyTitle": "Informativa Privacy",
-  "privacyPolicyBody": "La tua privacy è importante...\n[INSERIRE QUI IL TESTO COMPLETO DELLA PRIVACY POLICY]\n\nDati Raccolti: L'app salva i dati degli acquisti esclusivamente sul tuo dispositivo. Se scegli di utilizzare la funzione di backup cloud (funzionalità Pro), i tuoi dati verranno criptati e salvati sui server sicuri di Google Firebase.\n\nCondivisione Dati: Nessun dato personale o di acquisto viene condiviso con terze parti.\n...",
-  "genericPurchase": "Acquisto generico",
-  "mainProducts": "Prodotti principali:",
-  "andMoreProducts": "... e altri {count} prodotti.",
-  "@andMoreProducts": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "trackedWith": "Tracciato con Glufri App",
-  "shareText": "Ecco il mio ultimo acquisto senza glutine tracciato con l'app Glufri! 🛒",
-  "genericError": "Si è verificato un errore:\n{error}",
-  "@genericError": {
-    "placeholders": {
-      "error": {
-        "type": "Object"
-      }
-    }
-  },
+  "purchaseDetail": "Dettaglio Acquisto",
   "purchaseExport": "Esportazione Acquisto Glufri - {store}",
   "@purchaseExport": {
     "placeholders": {
@@ -172,27 +150,8 @@
       }
     }
   },
-  "storeHint": "Es. Supermercato Rossi",
-  "loginSuccess": "Benvenuto/a!",
-  "logoutSuccess": "Logout effettuato con successo.",
-  "undoAction": "ANNULLA",
   "purchaseMarkedForDeletion": "Acquisto eliminato.",
-
-  "backupInProgress": "Backup in corso...", 
-  "backupSuccess": "Backup completato con successo!", 
-  "backupError": "Errore durante il backup.", 
-  "restoreConfirmationTitle": "Conferma Ripristino", 
-  "restoreConfirmationBody": "Questo sovrascriverà tutti i dati locali con quelli salvati nel cloud. Continuare?", 
-  "restoreInProgress": "Ripristino in corso...", 
-  "restoreSuccess": "Dati ripristinati con successo!", 
-  "restoreError": "Errore durante il ripristino.",
-
-  "productHistoryTitle": "Prodotto già acquistato!", 
-  "lastPrice": "Ultimo prezzo:", 
-  "atStore": "presso", 
-  "times": "volte", 
-  "priceRange": "Prezzi: da {min}€ a {max}€", 
-  "continueAction": "CONTINUA",
+  "purchaseSavedSuccess": "Acquisto salvato con successo!",
   "purchasedXTimes": "{count,plural, =0{Mai acquistato} =1{Acquistato 1 volta} other{Acquistato {count} volte}}",
   "@purchasedXTimes": {
     "placeholders": {
@@ -201,28 +160,144 @@
       }
     }
   },
+  "removeDateFilterTooltip": "Rimuovi filtro data",
+  "savePurchase": "Salva Acquisto",
+  "scanBarcode": "Scansiona Codice",
+  "searchPlaceholder": "Cerca per negozio o prodotto...",
+  "shareSummary": "Condividi Riepilogo",
+  "shareText": "Ecco il mio ultimo acquisto senza glutine tracciato con l'app Glufri! 🛒",
+  "storeHint": "Es. Supermercato Rossi",
+  "times": "volte",
+  "totalGlutenFree": "Totale Senza Glutine",
+  "totalOther": "Totale Altro",
+  "totalOverall": "Totale Complessivo",
+  "trackedWith": "Tracciato con Glufri App",
 
-  "settingsFavProducts": "Prodotti Preferiti",
-  "noFavoriteProducts": "Non hai ancora prodotti preferiti.\nSalvali da un acquisto per trovarli qui.",
+  "@--- Liste Spesa ---": {},
+  "addFromFavorites": "Aggiungi da Preferiti",
+  "addItemToShoppingList": "Aggiungi Prodotto",
+  "addManual": "Aggiungi manualmente",
+  "checkedItems": "{checked}/{total} completati",
+  "create": "Crea",
+  "createListDialogTitle": "Crea Nuova Lista",
+  "deleteListConfirmationBody": "Sei sicuro di voler eliminare la lista '{listName}'?",
+  "deleteListConfirmationTitle": "Conferma Eliminazione",
+  "emptyShoppingList": "Nessuna lista della spesa.\nPremi '+' per crearne una.",
+  "listName": "Nome della lista",
+  "listNameEmptyError": "Il nome non può essere vuoto.",
+  "noItemsInShoppingList": "Aggiungi o de-seleziona almeno un item per iniziare.",
+  "startPurchaseFromList": "Inizia Acquisto dalla Lista",
+
+  "@--- Preferiti ---": {},
+  "addEditFavoriteDialogAdd": "Aggiungi Preferito",
+  "addEditFavoriteDialogEdit": "Modifica Preferito",
+  "addFavoriteProduct": "Aggiungi Preferito",
+  "addFromFavoritesTooltip": "Aggiungi da Preferiti",
+  "addToFavorites": "Aggiungi ai prodotti preferiti",
+  "defaultPrice": "Prezzo di Default (Opzionale)",
   "deleteFavoriteConfirmationBody": "Sei sicuro di voler eliminare '{productName}' dai preferiti?",
   "@deleteFavoriteConfirmationBody": {
-      "placeholders": {
-          "productName": { "type": "String" }
+    "placeholders": {
+      "productName": {
+        "type": "String"
       }
+    }
   },
+  "favoriteProductRemoved": "'{productName}' rimosso dai preferiti.",
+  "noFavoriteProducts": "Non hai ancora prodotti preferiti.\nSalvali da un acquisto per trovarli qui.",
+  "noFavoritesAvailable": "Non hai prodotti preferiti.",
+  "selectFavorite": "Seleziona un Preferito",
+  "settingsFavProducts": "Prodotti Preferiti",
 
-  "loginWelcome": "Bentornato!",
-  "loginSubtitle": "Accedi al tuo account per continuare.",
-  "loginError": "Email o password errati. Riprova.",
-  "noAccountPrompt": "Non hai un account?",
-  "signupSubtitle": "Crea un account per salvare i tuoi dati",
-  "alreadyHaveAccountPrompt": "Hai già un account?",
-  "forgotPasswordSubtitle": "Nessun problema! Inserisci la tua email e ti aiuteremo.",
-  "backToLogin": "Torna al Login",
+  "@--- Budget ---": {},
+  "budgetSetGlutenFree": "Budget Senza Glutine",
+  "budgetSetTotal": "Budget Totale",
+  "budgetTitle": "Budget di {monthYear}",
+  "@budgetTitle": {
+    "placeholders": {
+      "monthYear": {}
+    }
+  },
+  "budgetTrend": "Andamento Spesa",
+  "remainingBudget": "Residuo Budget",
+  "saveBudget": "Salva Budget",
+  "setBudget": "Imposta Budget",
 
-  "userGuest": "Utente Ospite",
-  "loginToSaveData": "Accedi per salvare i tuoi dati",
-  "shoppingLists": "Liste della Spesa",
-  "monthlyBudget": "Budget Mensile",
-  "favoriteProducts": "Prodotti Preferiti"
+  "@--- Impostazioni ---": {},
+  "dark": "Scuro",
+  "language": "Lingua",
+  "light": "Chiaro",
+  "privacyPolicyBody": "La tua privacy è importante...\n[INSERIRE QUI IL TESTO COMPLETO DELLA PRIVACY POLICY]\n\nDati Raccolti: L'app salva i dati degli acquisti esclusivamente sul tuo dispositivo. Se scegli di utilizzare la funzione di backup cloud (funzionalità Pro), i tuoi dati verranno criptati e salvati sui server sicuri di Google Firebase.\n\nCondivisione Dati: Nessun dato personale o di acquisto viene condiviso con terze parti.\n...",
+  "privacyPolicyTitle": "Informativa Privacy",
+  "settingsAccountAndBackup": "Account e Backup (Pro)",
+  "settingsLanguageEnglish": "English",
+  "settingsLanguageItalian": "Italiano",
+  "settingsLanguageSystem": "Sistema",
+  "settingsLoginForBackup": "Accedi con Google per abilitare il backup",
+  "settingsLoginFailed": "Login fallito. Riprova.",
+  "settingsPrivacyPolicy": "Informativa Privacy",
+  "system": "Sistema",
+  "theme": "Tema",
+
+  "@--- Monetizzazione (Upsell) ---": {},
+  "proRequiredForHistory": "Passa a Pro per vedere la cronologia prezzi!",
+  "unlockPro": "SCOPRI",
+  "upsellAction": "Abbonati Ora (Prezzo Annuo)",
+  "upsellFeature1": "Backup e Sync Multi-dispositivo",
+  "upsellFeature2": "Esportazioni illimitate in CSV",
+  "upsellFeature3": "Esperienza senza pubblicità",
+  "upsellFeature4": "Supporto Prioritario",
+  "upsellHeadline": "Sblocca Funzionalità Potenti!",
+  "upsellRestore": "Ripristina Acquisti",
+  "upsellTitle": "Passa a Glufri Pro",
+
+  "@--- Dati e Sincronizzazione ---": {},
+  "backupError": "Errore durante il backup.",
+  "backupInProgress": "Backup in corso...",
+  "backupSuccess": "Backup completato con successo!",
+  "migrationDeleted": "Dati locali eliminati con successo.",
+  "migrationDialogActionDelete": "ELIMINA",
+  "migrationDialogActionIgnore": "NO, LASCIA",
+  "migrationDialogActionMerge": "SÌ, UNISCI",
+  "migrationDialogBody": "Hai {count} acquisti salvati su questo dispositivo. Cosa vuoi fare?",
+  "@migrationDialogBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "migrationDialogTitle": "Acquisti Locali Rilevati",
+  "migrationSuccess": "Acquisti locali uniti al tuo account!",
+  "resetEmailError": "Errore durante l'invio dell'email. L'indirizzo potrebbe non essere valido.",
+  "resetEmailSuccess": "Email di recupero inviata con successo! Controlla la tua casella di posta.",
+  "restoreConfirmationBody": "Questo sovrascriverà tutti i dati locali con quelli salvati nel cloud. Continuare?",
+  "restoreConfirmationTitle": "Conferma Ripristino",
+  "restoreError": "Errore durante il ripristino.",
+  "restoreInProgress": "Ripristino in corso...",
+  "restoreSuccess": "Dati ripristinati con successo!",
+  "settingsAuthError": "Errore di autenticazione",
+  "settingsBackupNow": "Esegui Backup",
+  "settingsLogout": "Logout",
+  "settingsRestoreFromCloud": "Ripristina da Cloud",
+
+  "@--- Dialoghi, Messaggi e Errori ---": {},
+  "budgetSaved": "Budget salvato!",
+  "deleteConfirmationMessage": "Sei sicuro di voler eliminare questo acquisto? L'azione è irreversibile.",
+  "deleteConfirmationTitle": "Conferma Eliminazione",
+  "exportError": "Errore durante l'esportazione.",
+  "pdfCreationError": "Errore durante la creazione del PDF.",
+  "genericError": "Si è verificato un errore:\n{error}",
+  "@genericError": {
+    "placeholders": {
+      "error": {
+        "type": "Object"
+      }
+    }
+  },
+  "invalidValue": "Valore non valido",
+  "purchaseDeletedSuccess": "Acquisto eliminato con successo.",
+  "requiredField": "Campo obbligatorio",
+  "shareError": "Errore durante la condivisione.",
+  "syncError": "Errore di sincronizzazione."
 }
