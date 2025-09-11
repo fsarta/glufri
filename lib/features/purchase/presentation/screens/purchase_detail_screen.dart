@@ -164,41 +164,35 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
           ),
           // Lista dei singoli prodotti acquistati.
           ...purchase.items.map((item) {
-            final hasImage =
-                item.imagePath != null && item.imagePath!.isNotEmpty;
             final priceInfo =
                 '${item.quantity} x ${NumberFormat.currency(locale: 'it_IT', symbol: '€').format(item.unitPrice)}';
             final unitPriceInfo = item.pricePerStandardUnitDisplayString;
+
             return ListTile(
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: hasImage
-                      ? Image.file(
-                          File(item.imagePath!),
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Icon(Icons.image_not_supported),
-                        )
-                      : Container(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.secondaryContainer,
-                          child: const Icon(Icons.shopping_bag_outlined),
-                        ),
-                ),
-              ),
-              title: Row(
+              /* leading: Icon(
+                item.isGlutenFree
+                    ? Icons.verified
+                    : Icons.shopping_cart_outlined,
+                color: item.isGlutenFree
+                    ? Colors.green
+                    : Theme.of(context).colorScheme.secondary,
+              ), */
+              leading: item.isGlutenFree
+                  ? const Icon(Icons.verified, color: Colors.green)
+                  : const Icon(Icons.shopping_cart_outlined),
+              /* title: Row(
                 children: [
+                  Flexible(
+                    child: Text(item.name),
+                  ), // Usiamo Flexible per evitare overflow
                   Text(item.name),
                   if (item.isGlutenFree) ...[
                     const SizedBox(width: 8),
                     const Icon(Icons.verified, size: 16, color: Colors.green),
                   ],
                 ],
-              ),
+              ), */
+              title: Text(item.name),
               subtitle: Text(
                 unitPriceInfo.isNotEmpty
                     ? '$priceInfo  •  $unitPriceInfo'
