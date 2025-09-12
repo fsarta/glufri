@@ -614,13 +614,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get upsellFeature4 => 'Soporte Prioritario';
 
   @override
-  String get upsellHeadline => '¡Desbloquea Funcionalidades Potentes!';
+  String get upsellHeadline => '¡Desbloquea el Potencial Completo!';
 
   @override
   String get upsellRestore => 'Restaurar Compras';
 
   @override
-  String get upsellTitle => 'Pásate a Glufri Pro';
+  String get upsellTitle => 'Actualiza a Glufri Pro';
 
   @override
   String get backupError => 'Error durante la copia de seguridad.';
@@ -723,4 +723,78 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get syncError => 'Error de sincronización.';
+
+  @override
+  String get upsellSubtitle =>
+      'Toma el control total de tus gastos sin gluten.';
+
+  @override
+  String get proFeatureTitleBackup =>
+      'Copia de Seguridad y Sincronización Multi-dispositivo';
+
+  @override
+  String get proFeatureBodyBackup =>
+      'Tus datos son valiosos. Guarda cada compra de forma segura en la nube. ¿Cambias de teléfono o usas una tableta? Encuentra al instante todos tus datos, listas y favoritos sincronizados. Máxima seguridad, cero preocupaciones.';
+
+  @override
+  String get proFeatureTitleLists => 'Listas de Compras Inteligentes';
+
+  @override
+  String get proFeatureBodyLists =>
+      'La planificación es todo. Crea listas de compras ilimitadas, agrega productos de tus favoritos con un toque y, una vez en el supermercado, convierte la lista en una nueva compra con un solo botón. Nunca más notas de papel o aplicaciones separadas.';
+
+  @override
+  String get proFeatureTitleFavorites => 'Productos Favoritos Ilimitados';
+
+  @override
+  String get proFeatureBodyFavorites =>
+      'Ahorra tiempo en cada compra. Guarda los productos que compras más a menudo como favoritos, establece un precio predeterminado y agrégalos a tus listas o futuras compras en un instante. Tu supermercado personal, siempre en tu bolsillo.';
+
+  @override
+  String get proFeatureTitleBudget => 'Control de Presupuesto Mensual';
+
+  @override
+  String get proFeatureBodyBudget =>
+      '¿Cuánto gastas realmente en productos sin gluten? Establece presupuestos mensuales totales y específicos para el gluten-free. Rastrea tus gastos en tiempo real y ve tu presupuesto restante mientras añades productos al carrito. No más sorpresas a fin de mes.';
+
+  @override
+  String get proFeatureTitleDetails =>
+      'Detalles de Producto Profundos (con OFF)';
+
+  @override
+  String get proFeatureBodyDetails =>
+      'Toma decisiones más conscientes. Escanea un código de barras y descubre al instante ingredientes, alérgenos, el Nutri-Score y el grado de procesamiento (NOVA). Glufri se convierte en tu asistente para una compra no solo sin gluten, sino también más saludable.';
+
+  @override
+  String get proFeatureTitleHistory => 'Historial de Precios';
+
+  @override
+  String get proFeatureBodyHistory =>
+      '¿Estás pagando el precio correcto? Cuando escaneas un producto que ya has comprado, Glufri Pro te muestra al instante el último precio pagado y te avisa si estás gastando más. Compra como un profesional.';
+
+  @override
+  String get proFeatureTitleExport => 'Exportaciones Ilimitadas (PDF y CSV)';
+
+  @override
+  String get proFeatureBodyExport =>
+      'Tus datos, tus reglas. Genera informes mensuales o anuales en PDF, perfectos para análisis personales o deducciones fiscales. Exporta las compras individuales en formato CSV para un análisis profundo con hojas de cálculo. Control total sobre tus datos de gasto.';
+
+  @override
+  String get proFeatureTitleNoAds => 'Experiencia Sin Interrupciones';
+
+  @override
+  String get proFeatureBodyNoAds =>
+      'Concéntrate solo en tu compra. La versión Pro elimina toda la publicidad, ofreciéndote una experiencia más limpia, rápida y sin distracciones.';
+
+  @override
+  String get comparisonTitle => 'Compara Planes';
+
+  @override
+  String get featureHeader => 'Funcionalidad';
+
+  @override
+  String get freeHeader => 'Free';
+
+  @override
+  String get proHeader => 'PRO';
 }

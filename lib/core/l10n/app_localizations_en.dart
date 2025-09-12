@@ -608,13 +608,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get upsellFeature4 => 'Priority Support';
 
   @override
-  String get upsellHeadline => 'Unlock Powerful Features!';
+  String get upsellHeadline => 'Unlock the Full Potential!';
 
   @override
   String get upsellRestore => 'Restore Purchases';
 
   @override
-  String get upsellTitle => 'Go Pro with Glufri';
+  String get upsellTitle => 'Upgrade to Glufri Pro';
 
   @override
   String get backupError => 'Error during backup.';
@@ -717,4 +717,76 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get syncError => 'Synchronization error.';
+
+  @override
+  String get upsellSubtitle =>
+      'Take total control of your gluten-free spending.';
+
+  @override
+  String get proFeatureTitleBackup => 'Multi-device Backup & Sync';
+
+  @override
+  String get proFeatureBodyBackup =>
+      'Your data is precious. Securely save every purchase to the cloud. Changing phones or using a tablet? Instantly find all your synced data, lists, and favorites. Maximum security, zero worries.';
+
+  @override
+  String get proFeatureTitleLists => 'Smart Shopping Lists';
+
+  @override
+  String get proFeatureBodyLists =>
+      'Planning is everything. Create unlimited shopping lists, add products from your favorites with a tap, and once you\'re at the supermarket, turn the list into a new purchase with a single button. No more paper notes or separate apps.';
+
+  @override
+  String get proFeatureTitleFavorites => 'Unlimited Favorite Products';
+
+  @override
+  String get proFeatureBodyFavorites =>
+      'Save time on every shopping trip. Save the products you buy most often as favorites, set a default price, and add them to your lists or future purchases in a flash. Your personal supermarket, always in your pocket.';
+
+  @override
+  String get proFeatureTitleBudget => 'Monthly Budget Control';
+
+  @override
+  String get proFeatureBodyBudget =>
+      'How much do you really spend on gluten-free items? Set total monthly budgets and specific ones for gluten-free products. Track your expenses in real-time and see your remaining budget as you add products to your cart. No more surprises at the end of the month.';
+
+  @override
+  String get proFeatureTitleDetails => 'In-depth Product Details (with OFF)';
+
+  @override
+  String get proFeatureBodyDetails =>
+      'Make more informed choices. Scan a barcode and instantly discover ingredients, allergens, the Nutri-Score, and the degree of processing (NOVA). Glufri becomes your assistant for shopping that is not only gluten-free, but also healthier.';
+
+  @override
+  String get proFeatureTitleHistory => 'Price History';
+
+  @override
+  String get proFeatureBodyHistory =>
+      'Are you paying the right price? When you scan a product you\'ve already purchased, Glufri Pro instantly shows you the last price you paid and warns you if you\'re spending more. Shop like a pro.';
+
+  @override
+  String get proFeatureTitleExport => 'Unlimited Exports (PDF & CSV)';
+
+  @override
+  String get proFeatureBodyExport =>
+      'Your data, your rules. Generate monthly or annual reports in PDF, perfect for personal analysis or tax deductions. Export individual purchases in CSV format for in-depth analysis with spreadsheets. Full control over your spending data.';
+
+  @override
+  String get proFeatureTitleNoAds => 'Ad-Free Experience';
+
+  @override
+  String get proFeatureBodyNoAds =>
+      'Focus only on your shopping. The Pro version removes all ads, offering you a cleaner, faster, and distraction-free experience.';
+
+  @override
+  String get comparisonTitle => 'Compare Plans';
+
+  @override
+  String get featureHeader => 'Feature';
+
+  @override
+  String get freeHeader => 'Free';
+
+  @override
+  String get proHeader => 'PRO';
 }

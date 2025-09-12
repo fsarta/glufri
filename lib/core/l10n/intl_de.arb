@@ -359,5 +359,40 @@
   "requiredField": "Pflichtfeld",
   "shareError": "Fehler beim Teilen.",
   "shoppingListError": "Fehler beim Laden der Listen.",
-  "syncError": "Synchronisierungsfehler."
+  "syncError": "Synchronisierungsfehler.",
+
+  "upsellTitle": "Auf Glufri Pro upgraden",
+  "upsellHeadline": "Schalte das volle Potenzial frei!",
+  "upsellSubtitle": "Übernehme die volle Kontrolle über deine glutenfreien Ausgaben.",
+  "upsellAction": "Jetzt Abonnieren (Jahrespreis)",
+  "upsellRestore": "Käufe Wiederherstellen",
+
+  "proFeatureTitleBackup": "Multi-Geräte-Backup & Synchronisation",
+  "proFeatureBodyBackup": "Deine Daten sind wertvoll. Speichere jeden Einkauf sicher in der Cloud. Wechselst du das Handy oder benutzt ein Tablet? Finde sofort alle deine synchronisierten Daten, Listen und Favoriten. Maximale Sicherheit, null Sorgen.",
+
+  "proFeatureTitleLists": "Intelligente Einkaufslisten",
+  "proFeatureBodyLists": "Planung ist alles. Erstelle unbegrenzte Einkaufslisten, füge Produkte aus deinen Favoriten mit einem Tippen hinzu, und sobald du im Supermarkt bist, verwandle die Liste mit einem einzigen Knopfdruck in einen neuen Einkauf. Nie wieder Zettel oder separate Apps.",
+
+  "proFeatureTitleFavorites": "Unbegrenzte Lieblingsprodukte",
+  "proFeatureBodyFavorites": "Spare bei jedem Einkauf Zeit. Speichere die Produkte, die du am häufigsten kaufst, als Favoriten, lege einen Standardpreis fest und füge sie blitzschnell zu deinen Listen oder zukünftigen Einkäufen hinzu. Dein persönlicher Supermarkt, immer in deiner Tasche.",
+
+  "proFeatureTitleBudget": "Monatliche Budgetkontrolle",
+  "proFeatureBodyBudget": "Wie viel gibst du wirklich für glutenfreie Produkte aus? Lege monatliche Gesamtbudgets und spezifische Budgets für glutenfreie Produkte fest. Verfolge deine Ausgaben in Echtzeit und sieh dein verbleibendes Budget, während du Produkte in deinen Warenkorb legst. Keine Überraschungen mehr am Monatsende.",
+
+  "proFeatureTitleDetails": "Detaillierte Produktinformationen (mit OFF)",
+  "proFeatureBodyDetails": "Triff bewusstere Entscheidungen. Scanne einen Barcode und entdecke sofort Inhaltsstoffe, Allergene, den Nutri-Score und den Verarbeitungsgrad (NOVA). Glufri wird zu deinem Assistenten für einen Einkauf, der nicht nur glutenfrei, sondern auch gesünder ist.",
+
+  "proFeatureTitleHistory": "Preisverlauf",
+  "proFeatureBodyHistory": "Zahlst du den richtigen Preis? Wenn du ein Produkt scannst, das du bereits gekauft hast, zeigt dir Glufri Pro sofort den zuletzt bezahlten Preis an und warnt dich, wenn du mehr ausgibst. Kaufe wie ein Profi ein.",
+
+  "proFeatureTitleExport": "Unbegrenzte Exporte (PDF & CSV)",
+  "proFeatureBodyExport": "Deine Daten, deine Regeln. Erstelle monatliche oder jährliche Berichte im PDF-Format, perfekt für persönliche Analysen oder Steuerabzüge. Exportiere einzelne Einkäufe im CSV-Format für eine detaillierte Analyse mit Tabellenkalkulationen. Volle Kontrolle über deine Ausgabendaten.",
+
+  "proFeatureTitleNoAds": "Werbefreie Erfahrung",
+  "proFeatureBodyNoAds": "Konzentriere dich nur auf deinen Einkauf. Die Pro-Version entfernt alle Werbeanzeigen und bietet dir eine sauberere, schnellere und ablenkungsfreie Erfahrung.",
+
+  "comparisonTitle": "Pläne Vergleichen",
+  "featureHeader": "Funktion",
+  "freeHeader": "Free",
+  "proHeader": "PRO"
 }

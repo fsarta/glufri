@@ -610,7 +610,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get upsellFeature4 => 'Supporto Prioritario';
 
   @override
-  String get upsellHeadline => 'Sblocca Funzionalità Potenti!';
+  String get upsellHeadline => 'Sblocca il Pieno Potenziale!';
 
   @override
   String get upsellRestore => 'Ripristina Acquisti';
@@ -719,4 +719,77 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get syncError => 'Errore di sincronizzazione.';
+
+  @override
+  String get upsellSubtitle =>
+      'Prendi il controllo totale della tua spesa senza glutine.';
+
+  @override
+  String get proFeatureTitleBackup => 'Backup & Sync Multi-dispositivo';
+
+  @override
+  String get proFeatureBodyBackup =>
+      'I tuoi dati sono preziosi. Salva ogni acquisto in modo sicuro nel cloud. Cambia telefono o usa un tablet? Ritrova tutti i tuoi dati, liste e preferiti sincronizzati istantaneamente. Massima sicurezza, zero pensieri.';
+
+  @override
+  String get proFeatureTitleLists => 'Liste della Spesa Intelligenti';
+
+  @override
+  String get proFeatureBodyLists =>
+      'La pianificazione è tutto. Crea liste della spesa illimitate, aggiungi prodotti dai tuoi preferiti con un tocco e, una volta al supermercato, trasforma la lista in un nuovo acquisto con un solo pulsante. Mai più foglietti di carta o app separate.';
+
+  @override
+  String get proFeatureTitleFavorites => 'Prodotti Preferiti Illimitati';
+
+  @override
+  String get proFeatureBodyFavorites =>
+      'Risparmia tempo ad ogni spesa. Salva i prodotti che acquisti più spesso come preferiti, imposta un prezzo di default e aggiungili alle tue liste o ai tuoi acquisti futuri in un lampo. Il tuo supermercato personale, sempre in tasca.';
+
+  @override
+  String get proFeatureTitleBudget => 'Controllo del Budget Mensile';
+
+  @override
+  String get proFeatureBodyBudget =>
+      'Quanto spendi realmente per il senza glutine? Imposta budget mensili totali e specifici per il gluten-free. Tieni traccia delle tue uscite in tempo reale e guarda il tuo budget rimanente mentre aggiungi prodotti al carrello. Niente più sorprese a fine mese.';
+
+  @override
+  String get proFeatureTitleDetails =>
+      'Dettagli Prodotto Approfonditi (con OFF)';
+
+  @override
+  String get proFeatureBodyDetails =>
+      'Fai scelte più consapevoli. Scansiona un codice a barre e scopri subito ingredienti, allergeni, il Nutri-Score e il grado di processazione (NOVA). Glufri diventa il tuo assistente per una spesa non solo senza glutine, ma anche più sana.';
+
+  @override
+  String get proFeatureTitleHistory => 'Cronologia Prezzi';
+
+  @override
+  String get proFeatureBodyHistory =>
+      'Stai pagando il prezzo giusto? Quando scansioni un prodotto che hai già acquistato, Glufri Pro ti mostra istantaneamente l\'ultimo prezzo pagato e ti avverte se stai spendendo di più. Fai la spesa come un professionista.';
+
+  @override
+  String get proFeatureTitleExport => 'Esportazioni Illimitate (PDF & CSV)';
+
+  @override
+  String get proFeatureBodyExport =>
+      'I tuoi dati, le tue regole. Genera report mensili o annuali in PDF, perfetti per analisi personali o per detrazioni fiscali. Esporta i singoli acquisti in formato CSV per un\'analisi approfondita con fogli di calcolo. Pieno controllo sui tuoi dati di spesa.';
+
+  @override
+  String get proFeatureTitleNoAds => 'Esperienza Senza Interruzioni';
+
+  @override
+  String get proFeatureBodyNoAds =>
+      'Concentrati solo sulla tua spesa. La versione Pro rimuove ogni pubblicità, offrendoti un\'esperienza più pulita, veloce e senza distrazioni.';
+
+  @override
+  String get comparisonTitle => 'Confronta i Piani';
+
+  @override
+  String get featureHeader => 'Funzionalità';
+
+  @override
+  String get freeHeader => 'Free';
+
+  @override
+  String get proHeader => 'PRO';
 }

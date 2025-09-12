@@ -601,7 +601,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get unlockPro => 'FREISCHALTEN';
 
   @override
-  String get upsellAction => 'Jetzt abonnieren (Jahrespreis)';
+  String get upsellAction => 'Jetzt Abonnieren (Jahrespreis)';
 
   @override
   String get upsellFeature1 => 'Multi-Geräte-Backup und -Synchronisation';
@@ -616,13 +616,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get upsellFeature4 => 'Priorisierter Support';
 
   @override
-  String get upsellHeadline => 'Schalte leistungsstarke Funktionen frei!';
+  String get upsellHeadline => 'Schalte das volle Potenzial frei!';
 
   @override
-  String get upsellRestore => 'Einkäufe wiederherstellen';
+  String get upsellRestore => 'Käufe Wiederherstellen';
 
   @override
-  String get upsellTitle => 'Wechsle zu Glufri Pro';
+  String get upsellTitle => 'Auf Glufri Pro upgraden';
 
   @override
   String get backupError => 'Fehler bei der Sicherung.';
@@ -726,4 +726,77 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get syncError => 'Synchronisierungsfehler.';
+
+  @override
+  String get upsellSubtitle =>
+      'Übernehme die volle Kontrolle über deine glutenfreien Ausgaben.';
+
+  @override
+  String get proFeatureTitleBackup => 'Multi-Geräte-Backup & Synchronisation';
+
+  @override
+  String get proFeatureBodyBackup =>
+      'Deine Daten sind wertvoll. Speichere jeden Einkauf sicher in der Cloud. Wechselst du das Handy oder benutzt ein Tablet? Finde sofort alle deine synchronisierten Daten, Listen und Favoriten. Maximale Sicherheit, null Sorgen.';
+
+  @override
+  String get proFeatureTitleLists => 'Intelligente Einkaufslisten';
+
+  @override
+  String get proFeatureBodyLists =>
+      'Planung ist alles. Erstelle unbegrenzte Einkaufslisten, füge Produkte aus deinen Favoriten mit einem Tippen hinzu, und sobald du im Supermarkt bist, verwandle die Liste mit einem einzigen Knopfdruck in einen neuen Einkauf. Nie wieder Zettel oder separate Apps.';
+
+  @override
+  String get proFeatureTitleFavorites => 'Unbegrenzte Lieblingsprodukte';
+
+  @override
+  String get proFeatureBodyFavorites =>
+      'Spare bei jedem Einkauf Zeit. Speichere die Produkte, die du am häufigsten kaufst, als Favoriten, lege einen Standardpreis fest und füge sie blitzschnell zu deinen Listen oder zukünftigen Einkäufen hinzu. Dein persönlicher Supermarkt, immer in deiner Tasche.';
+
+  @override
+  String get proFeatureTitleBudget => 'Monatliche Budgetkontrolle';
+
+  @override
+  String get proFeatureBodyBudget =>
+      'Wie viel gibst du wirklich für glutenfreie Produkte aus? Lege monatliche Gesamtbudgets und spezifische Budgets für glutenfreie Produkte fest. Verfolge deine Ausgaben in Echtzeit und sieh dein verbleibendes Budget, während du Produkte in deinen Warenkorb legst. Keine Überraschungen mehr am Monatsende.';
+
+  @override
+  String get proFeatureTitleDetails =>
+      'Detaillierte Produktinformationen (mit OFF)';
+
+  @override
+  String get proFeatureBodyDetails =>
+      'Triff bewusstere Entscheidungen. Scanne einen Barcode und entdecke sofort Inhaltsstoffe, Allergene, den Nutri-Score und den Verarbeitungsgrad (NOVA). Glufri wird zu deinem Assistenten für einen Einkauf, der nicht nur glutenfrei, sondern auch gesünder ist.';
+
+  @override
+  String get proFeatureTitleHistory => 'Preisverlauf';
+
+  @override
+  String get proFeatureBodyHistory =>
+      'Zahlst du den richtigen Preis? Wenn du ein Produkt scannst, das du bereits gekauft hast, zeigt dir Glufri Pro sofort den zuletzt bezahlten Preis an und warnt dich, wenn du mehr ausgibst. Kaufe wie ein Profi ein.';
+
+  @override
+  String get proFeatureTitleExport => 'Unbegrenzte Exporte (PDF & CSV)';
+
+  @override
+  String get proFeatureBodyExport =>
+      'Deine Daten, deine Regeln. Erstelle monatliche oder jährliche Berichte im PDF-Format, perfekt für persönliche Analysen oder Steuerabzüge. Exportiere einzelne Einkäufe im CSV-Format für eine detaillierte Analyse mit Tabellenkalkulationen. Volle Kontrolle über deine Ausgabendaten.';
+
+  @override
+  String get proFeatureTitleNoAds => 'Werbefreie Erfahrung';
+
+  @override
+  String get proFeatureBodyNoAds =>
+      'Konzentriere dich nur auf deinen Einkauf. Die Pro-Version entfernt alle Werbeanzeigen und bietet dir eine sauberere, schnellere und ablenkungsfreie Erfahrung.';
+
+  @override
+  String get comparisonTitle => 'Pläne Vergleichen';
+
+  @override
+  String get featureHeader => 'Funktion';
+
+  @override
+  String get freeHeader => 'Free';
+
+  @override
+  String get proHeader => 'PRO';
 }

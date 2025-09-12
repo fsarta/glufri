@@ -614,13 +614,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get upsellFeature4 => 'Support Prioritaire';
 
   @override
-  String get upsellHeadline => 'Débloquez des Fonctionnalités Puissantes !';
+  String get upsellHeadline => 'Débloquez le Potentiel Complet !';
 
   @override
   String get upsellRestore => 'Restaurer les Achats';
 
   @override
-  String get upsellTitle => 'Passez à Glufri Pro';
+  String get upsellTitle => 'Passer à Glufri Pro';
 
   @override
   String get backupError => 'Erreur lors de la sauvegarde.';
@@ -723,4 +723,78 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get syncError => 'Erreur de synchronisation.';
+
+  @override
+  String get upsellSubtitle =>
+      'Prenez le contrôle total de vos dépenses sans gluten.';
+
+  @override
+  String get proFeatureTitleBackup =>
+      'Sauvegarde & Synchronisation Multi-appareils';
+
+  @override
+  String get proFeatureBodyBackup =>
+      'Vos données sont précieuses. Sauvegardez chaque achat en toute sécurité dans le cloud. Vous changez de téléphone ou utilisez une tablette ? Retrouvez instantanément toutes vos données, listes et favoris synchronisés. Sécurité maximale, zéro souci.';
+
+  @override
+  String get proFeatureTitleLists => 'Listes de Courses Intelligentes';
+
+  @override
+  String get proFeatureBodyLists =>
+      'La planification est essentielle. Créez des listes de courses illimitées, ajoutez des produits depuis vos favoris d\'un simple toucher et, une fois au supermarché, transformez la liste en un nouvel achat avec un seul bouton. Fini les bouts de papier ou les applications séparées.';
+
+  @override
+  String get proFeatureTitleFavorites => 'Produits Favoris Illimités';
+
+  @override
+  String get proFeatureBodyFavorites =>
+      'Gagnez du temps à chaque course. Enregistrez les produits que vous achetez le plus souvent comme favoris, définissez un prix par défaut et ajoutez-les à vos listes ou à vos futurs achats en un éclair. Votre supermarché personnel, toujours dans votre poche.';
+
+  @override
+  String get proFeatureTitleBudget => 'Contrôle du Budget Mensuel';
+
+  @override
+  String get proFeatureBodyBudget =>
+      'Combien dépensez-vous réellement pour le sans gluten ? Fixez des budgets mensuels totaux et spécifiques pour le sans gluten. Suivez vos dépenses en temps réel et voyez votre budget restant pendant que vous ajoutez des produits au panier. Fini les surprises à la fin du mois.';
+
+  @override
+  String get proFeatureTitleDetails =>
+      'Détails de Produit Approfondis (avec OFF)';
+
+  @override
+  String get proFeatureBodyDetails =>
+      'Faites des choix plus éclairés. Scannez un code-barres et découvrez immédiatement les ingrédients, les allergènes, le Nutri-Score et le degré de transformation (NOVA). Glufri devient votre assistant pour une course non seulement sans gluten, mais aussi plus saine.';
+
+  @override
+  String get proFeatureTitleHistory => 'Historique des Prix';
+
+  @override
+  String get proFeatureBodyHistory =>
+      'Payez-vous le bon prix ? Lorsque vous scannez un produit que vous avez déjà acheté, Glufri Pro vous montre instantanément le dernier prix payé et vous avertit si vous dépensez plus. Faites vos courses comme un professionnel.';
+
+  @override
+  String get proFeatureTitleExport => 'Exportations Illimitées (PDF & CSV)';
+
+  @override
+  String get proFeatureBodyExport =>
+      'Vos données, vos règles. Générez des rapports mensuels ou annuels en PDF, parfaits pour une analyse personnelle ou pour des déductions fiscales. Exportez les achats individuels au format CSV pour une analyse approfondie avec des feuilles de calcul. Contrôle total sur vos données de dépenses.';
+
+  @override
+  String get proFeatureTitleNoAds => 'Expérience Sans Interruption';
+
+  @override
+  String get proFeatureBodyNoAds =>
+      'Concentrez-vous uniquement sur vos courses. La version Pro supprime toutes les publicités, vous offrant une expérience plus propre, plus rapide et sans distraction.';
+
+  @override
+  String get comparisonTitle => 'Comparer les Plans';
+
+  @override
+  String get featureHeader => 'Fonctionnalité';
+
+  @override
+  String get freeHeader => 'Gratuit';
+
+  @override
+  String get proHeader => 'PRO';
 }
