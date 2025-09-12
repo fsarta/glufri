@@ -326,7 +326,7 @@ class _ShoppingListItemTile extends ConsumerWidget {
             foregroundColor: Colors.white,
             icon: Icons.delete,
             label: AppLocalizations.of(context)!.delete, // Usa l10n
-            borderRadius: BorderRadius.circular(12),
+            //borderRadius: BorderRadius.circular(12),
           ),
         ],
       ),

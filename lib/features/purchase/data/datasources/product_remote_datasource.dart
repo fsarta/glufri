@@ -14,12 +14,15 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
   @override
   Future<OffProduct?> getProductByBarcode(String barcode) async {
+    const fieldsToFetch =
+        'product_name_it,product_name_en,product_name,brands,image_front_url'
+        ',ingredients_text_it,ingredients_text' // Lista ingredienti (con fallback in inglese)
+        ',allergens_from_ingredients' // Allergeni
+        ',nutriscore_grade' // Punteggio Nutri-Score (es. 'a', 'b', 'c')
+        ',nova_group'; // Gruppo NOVA (es. 1, 2, 3, 4)
+
     final response = await client
-        .get(
-          Uri.parse(
-            '$baseUrl$barcode?fields=product_name_it,product_name_en,product_name,brands,image_front_url',
-          ),
-        )
+        .get(Uri.parse('$baseUrl$barcode?fields=$fieldsToFetch'))
         .timeout(const Duration(seconds: 10));
 
     if (response.statusCode == 200) {

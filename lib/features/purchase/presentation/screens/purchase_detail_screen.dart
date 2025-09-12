@@ -3,13 +3,16 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
 import 'package:glufri/features/monetization/presentation/screens/upsell_screen.dart';
 import 'package:glufri/features/purchase/data/models/purchase_model.dart';
 import 'package:glufri/features/purchase/domain/services/export_service.dart';
+import 'package:glufri/features/purchase/presentation/providers/product_api_provider.dart';
 import 'package:glufri/features/purchase/presentation/providers/purchase_providers.dart';
 import 'package:glufri/features/purchase/presentation/screens/purchase_session_screen.dart';
+import 'package:glufri/features/purchase/presentation/widgets/product_details_bottom_sheet.dart';
 import 'package:glufri/features/purchase/presentation/widgets/purchase_summary_card.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
@@ -37,6 +40,7 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
   Widget build(BuildContext context) {
     // Guarda il nuovo provider usando l'ID passato
     final purchase = ref.watch(singlePurchaseProvider(widget.purchaseId));
+    final isPro = ref.watch(isProUserProvider);
 
     // Gestisci il caso in cui l'acquisto non sia (ancora) disponibile o sia stato cancellato
     if (purchase == null) {
@@ -168,39 +172,104 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
                 '${item.quantity} x ${NumberFormat.currency(locale: 'it_IT', symbol: '€').format(item.unitPrice)}';
             final unitPriceInfo = item.pricePerStandardUnitDisplayString;
 
-            return ListTile(
-              /* leading: Icon(
-                item.isGlutenFree
-                    ? Icons.verified
-                    : Icons.shopping_cart_outlined,
-                color: item.isGlutenFree
-                    ? Colors.green
-                    : Theme.of(context).colorScheme.secondary,
-              ), */
-              leading: item.isGlutenFree
-                  ? const Icon(Icons.verified, color: Colors.green)
-                  : const Icon(Icons.shopping_cart_outlined),
-              /* title: Row(
+            // Determiniamo SE CI SARANNO AZIONI per questo item
+            final bool hasSlidableActions =
+                isPro && (item.barcode != null && item.barcode!.isNotEmpty);
+
+            // Se non ci sono azioni, restituisci una ListTile semplice.
+            if (!hasSlidableActions) {
+              return ListTile(
+                leading: item.isGlutenFree
+                    ? const Icon(Icons.verified, color: Colors.green)
+                    : const Icon(Icons.shopping_cart_outlined),
+                title: Text(item.name),
+                subtitle: Text(
+                  unitPriceInfo.isNotEmpty
+                      ? '$priceInfo  •  $unitPriceInfo'
+                      : priceInfo,
+                ),
+                trailing: Text(
+                  '${item.subtotal.toStringAsFixed(2)} €',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              );
+            }
+
+            return Slidable(
+              // Usiamo l'ID dell'item come chiave per garantire che lo Slidable si aggiorni correttamente
+              key: ValueKey(item.id),
+
+              // Definiamo solo l'azione a destra (endActionPane)
+              endActionPane: ActionPane(
+                motion: const StretchMotion(),
+                // I figli (le azioni) vengono mostrati solo se la condizione è vera
                 children: [
-                  Flexible(
-                    child: Text(item.name),
-                  ), // Usiamo Flexible per evitare overflow
-                  Text(item.name),
-                  if (item.isGlutenFree) ...[
-                    const SizedBox(width: 8),
-                    const Icon(Icons.verified, size: 16, color: Colors.green),
-                  ],
+                  SlidableAction(
+                    onPressed: (context) async {
+                      // La logica è identica a quella che avevamo nell'IconButton
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (ctx) =>
+                            const Center(child: CircularProgressIndicator()),
+                      );
+                      try {
+                        final offProduct = await ref.read(
+                          offProductProvider(item.barcode!).future,
+                        );
+                        Navigator.of(
+                          context,
+                          rootNavigator: true,
+                        ).pop(); // Chiudi caricamento
+
+                        if (context.mounted && offProduct != null) {
+                          showProductDetailsBottomSheet(context, offProduct);
+                        } else if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(l10n.productNotFoundOrNetworkError),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          Navigator.of(context, rootNavigator: true).pop();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(l10n.productNotFoundOrNetworkError),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      }
+                    },
+                    backgroundColor: Colors.blue.shade700,
+                    foregroundColor: Colors.white,
+                    icon: Icons.info_outline,
+                    label: "Dettagli", // TODO: Localizza
+                  ),
+                  // Nota: qui non mettiamo l'azione "Elimina" perché siamo in una cronologia di acquisto.
+                  // L'eliminazione avviene sull'intero acquisto, non sul singolo item.
                 ],
-              ), */
-              title: Text(item.name),
-              subtitle: Text(
-                unitPriceInfo.isNotEmpty
-                    ? '$priceInfo  •  $unitPriceInfo'
-                    : priceInfo,
               ),
-              trailing: Text(
-                '${item.subtotal.toStringAsFixed(2)} €',
-                style: const TextStyle(fontWeight: FontWeight.bold),
+              // Il figlio dello Slidable è la nostra ListTile
+              child: ListTile(
+                leading: item.isGlutenFree
+                    ? const Icon(Icons.verified, color: Colors.green)
+                    : const Icon(Icons.shopping_cart_outlined),
+                title: Text(item.name),
+                subtitle: Text(
+                  unitPriceInfo.isNotEmpty
+                      ? '$priceInfo  •  $unitPriceInfo'
+                      : priceInfo,
+                ),
+                trailing: Text(
+                  '${item.subtotal.toStringAsFixed(2)} €',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                // L'onTap sulla ListTile potrebbe essere usato in futuro
+                // per mostrare la cronologia prezzi di quel singolo prodotto
+                onTap: null,
               ),
             );
           }),

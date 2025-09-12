@@ -103,7 +103,7 @@ class FavoriteProductsScreen extends ConsumerWidget {
                       foregroundColor: Colors.white,
                       icon: Icons.delete,
                       label: l10n.delete,
-                      borderRadius: BorderRadius.circular(12),
+                      //borderRadius: BorderRadius.circular(12),
                     ),
                   ],
                 ),

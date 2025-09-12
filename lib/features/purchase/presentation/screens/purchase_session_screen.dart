@@ -18,6 +18,7 @@ import 'package:glufri/features/purchase/presentation/providers/cart_provider.da
 import 'package:glufri/features/purchase/data/models/purchase_item_model.dart';
 import 'package:glufri/features/purchase/presentation/providers/product_api_provider.dart';
 import 'package:glufri/features/purchase/presentation/providers/purchase_providers.dart';
+import 'package:glufri/features/purchase/presentation/widgets/product_details_bottom_sheet.dart';
 import 'package:glufri/features/scanner/presentation/screens/barcode_scanner_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -75,6 +76,7 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
     final cartState = ref.watch(cartProvider);
     final l10n = AppLocalizations.of(context);
     final textTheme = Theme.of(context).textTheme;
+    final isPro = ref.watch(isProUserProvider);
 
     if (!_isInitialized && cartState.storeName != null) {
       _storeNameController.text = cartState.storeName!;
@@ -167,6 +169,75 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
                         endActionPane: ActionPane(
                           motion: const StretchMotion(),
                           children: [
+                            // AZIONE: Dettagli Prodotto
+                            // La mostriamo solo se l'item ha un barcode
+                            if (item.barcode != null &&
+                                item.barcode!.isNotEmpty &&
+                                isPro)
+                              SlidableAction(
+                                onPressed: (context) async {
+                                  // Mostriamo un caricamento perché dobbiamo fare la chiamata API
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (ctx) => const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                  try {
+                                    final offProduct = await ref.read(
+                                      offProductProvider(item.barcode!).future,
+                                    );
+                                    // Togliamo il dialog di caricamento
+                                    Navigator.of(
+                                      context,
+                                      rootNavigator: true,
+                                    ).pop();
+
+                                    if (context.mounted && offProduct != null) {
+                                      showProductDetailsBottomSheet(
+                                        context,
+                                        offProduct,
+                                      );
+                                    } else if (context.mounted) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            l10n.productNotFoundOrNetworkError,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  } catch (e) {
+                                    // Assicurati di chiudere il dialogo anche in caso di errore
+                                    if (context.mounted) {
+                                      Navigator.of(
+                                        context,
+                                        rootNavigator: true,
+                                      ).pop();
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            l10n.productNotFoundOrNetworkError,
+                                          ),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                    }
+                                  }
+                                },
+                                backgroundColor: Colors.blue.shade700,
+                                foregroundColor: Colors.white,
+                                icon: Icons.info_outline,
+                                label: "Dettagli", // TODO: Localizza
+                                //borderRadius: BorderRadius.circular(12),
+                              ),
+
+                            // AZIONE: Elimina
                             SlidableAction(
                               onPressed: (context) {
                                 // Non serve un'ulteriore conferma qui, l'azione
@@ -179,7 +250,7 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
                               foregroundColor: Colors.white,
                               icon: Icons.delete,
                               label: l10n.delete,
-                              borderRadius: BorderRadius.circular(12),
+                              //borderRadius: BorderRadius.circular(12),
                             ),
                           ],
                         ),
@@ -310,6 +381,34 @@ Widget _buildActionButtons(
                         context,
                         l10n,
                         historyResult,
+                      );
+                    }
+
+                    final offProduct = apiResult is OffProduct
+                        ? apiResult
+                        : null;
+                    if (context.mounted && offProduct != null && isPro) {
+                      // Aspetta che il bottom sheet venga chiuso prima di procedere
+                      await showProductDetailsBottomSheet(context, offProduct);
+                    }
+
+                    // Aggiungiamo un feedback per l'utente NON-PRO quando scansiona un prodotto
+                    // per fargli sapere cosa si sta perdendo.
+                    if (context.mounted && offProduct != null && !isPro) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text(
+                            "Passa a Pro per vedere ingredienti e Nutri-Score!",
+                          ), // TODO: Localizza
+                          action: SnackBarAction(
+                            label: l10n.unlockPro,
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => const UpsellScreen(),
+                              ),
+                            ),
+                          ),
+                        ),
                       );
                     }
 
