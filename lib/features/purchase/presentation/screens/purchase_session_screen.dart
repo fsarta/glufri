@@ -8,6 +8,7 @@ import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/budget/presentation/providers/budget_providers.dart';
 import 'package:glufri/features/favorites/data/models/favorite_product_model.dart';
 import 'package:glufri/features/favorites/presentation/providers/favorite_providers.dart';
+import 'package:glufri/features/monetization/presentation/providers/interstitial_ad_manager.dart';
 import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
 import 'package:glufri/features/monetization/presentation/screens/upsell_screen.dart';
 import 'package:glufri/features/purchase/data/models/purchase_model.dart';
@@ -53,6 +54,11 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
     // prima di tentare di modificare lo stato di un provider.
     // Questo previene potenziali errori di 'modifying a provider during build'.
     Future.microtask(() {
+      final isPro = ref.read(isProUserProvider);
+      if (!isPro) {
+        ref.read(interstitialAdManagerProvider).loadAd();
+      }
+
       final purchase = widget.purchaseToEdit;
       if (purchase != null) {
         // Chiama la funzione di caricamento sul notifier!
@@ -109,12 +115,34 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
               label: Text(l10n!.savePurchase),
               onPressed: cartState.items.isNotEmpty
                   ? () async {
+                      // Prima salva l'acquisto
                       await ref.read(cartProvider.notifier).savePurchase();
-                      if (context.mounted) {
-                        Navigator.of(context).pop();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(l10n.purchaseSavedSuccess)),
-                        );
+
+                      if (!context.mounted) return;
+
+                      // Mostra la conferma all'utente SUBITO
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(l10n.purchaseSavedSuccess)),
+                      );
+
+                      // Funzione che chiude la pagina
+                      final void Function() navigateBack = () {
+                        if (context.mounted) {
+                          Navigator.of(context).pop();
+                        }
+                      };
+
+                      // Ora gestisci l'annuncio o la navigazione
+                      final isPro = ref.read(isProUserProvider);
+                      if (!isPro) {
+                        // Se l'utente non è Pro, prova a mostrare l'annuncio.
+                        // La navigazione indietro avverrà DOPO che l'annuncio è stato chiuso.
+                        ref
+                            .read(interstitialAdManagerProvider)
+                            .showAdIfAvailable(onAdDismissed: navigateBack);
+                      } else {
+                        // Se l'utente è Pro, torna indietro subito.
+                        navigateBack();
                       }
                     }
                   : null,
