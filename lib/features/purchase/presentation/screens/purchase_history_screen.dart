@@ -80,6 +80,11 @@ class _PurchaseHistoryScreenState extends ConsumerState<PurchaseHistoryScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+          onPressed: () => Scaffold.of(context).openDrawer(),
+        ),
         title: Text(l10n!.purchaseHistory),
         actions: [
           IconButton(

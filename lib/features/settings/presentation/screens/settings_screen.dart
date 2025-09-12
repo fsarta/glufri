@@ -30,7 +30,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final isPro = ref.watch(isProUserProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n!.settings)),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+          onPressed: () => Scaffold.of(context).openDrawer(),
+        ),
+        title: Text(l10n!.settings),
+      ),
       body: ListView(
         children: [
           ListTile(

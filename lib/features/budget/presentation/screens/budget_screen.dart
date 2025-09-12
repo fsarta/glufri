@@ -45,6 +45,11 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+          onPressed: () => Scaffold.of(context).openDrawer(),
+        ),
         title: Text('Budget di $monthName'), // TODO: Localizza
         actions: [
           IconButton(

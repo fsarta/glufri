@@ -13,7 +13,14 @@ class ShoppingListsScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.shoppingListsScreenTitle)),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+          onPressed: () => Scaffold.of(context).openDrawer(),
+        ),
+        title: Text(l10n.shoppingListsScreenTitle),
+      ),
       body: listsAsync.when(
         data: (lists) {
           if (lists.isEmpty) {

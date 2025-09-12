@@ -23,6 +23,7 @@ class UserNotifier extends StateNotifier<UserModel?> {
           uid: user.uid,
           email: user.email,
           displayName: user.displayName,
+          photoURL: user.photoURL,
         );
         state = userModel;
         await _saveUserToCache(userModel);
