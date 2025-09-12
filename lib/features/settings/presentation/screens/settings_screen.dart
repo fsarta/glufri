@@ -11,6 +11,7 @@ import 'package:glufri/features/monetization/presentation/screens/upsell_screen.
 import 'package:glufri/features/purchase/presentation/providers/purchase_providers.dart';
 import 'package:glufri/features/settings/presentation/providers/settings_provider.dart';
 import 'package:glufri/features/settings/presentation/screens/privacy_policy_screen.dart';
+import 'package:glufri/features/settings/presentation/screens/support_screen.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -319,6 +320,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               );
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.support_agent_outlined),
+            title: Text("Aiuto & Supporto"), // TODO: Localizza
+            onTap: () {
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (_) => const SupportScreen()));
+            },
+          ),
+          const Divider(),
+
           // Questa intera sezione verrà compilata e mostrata SOLO in modalità debug.
           // Non esisterà nell'app che pubblicherai sullo store.
           if (kDebugMode) ...[
