@@ -10,18 +10,21 @@ import 'package:uuid/uuid.dart';
 void showAddEditFavoriteDialog(
   BuildContext context, {
   FavoriteProductModel? product,
+  bool isFromScan = false,
 }) {
   final isEditing = product != null;
 
   showDialog(
     context: context,
-    builder: (ctx) => _AddEditFavoriteDialogContent(product: product),
+    builder: (ctx) =>
+        _AddEditFavoriteDialogContent(product: product, isFromScan: isFromScan),
   );
 }
 
 class _AddEditFavoriteDialogContent extends ConsumerStatefulWidget {
   final FavoriteProductModel? product;
-  const _AddEditFavoriteDialogContent({this.product});
+  final bool isFromScan;
+  const _AddEditFavoriteDialogContent({this.product, this.isFromScan = false});
 
   @override
   ConsumerState<_AddEditFavoriteDialogContent> createState() =>
@@ -76,6 +79,8 @@ class _AddEditFavoriteDialogContentState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context); // Prendiamo il tema per i colori
+
     return AlertDialog(
       title: Text(
         widget.product != null
@@ -90,16 +95,24 @@ class _AddEditFavoriteDialogContentState
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: l10n.productName,
-                ), // TODO:
+                decoration: InputDecoration(labelText: l10n.productName),
                 validator: (val) =>
                     (val?.trim().isEmpty ?? true) ? l10n.requiredField : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _barcodeController,
-                decoration: InputDecoration(labelText: l10n.barcodeOptional),
+                readOnly: widget.isFromScan, // Usa la variabile passata
+                decoration: InputDecoration(
+                  labelText: l10n.barcodeOptional,
+                  prefixIcon: const Icon(Icons.qr_code_2), // Aggiungi l'icona
+                  filled: widget.isFromScan,
+                  fillColor: widget.isFromScan
+                      ? theme.disabledColor.withOpacity(
+                          0.1,
+                        ) // Colora lo sfondo se readOnly
+                      : null,
+                ),
               ),
               const SizedBox(height: 16),
               TextFormField(

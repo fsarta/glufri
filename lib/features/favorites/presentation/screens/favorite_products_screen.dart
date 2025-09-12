@@ -9,6 +9,7 @@ import 'package:glufri/core/widgets/skeletons/skeleton_card.dart';
 import 'package:glufri/features/favorites/data/models/favorite_product_model.dart';
 import 'package:glufri/features/favorites/presentation/providers/favorite_providers.dart';
 import 'package:glufri/features/favorites/presentation/widgets/add_edit_favorite_dialog.dart';
+import 'package:glufri/features/purchase/presentation/providers/product_api_provider.dart';
 import 'package:glufri/features/scanner/presentation/screens/barcode_scanner_screen.dart';
 import 'package:uuid/uuid.dart';
 
@@ -38,13 +39,61 @@ class FavoriteProductsScreen extends ConsumerWidget {
               );
 
               if (barcode != null && barcode.isNotEmpty && context.mounted) {
-                // TODO: in futuro potremmo cercare il nome del prodotto online
-                final newProduct = FavoriteProductModel(
-                  id: const Uuid().v4(),
-                  name: '',
-                  barcode: barcode,
+                // 1. Mostra un dialog di caricamento
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (ctx) =>
+                      const Center(child: CircularProgressIndicator()),
                 );
-                showAddEditFavoriteDialog(context, product: newProduct);
+
+                try {
+                  // 2. Chiama Open Food Facts per ottenere i dettagli
+                  final offProduct = await ref.read(
+                    offProductProvider(barcode).future,
+                  );
+
+                  // Chiudi il dialog di caricamento
+                  Navigator.of(context, rootNavigator: true).pop();
+
+                  // 3. Se non troviamo il prodotto, mostriamo un avviso
+                  if (offProduct == null && context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(l10n.productNotFoundOrNetworkError),
+                      ),
+                    );
+                  }
+
+                  // 4. Crea il nuovo modello, usando il nome trovato (o vuoto se non trovato)
+                  final newProduct = FavoriteProductModel(
+                    id: const Uuid().v4(),
+                    name: offProduct?.name ?? '',
+                    barcode: barcode,
+                    isGlutenFree:
+                        false, // Di default è false, l'utente può cambiarlo
+                  );
+
+                  // 5. Apri il dialogo con i dati pre-compilati
+                  if (context.mounted) {
+                    showAddEditFavoriteDialog(
+                      context,
+                      product: newProduct,
+                      isFromScan: true,
+                    );
+                  }
+                } catch (e) {
+                  // In caso di errore, chiudi comunque il dialogo
+                  if (context.mounted) {
+                    Navigator.of(context, rootNavigator: true).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(l10n.genericError(e)),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                }
               }
             },
           ),
@@ -138,7 +187,7 @@ class FavoriteProductsScreen extends ConsumerWidget {
         tooltip: l10n.addFavoriteProduct,
         child: const Icon(Icons.add),
         onPressed: () {
-          showAddEditFavoriteDialog(context);
+          showAddEditFavoriteDialog(context, isFromScan: false);
         },
       ),
     );
