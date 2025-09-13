@@ -15,6 +15,7 @@ import 'package:glufri/features/monetization/presentation/screens/upsell_screen.
 import 'package:glufri/features/purchase/presentation/screens/purchase_history_screen.dart';
 import 'package:glufri/features/settings/presentation/screens/settings_screen.dart';
 import 'package:glufri/features/shopping_list/presentation/screens/shopping_lists_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainShellScreen extends ConsumerStatefulWidget {
   const MainShellScreen({super.key});
@@ -25,6 +26,7 @@ class MainShellScreen extends ConsumerStatefulWidget {
 
 class _MainShellScreenState extends ConsumerState<MainShellScreen> {
   int _selectedIndex = 0;
+  static const String _lastTabIndexKey = 'lastTabIndex';
 
   // Manteniamo la lista di widget come prima
   static const List<Widget> _screens = <Widget>[
@@ -35,18 +37,30 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
     SettingsScreen(), // 4
   ];
 
-  // Lista separata degli ID delle schermate (per riferimento futuro)
-  final _screenKeys = [
-    GlobalKey<NavigatorState>(),
-    GlobalKey<NavigatorState>(),
-    GlobalKey<NavigatorState>(),
-    GlobalKey<NavigatorState>(),
-    GlobalKey<NavigatorState>(),
-  ];
-
   final proScreenIndexes = {1, 2, 3};
 
-  void _onItemTapped(int index) {
+  @override
+  void initState() {
+    super.initState();
+    _loadLastTabIndex();
+  }
+
+  /// Carica l'ultimo indice della tab salvato dalle preferenze.
+  Future<void> _loadLastTabIndex() async {
+    final prefs = await SharedPreferences.getInstance();
+    // Legge l'indice salvato. Se non c'è, usa 0 (Cronologia) come default.
+    final lastIndex = prefs.getInt(_lastTabIndexKey) ?? 0;
+
+    // Controlliamo che lo stato esista ancora prima di aggiornarlo
+    if (mounted) {
+      setState(() {
+        _selectedIndex = lastIndex;
+      });
+    }
+  }
+
+  /// Salva l'indice della tab corrente e aggiorna lo stato.
+  Future<void> _onItemTapped(int index) async {
     final isPro = ref.read(isProUserProvider);
 
     if (proScreenIndexes.contains(index) && !isPro) {
@@ -55,6 +69,9 @@ class _MainShellScreenState extends ConsumerState<MainShellScreen> {
       ).push(MaterialPageRoute(builder: (_) => const UpsellScreen()));
       return;
     }
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_lastTabIndexKey, index);
 
     setState(() {
       _selectedIndex = index;
