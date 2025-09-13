@@ -84,7 +84,14 @@ class _GlufriAppState extends ConsumerState<GlufriApp> {
         );
         debugPrint('[Auth Listener] Chiamo _handlePostLoginFlow...');
 
-        // Avvia il flusso post-login: ripristino cloud e/o migrazione locale.
+        // `popUntil` chiude tutte le schermate una sopra l'altra
+        // fino a quando non trova una rotta che soddisfa la condizione.
+        // La condizione `(route) => route.isFirst` è vera solo per la
+        // primissima schermata dell'app (la nostra MainShellScreen/AuthWrapper).
+        Navigator.of(navigatorContext).popUntil((route) => route.isFirst);
+
+        // Il flusso di sync viene avviato subito dopo, mentre l'utente
+        // è già stato riportato alla home.
         _handlePostLoginFlow(navigatorContext, next.uid);
       }
       // --- CASO LOGOUT: l'utente passa da uno stato valido a 'null'.
@@ -96,6 +103,8 @@ class _GlufriAppState extends ConsumerState<GlufriApp> {
             backgroundColor: Theme.of(navigatorContext).colorScheme.primary,
           ),
         );
+        // Anche dopo il logout, assicuriamoci di tornare alla home.
+        Navigator.of(navigatorContext).popUntil((route) => route.isFirst);
       }
     });
   }
