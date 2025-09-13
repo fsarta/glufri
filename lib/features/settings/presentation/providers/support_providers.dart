@@ -1,5 +1,7 @@
 // lib/features/settings/presentation/providers/support_providers.dart
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -47,13 +49,34 @@ final faqListProvider = FutureProvider<List<FaqModel>>((ref) async {
 
 T? ambiguate<T>(T? value) => value;
 
-/// Provider che gestisce il termine di ricerca inserito dall'utente
-final faqSearchQueryProvider = StateProvider<String>((ref) => '');
+class FaqSearchNotifier extends StateNotifier<String> {
+  Timer? _debounce;
+  FaqSearchNotifier() : super('');
 
-/// Provider che FILTRA la lista di FAQ in base alla query di ricerca
+  void setSearchQuery(String query) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 250), () {
+      state = query;
+    });
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+}
+
+final faqSearchNotifierProvider =
+    StateNotifierProvider<FaqSearchNotifier, String>((ref) {
+      return FaqSearchNotifier();
+    });
+
+// `filteredFaqProvider` ora deve ascoltare il nuovo notifier
 final filteredFaqProvider = Provider<List<FaqModel>>((ref) {
   final allFaqs = ref.watch(faqListProvider).valueOrNull ?? [];
-  final query = ref.watch(faqSearchQueryProvider).toLowerCase().trim();
+  // 3. Ascolta il nuovo provider invece del vecchio
+  final query = ref.watch(faqSearchNotifierProvider).toLowerCase().trim();
 
   if (query.isEmpty) {
     return allFaqs;
@@ -68,3 +91,5 @@ final filteredFaqProvider = Provider<List<FaqModel>>((ref) {
     return questionMatch || answerMatch || keywordMatch;
   }).toList();
 });
+
+final faqSearchQueryProvider = StateProvider<String>((ref) => '');

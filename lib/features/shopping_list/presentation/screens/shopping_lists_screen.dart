@@ -19,7 +19,7 @@ class ShoppingListsScreen extends ConsumerWidget {
     // - `shoppingListSearchQueryProvider` per gestire la UI della barra di ricerca (es. la "X").
     final lists = ref.watch(filteredShoppingListsProvider);
     final l10n = AppLocalizations.of(context)!;
-    final query = ref.watch(shoppingListSearchQueryProvider);
+    final query = ref.watch(shoppingListSearchNotifierProvider);
 
     // Usiamo `allListsAsync` solo per controllare lo stato di caricamento/errore iniziale.
     final allListsAsync = ref.watch(shoppingListsProvider);
@@ -43,13 +43,11 @@ class ShoppingListsScreen extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
             child: TextField(
               // Usiamo un controller "usa e getta" per posizionare il cursore alla fine del testo.
-              controller: TextEditingController(text: query)
-                ..selection = TextSelection.fromPosition(
-                  TextPosition(offset: query.length),
-                ),
-              onChanged: (value) =>
-                  ref.read(shoppingListSearchQueryProvider.notifier).state =
-                      value,
+              controller: TextEditingController(text: query),
+              onChanged: (value) => ref
+                  .read(shoppingListSearchNotifierProvider.notifier)
+                  .setSearchQuery(value),
+
               decoration: InputDecoration(
                 hintText: "Cerca per lista o prodotto...", // TODO: Localizza
                 prefixIcon: const Icon(Icons.search),
@@ -57,13 +55,9 @@ class ShoppingListsScreen extends ConsumerWidget {
                 suffixIcon: query.isNotEmpty
                     ? IconButton(
                         icon: const Icon(Icons.clear),
-                        onPressed: () =>
-                            ref
-                                    .read(
-                                      shoppingListSearchQueryProvider.notifier,
-                                    )
-                                    .state =
-                                '',
+                        onPressed: () => ref
+                            .read(shoppingListSearchNotifierProvider.notifier)
+                            .setSearchQuery(''),
                       )
                     : null,
                 border: OutlineInputBorder(

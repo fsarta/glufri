@@ -1,16 +1,41 @@
 // lib/features/shopping_list/presentation/providers/shopping_list_filter_provider.dart
 
+import 'dart:async'; // <-- Import
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/features/shopping_list/data/models/shopping_list_model.dart';
 import 'package:glufri/features/shopping_list/presentation/providers/shopping_list_providers.dart';
 
-// Provider per la query di ricerca
-final shoppingListSearchQueryProvider = StateProvider<String>((ref) => '');
+// --- Trasforma in StateNotifier ---
+class ShoppingListSearchNotifier extends StateNotifier<String> {
+  Timer? _debounce;
+  ShoppingListSearchNotifier() : super('');
 
-// Provider che applica il filtro alla lista completa
+  void setSearchQuery(String query) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 250), () {
+      state = query;
+    });
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+}
+
+final shoppingListSearchNotifierProvider =
+    StateNotifierProvider<ShoppingListSearchNotifier, String>((ref) {
+      return ShoppingListSearchNotifier();
+    });
+
+// Il provider filtrato ascolta il nuovo notifier
 final filteredShoppingListsProvider = Provider<List<ShoppingListModel>>((ref) {
   final allLists = ref.watch(shoppingListsProvider).valueOrNull ?? [];
-  final query = ref.watch(shoppingListSearchQueryProvider).toLowerCase().trim();
+  final query = ref
+      .watch(shoppingListSearchNotifierProvider)
+      .toLowerCase()
+      .trim();
 
   if (query.isEmpty) {
     return allLists;
