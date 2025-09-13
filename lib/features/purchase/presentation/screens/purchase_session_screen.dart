@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
+import 'package:glufri/core/providers/connectivity_provider.dart';
 import 'package:glufri/features/budget/presentation/providers/budget_providers.dart';
 import 'package:glufri/features/favorites/data/models/favorite_product_model.dart';
 import 'package:glufri/features/favorites/presentation/providers/favorite_providers.dart';
@@ -45,6 +46,17 @@ class PurchaseSessionScreen extends ConsumerStatefulWidget {
 class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
   final _storeNameController = TextEditingController();
   bool _isInitialized = false; // Flag per l'inizializzazione
+
+  void _showOfflineSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          "Questa funzione richiede una connessione internet.",
+        ), // TODO: Localizza
+        backgroundColor: Colors.orange,
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -204,6 +216,11 @@ class _PurchaseSessionScreenState extends ConsumerState<PurchaseSessionScreen> {
                                 isPro)
                               SlidableAction(
                                 onPressed: (context) async {
+                                  // Aggiungi il controllo di connessione
+                                  if (!ref.read(hasConnectionProvider)) {
+                                    _showOfflineSnackbar();
+                                    return;
+                                  }
                                   // Mostriamo un caricamento perché dobbiamo fare la chiamata API
                                   showDialog(
                                     context: context,
@@ -339,6 +356,18 @@ Widget _buildActionButtons(
 ) {
   final isPro = ref.watch(isProUserProvider);
 
+  // Funzione helper locale (il context è già disponibile)
+  void _showOfflineSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          "Questa funzione richiede una connessione internet.",
+        ), // TODO: Localizza
+        backgroundColor: Colors.orange,
+      ),
+    );
+  }
+
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -361,6 +390,12 @@ Widget _buildActionButtons(
                 icon: const Icon(Icons.qr_code_scanner),
                 label: Text(l10n.scanBarcode),
                 onPressed: () async {
+                  // Aggiungi il controllo PRIMA di avviare lo scanner
+                  // (non ha senso scansionare se poi non possiamo fare la chiamata API)
+                  if (!ref.read(hasConnectionProvider)) {
+                    _showOfflineSnackbar();
+                    return;
+                  }
                   final barcode = await Navigator.of(context).push<String>(
                     MaterialPageRoute(
                       builder: (ctx) => const BarcodeScannerScreen(),

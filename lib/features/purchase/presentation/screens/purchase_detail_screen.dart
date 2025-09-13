@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
+import 'package:glufri/core/providers/connectivity_provider.dart';
 import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
 import 'package:glufri/features/monetization/presentation/screens/upsell_screen.dart';
 import 'package:glufri/features/purchase/data/models/purchase_model.dart';
@@ -35,6 +36,18 @@ class PurchaseDetailScreen extends ConsumerStatefulWidget {
 class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
   // Controller per catturare un widget come immagine.
   final ScreenshotController _screenshotController = ScreenshotController();
+
+  // Funzione helper per la snackbar
+  void _showOfflineSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          "Questa funzione richiede una connessione internet.",
+        ), // TODO
+        backgroundColor: Colors.orange,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -206,6 +219,11 @@ class _PurchaseDetailScreenState extends ConsumerState<PurchaseDetailScreen> {
                 children: [
                   SlidableAction(
                     onPressed: (context) async {
+                      // Aggiungi il controllo
+                      if (!ref.read(hasConnectionProvider)) {
+                        _showOfflineSnackbar();
+                        return;
+                      }
                       // La logica è identica a quella che avevamo nell'IconButton
                       showDialog(
                         context: context,

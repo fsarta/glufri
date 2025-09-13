@@ -2,10 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
+import 'package:glufri/core/providers/connectivity_provider.dart';
 import 'package:glufri/core/utils/debug_data_seeder.dart';
 import 'package:glufri/core/utils/debug_overrides.dart';
 import 'package:glufri/features/backup/domain/auth_repository.dart';
 import 'package:glufri/features/backup/domain/sync_service.dart';
+import 'package:glufri/features/backup/presentation/screens/login_screen.dart';
 import 'package:glufri/features/monetization/presentation/providers/monetization_provider.dart';
 import 'package:glufri/features/monetization/presentation/screens/upsell_screen.dart';
 import 'package:glufri/features/purchase/presentation/providers/purchase_providers.dart';
@@ -23,6 +25,20 @@ class SettingsScreen extends ConsumerStatefulWidget {
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   bool _isBackupLoading = false;
   bool _isRestoreLoading = false;
+
+  // Funzione helper per mostrare la notifica di offline
+  void _showOfflineSnackbar({String? message}) {
+    if (!mounted) return;
+
+    // Ora usiamo il messaggio fornito, se c'è, altrimenti usiamo un testo di default
+    final snackBarMessage =
+        message ??
+        "Questa funzione richiede una connessione internet."; // TODO: Localizza
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(snackBarMessage), backgroundColor: Colors.orange),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,14 +113,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   leading: const Icon(Icons.login),
                   title: Text(l10n.settingsLoginForBackup),
                   onTap: () async {
-                    try {
-                      await ref.read(authRepositoryProvider).signInWithGoogle();
-                    } catch (e) {
-                      if (!context.mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(l10n.settingsLoginFailed)),
-                      );
+                    // Controlla la connessione PRIMA di fare qualsiasi cosa
+                    if (!ref.read(hasConnectionProvider)) {
+                      _showOfflineSnackbar(
+                        message: "Il login richiede una connessione internet.",
+                      ); // TODO
+                      return;
                     }
+
+                    // Se connesso, naviga alla schermata di login
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const LoginScreen()),
+                    );
                   },
                 );
               }
@@ -131,6 +151,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         : const Icon(Icons.cloud_upload_outlined),
                     title: Text(l10n.settingsBackupNow),
                     onTap: () async {
+                      // Aggiungi il controllo di connessione
+                      if (!ref.read(hasConnectionProvider)) {
+                        _showOfflineSnackbar();
+                        return;
+                      }
                       if (!isPro) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -171,6 +196,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         : const Icon(Icons.cloud_download_outlined),
                     title: Text(l10n.settingsRestoreFromCloud),
                     onTap: () async {
+                      // Aggiungi il controllo di connessione
+                      if (!ref.read(hasConnectionProvider)) {
+                        _showOfflineSnackbar();
+                        return;
+                      }
                       if (!isPro) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -233,72 +263,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     title: Text(l10n.settingsLogout),
                     onTap: () => ref.read(authRepositoryProvider).signOut(),
                   ),
-                  /* ListTile(
-                    leading: const Icon(Icons.assessment_outlined),
-                    title: const Text(
-                      'Budget Mensile (Pro)',
-                    ), // TODO: Localizza
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      if (!isPro) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const UpsellScreen(),
-                          ),
-                        );
-                        return;
-                      }
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const BudgetScreen()),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.favorite_border),
-                    title: const Text(
-                      'Prodotti Preferiti (Pro)',
-                    ), // TODO: Localizza
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      if (!isPro) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const UpsellScreen(),
-                          ),
-                        );
-                        return;
-                      }
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const FavoriteProductsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-
-                  ListTile(
-                    leading: const Icon(Icons.list_alt_outlined),
-                    title: const Text(
-                      'Liste della Spesa (Pro)',
-                    ), // TODO: Localizza
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      if (!isPro) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const UpsellScreen(),
-                          ),
-                        );
-                        return;
-                      }
-                      // Naviga alla nuova schermata principale delle liste
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const ShoppingListsScreen(),
-                        ),
-                      );
-                    },
-                  ), */
                 ],
               );
             },

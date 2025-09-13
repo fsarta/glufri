@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
+import 'package:glufri/core/providers/connectivity_provider.dart';
 import 'package:glufri/features/backup/domain/auth_repository.dart';
 import 'package:glufri/features/backup/presentation/screens/forgot_password_screen.dart';
 import 'package:glufri/features/backup/presentation/screens/signup_screen.dart';
@@ -22,6 +23,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   String? _errorMessage;
   bool _isPasswordVisible = false;
 
+  // Aggiungi la funzione helper per la notifica
+  void _showOfflineSnackbar() {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          "L'autenticazione richiede una connessione internet.",
+        ), // TODO
+        backgroundColor: Colors.orange,
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -30,6 +44,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _login() async {
+    // Aggiungi il controllo qui
+    if (!ref.read(hasConnectionProvider)) {
+      _showOfflineSnackbar();
+      return;
+    }
+
     setState(() => _errorMessage = null);
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
@@ -54,6 +74,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Future<void> _loginWithGoogle() async {
     final l10n = AppLocalizations.of(context)!;
+
+    // E aggiungi il controllo anche qui
+    if (!ref.read(hasConnectionProvider)) {
+      _showOfflineSnackbar();
+      return;
+    }
 
     setState(() => _errorMessage = null);
     setState(() => _isLoading = true);
