@@ -14,6 +14,7 @@ class SupportScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final faqs = ref.watch(filteredFaqProvider);
     final faqsAsync = ref.watch(faqListProvider);
+    final query = ref.watch(faqSearchQueryProvider); // Osserva la query
 
     return Scaffold(
       appBar: AppBar(
@@ -26,9 +27,21 @@ class SupportScreen extends ConsumerWidget {
             child: TextField(
               onChanged: (value) =>
                   ref.read(faqSearchQueryProvider.notifier).state = value,
+              controller: TextEditingController(text: query)
+                ..selection = TextSelection.fromPosition(
+                  TextPosition(offset: query.length),
+                ),
               decoration: InputDecoration(
                 hintText: "Cerca una domanda...", // TODO: Localizza
                 prefixIcon: const Icon(Icons.search),
+                suffixIcon: query.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          ref.read(faqSearchQueryProvider.notifier).state = '';
+                        },
+                      )
+                    : null, // Nessuna icona se il campo è vuoto
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
