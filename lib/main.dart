@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:glufri/features/backup/domain/sync_service.dart';
 import 'package:glufri/features/budget/data/models/budget_model.dart';
 import 'package:glufri/features/favorites/data/models/favorite_product_model.dart';
 import 'package:glufri/features/shopping_list/data/models/shopping_list_item_model.dart';
@@ -64,6 +65,7 @@ Future<void> main() async {
     MobileAds.instance.initialize(),
     _initializeGoogleSignInIfNeeded(),
     initializeDateFormatting(),
+    SharedPreferences.getInstance(),
   ]);
 
   // Registra gli adapters di Hive prima di aprire le box
@@ -75,6 +77,8 @@ Future<void> main() async {
   Hive.registerAdapter(ShoppingListModelAdapter());
 
   // Apri le box
+  // Nota: I box per utente (es. 'purchases_userId') vengono aperti dinamicamente
+  // e non hanno bisogno di essere aperti qui.
   await Hive.openBox<PurchaseModel>('purchases');
   await Hive.openBox<BudgetModel>('budgets');
   await Hive.openBox<FavoriteProductModel>('favorites');

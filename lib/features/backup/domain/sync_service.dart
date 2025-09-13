@@ -6,12 +6,59 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/features/purchase/data/models/purchase_model.dart';
 import 'package:hive/hive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+const _lastSyncTimestampKey = 'lastSyncTimestamp';
 
 class SyncService {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
 
   SyncService(this._firestore, this._auth);
+
+  // Metodo HELPER per ottenere il riferimento alla collezione dell'utente
+  CollectionReference<Map<String, dynamic>> _userPurchasesCollection() {
+    final user = _auth.currentUser;
+    if (user == null) {
+      throw Exception("User not authenticated for sync operation");
+    }
+    return _firestore.collection('users').doc(user.uid).collection('purchases');
+  }
+
+  /// Recupera la data dell'acquisto più recente presente su Firestore.
+  /// Restituisce `null` se non ci sono acquisti.
+  Future<DateTime?> getLatestPurchaseDateFromCloud() async {
+    final querySnapshot = await _userPurchasesCollection()
+        .orderBy('date', descending: true)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final data = querySnapshot.docs.first.data();
+      // Le date in Firestore sono salvate come Timestamp
+      return (data['date'] as Timestamp).toDate();
+    }
+    return null;
+  }
+
+  /// Recupera la data dell'acquisto più recente salvato localmente su Hive.
+  /// Restituisce `null` se non ci sono acquisti.
+  Future<DateTime?> getLatestPurchaseDateFromLocal() async {
+    final user = _auth.currentUser;
+    if (user == null) return null;
+
+    final boxName = 'purchases_${user.uid}';
+    if (!await Hive.boxExists(boxName)) return null;
+
+    final box = await Hive.openBox<PurchaseModel>(boxName);
+    if (box.values.isNotEmpty) {
+      final purchases = box.values.toList();
+      // Ordiniamo in memoria (Hive non ordina nativamente)
+      purchases.sort((a, b) => b.date.compareTo(a.date));
+      return purchases.first.date;
+    }
+    return null;
+  }
 
   /// Carica tutti i dati locali su Firestore, sovrascrivendoli.
   Future<void> backupToCloud() async {
@@ -32,11 +79,7 @@ class SyncService {
     final batch = _firestore.batch();
 
     for (final purchase in purchases) {
-      final docRef = _firestore
-          .collection('users')
-          .doc(user.uid)
-          .collection('purchases')
-          .doc(purchase.id);
+      final docRef = _userPurchasesCollection().doc(purchase.id);
       batch.set(docRef, purchase.toJson());
     }
 
@@ -91,46 +134,21 @@ class SyncService {
 
     debugPrint('[SyncService] Inizio ripristino per utente ${user.uid}...');
 
-    final querySnapshot = await _firestore
-        .collection('users')
-        .doc(user.uid)
-        .collection('purchases')
-        .get();
+    final querySnapshot = await _userPurchasesCollection().get();
 
     debugPrint(
       '[SyncService] Query Firestore completata. Trovati ${querySnapshot.docs.length} documenti nel cloud.',
     );
 
     final cloudPurchases = querySnapshot.docs
-        .map((doc) {
-          // Aggiungiamo un try-catch qui per scovare problemi di deserializzazione
-          try {
-            return PurchaseModel.fromJson(doc.data());
-          } catch (e) {
-            debugPrint(
-              '[SyncService] ERRORE durante la conversione di un documento da Firestore: $e',
-            );
-            return null;
-          }
-        })
-        .whereType<PurchaseModel>()
+        .map((doc) => PurchaseModel.fromJson(doc.data()))
         .toList();
 
-    if (cloudPurchases.isNotEmpty) {
-      final box = await Hive.openBox<PurchaseModel>('purchases_${user.uid}');
-      debugPrint('[SyncService] Box Hive "purchases_${user.uid}" aperta.');
-      await box.clear();
-      await box.putAll({for (var p in cloudPurchases) p.id: p});
-      debugPrint(
-        '[SyncService] Box Hive svuotata e ripopolata con ${cloudPurchases.length} acquisti.',
-      );
-    } else {
-      debugPrint('[SyncService] Nessun acquisto valido da salvare in Hive.');
-    }
+    final box = await Hive.openBox<PurchaseModel>('purchases_${user.uid}');
+    await box.clear();
+    await box.putAll({for (var p in cloudPurchases) p.id: p});
 
-    debugPrint(
-      '[SyncService] Ripristino terminato. Restituisco il conteggio: ${cloudPurchases.length}',
-    );
+    debugPrint('[Sync] RESTORE completato. Box locale aggiornata.');
     return cloudPurchases.length;
   }
 }
@@ -141,6 +159,7 @@ final authProvider = Provider(
   (ref) => FirebaseAuth.instance,
 ); // Potresti averne già uno
 
+// Provider Sincrono. Le sue dipendenze (firestore, auth) sono disponibili immediatamente.
 final syncServiceProvider = Provider<SyncService>((ref) {
   return SyncService(ref.watch(firestoreProvider), ref.watch(authProvider));
 });

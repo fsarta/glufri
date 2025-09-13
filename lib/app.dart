@@ -17,6 +17,7 @@ import 'package:glufri/features/purchase/data/models/purchase_model.dart';
 import 'package:glufri/features/purchase/presentation/providers/purchase_providers.dart';
 import 'package:glufri/features/settings/presentation/providers/settings_provider.dart';
 import 'package:glufri/features/shell/presentation/screens/main_shell_screen.dart';
+import 'package:glufri/features/backup/domain/sync_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class AuthWrapper extends ConsumerWidget {
@@ -102,143 +103,228 @@ class _GlufriAppState extends ConsumerState<GlufriApp> {
   /// Orchestra le operazioni da eseguire dopo un login (ripristino/migrazione).
   Future<void> _handlePostLoginFlow(BuildContext context, String userId) async {
     final l10n = AppLocalizations.of(context)!;
-
-    // 1. IMPOSTA LO STATO GLOBALE DI CARICAMENTO SU 'TRUE'
-    // `.notifier` ci dà accesso al controller, `.state` lo modifica
     ref.read(syncInProgressProvider.notifier).state = true;
-
-    debugPrint('[PostLoginFlow] syncInProgressProvider impostato a true');
+    debugPrint('[Sync & Migration] Avvio del flusso post-login...');
 
     try {
-      final restoredCount = await ref
-          .read(syncServiceProvider)
-          .restoreFromCloudAndGetCount();
-      debugPrint(
-        '[PostLoginFlow] Restore completato. Conteggio: $restoredCount',
-      );
+      // --- STEP 1: GESTIONE MIGRAZIONE DATI OSPITE ---
+      // Questa è la priorità. Lo facciamo prima del sync intelligente.
+      // Chiamiamo il dialogo, e la funzione interna ora restituirà `true`
+      // se l'utente ha scelto di unire i dati.
+      final bool didMergeAndBackup = await _showMigrationDialog(userId);
 
-      ref.invalidate(purchaseListProvider);
-      debugPrint('[PostLoginFlow] purchaseListProvider invalidato.');
+      // --- STEP 2: SYNC INTELLIGENTE ---
+      // Eseguiamo il sync intelligente solo se NON abbiamo appena fatto una migrazione
+      // con backup, per evitare operazioni ridondanti.
+      if (!didMergeAndBackup) {
+        final syncService = ref.read(syncServiceProvider);
 
-      // La logica di migrazione rimane, ma non ha bisogno del context ora.
-      if (restoredCount == 0) {
+        final futures = await Future.wait([
+          syncService.getLatestPurchaseDateFromLocal(),
+          syncService.getLatestPurchaseDateFromCloud(),
+        ]);
+        final localLatestDate = futures[0];
+        final cloudLatestDate = futures[1];
+
         debugPrint(
-          '[PostLoginFlow] Nessun dato nel cloud. Controllo dati locali.',
+          '[Sync] Data locale più recente (utente loggato): $localLatestDate',
         );
-        await _showMigrationDialog(userId);
-      } else {
-        debugPrint(
-          '[PostLoginFlow] Trovati dati nel cloud. Salto la migrazione locale.',
-        );
+        debugPrint('[Sync] Data cloud più recente: $cloudLatestDate');
+
+        // Logica decisionale (invariata, ma ora eseguita nel momento giusto)
+        if (localLatestDate == null && cloudLatestDate == null) {
+          debugPrint('[Sync] Decisione: Nessun dato da sincronizzare.');
+        } else if (localLatestDate == null ||
+            (cloudLatestDate != null &&
+                cloudLatestDate.isAfter(localLatestDate))) {
+          debugPrint(
+            '[Sync] Decisione: Dati cloud più recenti. Avvio RESTORE...',
+          );
+          await syncService.restoreFromCloudAndGetCount();
+          if (mounted)
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Dati sincronizzati dal cloud.")),
+            );
+          ref.invalidate(purchaseListProvider);
+        } else if (cloudLatestDate == null ||
+            localLatestDate!.isAfter(cloudLatestDate)) {
+          debugPrint(
+            '[Sync] Decisione: Dati locali più recenti. Avvio BACKUP...',
+          );
+          await syncService.backupToCloud();
+          if (mounted)
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  "Le modifiche offline sono state salvate nel cloud.",
+                ),
+              ),
+            );
+          ref.invalidate(purchaseListProvider);
+        } else {
+          debugPrint('[Sync] Decisione: Dati già sincronizzati.');
+        }
       }
     } catch (e) {
-      debugPrint('[PostLoginFlow] *** ERRORE CATTURATO: $e ***');
+      debugPrint('[Sync & Migration] *** ERRORE CATTURATO: $e ***');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(l10n.syncError), backgroundColor: Colors.red),
         );
       }
     } finally {
-      // 2. IN OGNI CASO, ALLA FINE, RIPORTA LO STATO A 'FALSE'
-      // `mounted` è un controllo di sicurezza per le operazioni async.
       if (mounted) {
         ref.read(syncInProgressProvider.notifier).state = false;
-        debugPrint('[PostLoginFlow] syncInProgressProvider impostato a false');
+        debugPrint('[Sync & Migration] Flusso terminato.');
       }
     }
   }
 
-  /// Mostra il dialogo per la migrazione dei dati locali, se presenti.
-  Future<void> _showMigrationDialog(String newUserId) async {
+  /// Controlla i dati "ospite" e chiede all'utente come gestirli.
+  /// Restituisce `true` se i dati sono stati uniti e backuppati, `false` altrimenti.
+  Future<bool> _showMigrationDialog(String newUserId) async {
     final context = navigatorKey.currentContext;
-    if (context == null) return;
+    if (context == null) return false;
 
     final l10n = AppLocalizations.of(context)!;
     final localBoxName = 'purchases_$localUserId';
 
+    // Assicuriamoci di ritornare `false` di default se non facciamo nulla.
+    bool didMergeAndBackup = false;
+
     if (await Hive.boxExists(localBoxName)) {
       final localBox = await Hive.openBox<PurchaseModel>(localBoxName);
-      if (localBox.isNotEmpty && context.mounted) {
-        final choice = await showDialog<String>(
-          context: context,
-          barrierDismissible: false,
-          builder: (ctx) => AlertDialog(
-            title: Text(l10n.migrationDialogTitle),
-            content: Text(l10n.migrationDialogBody(localBox.length)),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop('delete'),
-                child: Text(l10n.migrationDialogActionDelete),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop('ignore'),
-                child: Text(l10n.migrationDialogActionIgnore),
-              ),
-              FilledButton(
-                onPressed: () => Navigator.of(ctx).pop('merge'),
-                child: Text(l10n.migrationDialogActionMerge),
-              ),
-            ],
-          ),
-        );
 
-        if (choice == 'merge') {
-          // Logica di 'deep copy' per evitare errori di Hive
-          final userBox = await Hive.openBox<PurchaseModel>(
-            'purchases_$newUserId',
+      try {
+        // Usiamo un blocco try-finally per garantire la chiusura della box
+        if (localBox.isNotEmpty && context.mounted) {
+          final choice = await showDialog<String>(
+            context: context,
+            barrierDismissible: false,
+            builder: (ctx) => AlertDialog(
+              title: Text(l10n.migrationDialogTitle),
+              content: Text(l10n.migrationDialogBody(localBox.length)),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop('delete'),
+                  child: Text(l10n.migrationDialogActionDelete),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop('ignore'),
+                  child: Text(l10n.migrationDialogActionIgnore),
+                ),
+                FilledButton(
+                  onPressed: () => Navigator.of(ctx).pop('merge'),
+                  child: Text(l10n.migrationDialogActionMerge),
+                ),
+              ],
+            ),
           );
-          final Map<String, PurchaseModel> itemsToMigrate = {};
-          for (final purchase in localBox.values) {
-            final newItems = purchase.items
-                .map(
-                  (item) => PurchaseItemModel(
-                    id: item.id,
-                    name: item.name,
-                    unitPrice: item.unitPrice,
-                    quantity: item.quantity,
-                    barcode: item.barcode,
-                    imagePath: item.imagePath,
-                    isGlutenFree: item.isGlutenFree,
-                  ),
-                )
-                .toList();
-            final newPurchase = PurchaseModel(
-              id: purchase.id,
-              date: purchase.date,
-              store: purchase.store,
-              total: purchase.total,
-              items: newItems,
-              currency: purchase.currency,
+
+          if (choice == 'merge') {
+            debugPrint("[Migration] Scelta: UNISCI. Avvio migrazione...");
+
+            final userBox = await Hive.openBox<PurchaseModel>(
+              'purchases_$newUserId',
             );
-            itemsToMigrate[purchase.id] = newPurchase;
+
+            // --- INIZIO LOGICA DI CLONAZIONE ---
+
+            // 1. Creiamo una mappa vuota per ospitare le copie.
+            //    La chiave sarà l'ID dell'acquisto (String), il valore l'oggetto clonato (PurchaseModel).
+            final Map<String, PurchaseModel> itemsToMigrate = {};
+
+            // 2. Iteriamo su ogni acquisto nel box "ospite".
+            for (final oldPurchase in localBox.values) {
+              // 3. Creiamo una NUOVA lista di PurchaseItemModel, clonando ogni item.
+              final newItems = oldPurchase.items.map((oldItem) {
+                return PurchaseItemModel(
+                  id: oldItem.id,
+                  name: oldItem.name,
+                  unitPrice: oldItem.unitPrice,
+                  quantity: oldItem.quantity,
+                  barcode: oldItem.barcode,
+                  imagePath: oldItem.imagePath,
+                  isGlutenFree: oldItem.isGlutenFree,
+                  unitValue: oldItem.unitValue,
+                  unitOfMeasure: oldItem.unitOfMeasure,
+                );
+              }).toList();
+
+              // 4. Creiamo un NUOVO PurchaseModel usando i dati del vecchio e la nuova lista di item.
+              //    Questa è l'istanza "orfana", senza legami con il vecchio box.
+              final newPurchase = PurchaseModel(
+                id: oldPurchase.id,
+                date: oldPurchase.date,
+                store: oldPurchase.store,
+                total: oldPurchase.total,
+                items: newItems,
+                currency: oldPurchase.currency,
+              );
+
+              // 5. Aggiungiamo il clone alla nostra mappa.
+              itemsToMigrate[newPurchase.id] = newPurchase;
+            }
+
+            // 6. Ora salviamo la mappa di oggetti CLONATI nel box dell'utente.
+            if (itemsToMigrate.isNotEmpty) {
+              await userBox.putAll(itemsToMigrate);
+            }
+
+            // --- FINE LOGICA DI CLONAZIONE ---
+
+            await localBox.clear();
+
+            debugPrint(
+              "[Migration] Dati uniti localmente. Avvio backup sul cloud...",
+            );
+            await ref.read(syncServiceProvider).backupToCloud();
+
+            ref.invalidate(purchaseListProvider);
+
+            if (context.mounted) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(l10n.migrationSuccess)));
+            }
+            debugPrint("[Migration] Migrazione completata e backup eseguito.");
+
+            didMergeAndBackup = true;
+          } else if (choice == 'delete') {
+            debugPrint(
+              "[Migration] Scelta: ELIMINA. Cancellazione dati ospite...",
+            );
+            await localBox.clear();
+            if (context.mounted) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(l10n.migrationDeleted)));
+            }
+          } else {
+            // 'ignore' o dialogo chiuso
+            debugPrint(
+              "[Migration] Scelta: IGNORA. Nessuna azione intrapresa.",
+            );
           }
-
-          if (itemsToMigrate.isNotEmpty) {
-            await userBox.putAll(itemsToMigrate);
-          }
-          await localBox.clear();
-
-          if (context.mounted)
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(l10n.migrationSuccess)));
-
-          ref.invalidate(purchaseListProvider);
+        } else {
+          debugPrint(
+            "[Migration] Box 'purchases_local' trovata ma vuota. Nessuna migrazione necessaria.",
+          );
         }
-
-        if (choice == 'delete') {
-          await localBox.clear();
-          if (context.mounted)
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(l10n.migrationDeleted)));
+      } finally {
+        // Questa parte viene eseguita SEMPRE, sia in caso di successo che di errore.
+        if (localBox.isOpen) {
+          await localBox.close();
         }
       }
-
-      if (localBox.isOpen) {
-        await localBox.close();
-      }
+    } else {
+      debugPrint(
+        "[Migration] Nessuna box 'purchases_local' trovata. Nessuna migrazione necessaria.",
+      );
     }
+
+    // A prescindere dal percorso, la funzione ora restituisce sempre un booleano.
+    return didMergeAndBackup;
   }
 
   @override
