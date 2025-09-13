@@ -259,9 +259,7 @@ class _PurchaseHistoryScreenState extends ConsumerState<PurchaseHistoryScreen> {
                       ref.read(syncInProgressProvider.notifier).state = true;
                       try {
                         // 4. Chiama il servizio di sync per scaricare i dati dal cloud
-                        await ref
-                            .read(syncServiceProvider)
-                            .restoreFromCloud(isSilent: true);
+                        await ref.read(syncServiceProvider).restoreFromCloud();
                       } catch (e) {
                         // In caso di errore (es. offline), mostra un messaggio
                         debugPrint('Errore di sincronizzazione manuale: $e');

@@ -1,18 +1,33 @@
+// lib/features/budget/presentation/providers/budget_providers.dart
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:glufri/features/backup/presentation/providers/user_provider.dart';
 import 'package:glufri/features/budget/data/models/budget_model.dart';
+import 'package:glufri/features/purchase/data/datasources/purchase_local_datasource.dart';
 import 'package:glufri/features/purchase/presentation/providers/cart_provider.dart';
 import 'package:glufri/features/purchase/presentation/providers/purchase_providers.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:collection/collection.dart';
 
-/// Un semplice provider per la box Hive dei budget.
-final budgetBoxProvider = Provider((_) => Hive.box<BudgetModel>('budgets'));
+/// Provider Asincrono per il box Hive dei budget.
+/// Apre il box corretto in base all'utente (loggato o ospite).
+final budgetBoxProvider = FutureProvider<Box<BudgetModel>>((ref) async {
+  final user = ref.watch(userProvider);
+  final userId = user?.uid ?? localUserId;
+  final boxName = 'budgets_$userId';
+
+  return await Hive.openBox<BudgetModel>(boxName);
+});
 
 /// Provider che fornisce il budget per il MESE CORRENTE.
+/// È asincrono perché dipende dall'apertura del box.
 final currentMonthBudgetProvider = FutureProvider<BudgetModel?>((ref) async {
-  final box = ref.watch(budgetBoxProvider);
+  // `await ref.watch` è un modo speciale per attendere il risultato di un FutureProvider
+  // all'interno di un altro provider.
+  final box = await ref.watch(budgetBoxProvider.future);
   final now = DateTime.now();
   final id = '${now.year}-${now.month}';
+
   return box.get(id);
 });
 

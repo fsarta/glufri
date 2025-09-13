@@ -342,7 +342,12 @@ class _ShoppingListItemTile extends ConsumerWidget {
           ),
         ),
         onChanged: (newValue) {
-          ref.read(shoppingListActionsProvider).toggleItemChecked(item);
+          // 1. Modifica lo stato dell'oggetto item in memoria.
+          item.isChecked = newValue ?? false;
+
+          // 2. Chiama il nuovo metodo `updateItemInList`, passando sia
+          //    la lista genitore (`list`) che l'item modificato (`item`).
+          ref.read(shoppingListActionsProvider).updateItemInList(list, item);
         },
         activeColor: Theme.of(context).colorScheme.primary,
       ),

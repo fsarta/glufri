@@ -28,4 +28,24 @@ class FavoriteProductModel extends HiveObject {
     this.isGlutenFree = false,
     this.defaultPrice,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'barcode': barcode,
+      'isGlutenFree': isGlutenFree,
+      'defaultPrice': defaultPrice,
+    };
+  }
+
+  factory FavoriteProductModel.fromJson(Map<String, dynamic> json) {
+    return FavoriteProductModel(
+      id: json['id'],
+      name: json['name'],
+      barcode: json['barcode'],
+      isGlutenFree: json['isGlutenFree'],
+      defaultPrice: (json['defaultPrice'] as num?)?.toDouble(),
+    );
+  }
 }

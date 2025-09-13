@@ -9,6 +9,10 @@ import 'package:glufri/features/backup/domain/sync_service.dart';
 import 'package:glufri/features/backup/domain/user_model.dart';
 import 'package:glufri/features/backup/presentation/providers/sync_providers.dart';
 import 'package:glufri/features/backup/presentation/providers/user_provider.dart';
+import 'package:glufri/features/budget/data/models/budget_model.dart';
+import 'package:glufri/features/budget/presentation/providers/budget_providers.dart';
+import 'package:glufri/features/favorites/data/models/favorite_product_model.dart';
+import 'package:glufri/features/favorites/presentation/providers/favorite_providers.dart';
 import 'package:glufri/features/onboarding/presentation/providers/onboarding_provider.dart';
 import 'package:glufri/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:glufri/features/purchase/data/datasources/purchase_local_datasource.dart';
@@ -18,6 +22,9 @@ import 'package:glufri/features/purchase/presentation/providers/purchase_provide
 import 'package:glufri/features/settings/presentation/providers/settings_provider.dart';
 import 'package:glufri/features/shell/presentation/screens/main_shell_screen.dart';
 import 'package:glufri/features/backup/domain/sync_service.dart';
+import 'package:glufri/features/shopping_list/data/models/shopping_list_item_model.dart';
+import 'package:glufri/features/shopping_list/data/models/shopping_list_model.dart';
+import 'package:glufri/features/shopping_list/presentation/providers/shopping_list_providers.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class AuthWrapper extends ConsumerWidget {
@@ -63,7 +70,7 @@ class _GlufriAppState extends ConsumerState<GlufriApp> {
   void _setupAuthListener() {
     // Usiamo `ref.listenManual` perché il listener è in initState e non deve
     // essere ricreato ad ogni build.
-    ref.listenManual<UserModel?>(userProvider, (previous, next) {
+    ref.listenManual<UserModel?>(userProvider, (previous, next) async {
       final navigatorContext = navigatorKey.currentContext;
       if (navigatorContext == null) return;
       final l10n = AppLocalizations.of(navigatorContext)!;
@@ -149,12 +156,17 @@ class _GlufriAppState extends ConsumerState<GlufriApp> {
           debugPrint(
             '[Sync] Decisione: Dati cloud più recenti. Avvio RESTORE...',
           );
-          await syncService.restoreFromCloudAndGetCount();
-          if (mounted)
+          await syncService.restoreFromCloud();
+          if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text("Dati sincronizzati dal cloud.")),
             );
+          }
           ref.invalidate(purchaseListProvider);
+          ref.invalidate(favoriteListProvider);
+          ref.invalidate(shoppingListsProvider);
+          ref.invalidate(currentMonthBudgetProvider);
+          debugPrint('[Sync] RESTORE completato.');
         } else if (cloudLatestDate == null ||
             localLatestDate!.isAfter(cloudLatestDate)) {
           debugPrint(

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 
 part 'budget_model.g.dart';
@@ -28,4 +29,26 @@ class BudgetModel extends HiveObject {
     this.glutenFreeBudget,
     this.totalBudget,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'year': year,
+      'month': month,
+      'glutenFreeBudget': glutenFreeBudget,
+      'totalBudget': totalBudget,
+      // Aggiungiamo un timestamp per future logiche di ordinamento
+      'lastUpdated': FieldValue.serverTimestamp(),
+    };
+  }
+
+  factory BudgetModel.fromJson(Map<String, dynamic> json) {
+    return BudgetModel(
+      id: json['id'],
+      year: json['year'],
+      month: json['month'],
+      glutenFreeBudget: (json['glutenFreeBudget'] as num?)?.toDouble(),
+      totalBudget: (json['totalBudget'] as num?)?.toDouble(),
+    );
+  }
 }

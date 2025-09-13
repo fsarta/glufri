@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:glufri/core/l10n/app_localizations.dart';
 import 'package:glufri/features/shopping_list/data/models/shopping_list_model.dart';
-// 1. Importiamo il nuovo file con i provider per il filtro e la ricerca
 import 'package:glufri/features/shopping_list/presentation/providers/shopping_list_filter_provider.dart';
 import 'package:glufri/features/shopping_list/presentation/providers/shopping_list_providers.dart';
 import 'package:glufri/features/shopping_list/presentation/screens/shopping_list_detail_screen.dart';
@@ -189,23 +188,59 @@ class ShoppingListsScreen extends ConsumerWidget {
               onPressed: () => Navigator.of(ctx).pop(),
               child: Text(l10n.cancel),
             ),
-            FilledButton(
-              onPressed: () async {
-                if (formKey.currentState!.validate()) {
-                  // Aggiunta la gestione dello snackbar per il feedback
-                  final newListName = controller.text.trim();
-                  await ref
-                      .read(shoppingListActionsProvider)
-                      .createNewList(newListName);
-                  Navigator.of(ctx).pop();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Lista '$newListName' creata!"),
-                    ), // TODO
-                  );
-                }
+            Consumer(
+              builder: (context, ref, child) {
+                // Osserviamo ENTRAMBI i future provider. `isLoading` sarà true se anche solo uno sta caricando.
+                final bool isLoading =
+                    ref.watch(shoppingListBoxProvider).isLoading ||
+                    ref.watch(shoppingListItemBoxProvider).isLoading;
+
+                return FilledButton(
+                  // Disabilitiamo il pulsante mentre i box si aprono
+                  onPressed: isLoading
+                      ? null
+                      : () async {
+                          if (formKey.currentState!.validate()) {
+                            final newListName = controller.text.trim();
+                            try {
+                              // A questo punto siamo SICURI che i provider abbiano un valore.
+                              final actions = ref.read(
+                                shoppingListActionsProvider,
+                              );
+                              await actions.createNewList(newListName);
+
+                              // Chiudi il dialogo solo dopo il successo
+                              if (ctx.mounted) Navigator.of(ctx).pop();
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Lista '$newListName' creata!"),
+                                ), // TODO
+                              );
+                            } catch (e, stack) {
+                              debugPrint(
+                                "Errore durante la creazione della lista: $e\n$stack",
+                              );
+                              if (ctx.mounted) Navigator.of(ctx).pop();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    "Errore: impossibile creare la lista. Riprova.",
+                                  ),
+                                ),
+                              ); // TODO
+                            }
+                          }
+                        },
+                  child: isLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Text(l10n.create),
+                );
               },
-              child: Text(l10n.create),
             ),
           ],
         );

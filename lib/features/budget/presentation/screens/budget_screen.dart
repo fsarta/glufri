@@ -1,5 +1,8 @@
+// lib/features/budget/presentation/screens/budget_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:glufri/features/backup/domain/sync_service.dart';
 import 'package:glufri/features/budget/data/models/budget_model.dart';
 import 'package:glufri/features/budget/presentation/providers/budget_providers.dart';
 import 'package:intl/intl.dart';
@@ -25,22 +28,28 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final monthName = DateFormat.yMMMM('it_IT').format(DateTime.now());
+    // Assicurati che l'italiano (o altre lingue) sia inizializzato in main.dart
+    final monthName = DateFormat.yMMMM(
+      Localizations.localeOf(context).languageCode,
+    ).format(DateTime.now());
 
     // Osserviamo i provider
     final budgetAsync = ref.watch(currentMonthBudgetProvider);
     final spending = ref.watch(currentMonthSpendingProvider(null));
 
-    // Usiamo ref.listen per aggiornare i controller una sola volta quando i dati arrivano
+    // `ref.listen` è il modo giusto per reagire a un cambiamento di stato
+    // asincrono per aggiornare i controller, che sono parte dello State del widget.
     ref.listen<AsyncValue<BudgetModel?>>(currentMonthBudgetProvider, (
       _,
       state,
     ) {
-      if (state.hasValue) {
-        final budget = state.value;
-        _gfController.text = budget?.glutenFreeBudget?.toString() ?? '';
-        _totalController.text = budget?.totalBudget?.toString() ?? '';
-      }
+      state.whenData((budget) {
+        if (mounted) {
+          // Controlla sempre `mounted` in listener asincroni
+          _gfController.text = budget?.glutenFreeBudget?.toString() ?? '';
+          _totalController.text = budget?.totalBudget?.toString() ?? '';
+        }
+      });
     });
 
     return Scaffold(
@@ -54,7 +63,9 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.save),
-            onPressed: _saveBudget,
+            onPressed: budgetAsync.isLoading
+                ? null
+                : _saveBudget, // Disabilita durante il caricamento
             tooltip: 'Salva Budget', // TODO: Localizza
           ),
         ],
@@ -116,11 +127,10 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
   }
 
   void _saveBudget() {
-    final box = ref.read(budgetBoxProvider);
+    final box = ref.read(budgetBoxProvider).requireValue;
     final now = DateTime.now();
     final id = '${now.year}-${now.month}';
 
-    // Parse dei valori, con gestione del testo vuoto
     final newGfBudget = double.tryParse(_gfController.text);
     final newTotalBudget = double.tryParse(_totalController.text);
 
@@ -132,18 +142,39 @@ class _BudgetScreenState extends ConsumerState<BudgetScreen> {
       totalBudget: newTotalBudget,
     );
 
+    // 1. Salva in locale
     box.put(id, budget);
+    debugPrint("[Sync Budget] Budget per '$id' salvato in Hive.");
 
-    // Invalida il provider per far ricaricare i dati e aggiornare la UI
+    // 2. Prova a salvare in cloud
+    try {
+      final user = ref.read(authProvider).currentUser;
+      if (user != null) {
+        final remoteCollection = ref
+            .read(firestoreProvider)
+            .collection('users')
+            .doc(user.uid)
+            .collection('budgets');
+
+        // Usiamo `set` per creare o sovrascrivere il documento del mese corrente.
+        remoteCollection.doc(id).set(budget.toJson());
+        debugPrint(
+          "[Sync Budget] Budget per '$id' salvato anche su Firestore.",
+        );
+      }
+    } catch (e) {
+      debugPrint(
+        "[Sync Budget] Errore sync (save budget) su cloud (probabilmente offline): $e",
+      );
+    }
+
+    // Il resto della funzione (invalidate, snackbar) rimane identico
     ref.invalidate(currentMonthBudgetProvider);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Budget salvato!'),
-        backgroundColor: Colors.green,
-      ),
-    );
-    FocusScope.of(context).unfocus(); // Chiude la tastiera
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Budget salvato!')));
+    FocusScope.of(context).unfocus();
   }
 }
 

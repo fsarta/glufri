@@ -1,7 +1,6 @@
 // lib/features/shopping_list/data/models/shopping_list_item_model.dart
 
 import 'package:hive/hive.dart';
-import 'package:uuid/uuid.dart';
 
 part 'shopping_list_item_model.g.dart';
 
@@ -29,4 +28,26 @@ class ShoppingListItemModel extends HiveObject {
     this.isChecked = false,
     this.isGlutenFree = false,
   });
+
+  /// Converte l'oggetto in una mappa JSON per Firestore.
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'quantity': quantity,
+      'isChecked': isChecked,
+      'isGlutenFree': isGlutenFree,
+    };
+  }
+
+  /// Crea un'istanza dell'oggetto da una mappa JSON di Firestore.
+  factory ShoppingListItemModel.fromJson(Map<String, dynamic> json) {
+    return ShoppingListItemModel(
+      id: json['id'],
+      name: json['name'],
+      quantity: (json['quantity'] as num).toDouble(),
+      isChecked: json['isChecked'],
+      isGlutenFree: json['isGlutenFree'],
+    );
+  }
 }

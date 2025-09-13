@@ -76,14 +76,14 @@ Future<void> main() async {
   Hive.registerAdapter(ShoppingListItemModelAdapter());
   Hive.registerAdapter(ShoppingListModelAdapter());
 
-  // Apri le box
-  // Nota: I box per utente (es. 'purchases_userId') vengono aperti dinamicamente
-  // e non hanno bisogno di essere aperti qui.
-  await Hive.openBox<PurchaseModel>('purchases');
-  await Hive.openBox<BudgetModel>('budgets');
-  await Hive.openBox<FavoriteProductModel>('favorites');
-  await Hive.openBox<ShoppingListItemModel>('shopping_list_items');
-  await Hive.openBox<ShoppingListModel>('shopping_lists');
+  // Apriremo i box dell'utente dinamicamente. Quello che DOBBIAMO fare qui
+  // è aprire i box per l'utente "ospite" (`localUserId`).
+  const String localUserId = 'local'; // Potrebbe essere importato
+  await Hive.openBox<PurchaseModel>('purchases_$localUserId');
+  await Hive.openBox<ShoppingListModel>('shopping_lists_$localUserId');
+  await Hive.openBox<ShoppingListItemModel>('shopping_list_items_$localUserId');
+  await Hive.openBox<BudgetModel>('budgets_$localUserId');
+  await Hive.openBox<FavoriteProductModel>('favorites_$localUserId');
 
   // Controlla se l'utente ha già visto l'onboarding
   final prefs = await SharedPreferences.getInstance();
